@@ -1,8 +1,10 @@
+package persistencia.controllers;
+
 import java.io.*;
 
-public class FileManager {
+public class CtrlPersistencia {
     static public String ReadFileAsString(String fileDir){
-        byte [] content = FileManager.ReadFileAsBytes(fileDir);
+        byte [] content = CtrlPersistencia.ReadFileAsBytes(fileDir);
         if(content != null){
             return new String(content);
         }
@@ -39,7 +41,7 @@ public class FileManager {
     }
 
     static public void WriteStringToFile(String fileDir, String text){
-        FileManager.WriteBytesToFile(fileDir, text.getBytes());
+        CtrlPersistencia.WriteBytesToFile(fileDir, text.getBytes());
     }
 
     static public void WriteBytesToFile(String fileDir, byte [] text){

@@ -1,13 +1,27 @@
+package domain;
+
 import java.util.*;
 import java.lang.Math;
 
-public class LZ78 extends Algoritme{
+/**
+ * LZ78 ASCII compression algorithm
+ *
+ * @author Pol Monroig Company
+ *
+ */
 
+public class LZ78 extends Algoritme {
+
+    /** Sets the number of bits the a char uses,
+     *  we use UTF-8 so CHAR_SIZE = 8
+     * */
     final private int CHAR_SIZE = 8;
 
-    /*******************************
-    *COMPRESSION
-    *********************************/
+    /**
+     * <p>The compression method makes a compression of a given text</>
+     * @param texto the text to compress
+     * @return the compressed text
+     */
     @Override
     public String comprimir(String texto) {
         SortedMap< String, Integer> dict = new TreeMap<>(); ;
@@ -44,9 +58,14 @@ public class LZ78 extends Algoritme{
         System.out.println("Compression ratio: " + (compressed_size / texto.length() * 100) + "%");
         System.out.println("Decompressed encoding: " + descomprimir(binary_string));
 
-        return "";
+        return toBinaryString(coding);
     }
 
+    /**
+     * <p>Transforms a given LZ78 compression into a binary string</>
+     * @param coding text to transform into binary
+     * @return the encoding as a binary text
+     */
     private String toBinaryString(String coding){
         String binary_string = "";
         int current_index_size = 1;
@@ -78,7 +97,12 @@ public class LZ78 extends Algoritme{
         return binary_string;
     }
 
-
+    /**
+     * <p>Adds a specified number of 0s at the left side of a string</>
+     * @param binary binary string
+     * @param n_zeros size of the final string
+     * @return returns a binary string where its size >= n_zeros
+     */
     static private String addZeros(String binary, int n_zeros){
         while(binary.length() < n_zeros){
             binary = "0" + binary;
@@ -87,11 +111,7 @@ public class LZ78 extends Algoritme{
     }
 
 
-    /*******************************
-     *DECOMPRESSION
-     *********************************/
-
-
+    
     static private String getLetter(String text,  int i){
         String letter = "";
         for(int j = i; j < i + 8; ++j){
