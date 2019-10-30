@@ -62,11 +62,13 @@ public class LZ78 extends Algoritme {
             }
         }
         if(inDict)coding += Integer.toString(lastWordPos);
+        System.out.println("Converting to binary");
         String binary_string = toBinaryString(coding);
         String decoded = toString(toByteArray(binary_string));
         if(decoded.equals(binary_string)){
             System.out.println("EQUAL == TRUE");
         }
+
         this.original_size = text.length();
         this.compressed_size = (int)Math.ceil(binary_string.length() / 8.0);
         this.compression_ratio = ((float)compressed_size / (float)text.length()) * 100;
@@ -81,7 +83,6 @@ public class LZ78 extends Algoritme {
         int current_index = 0;
         ArrayList<String> phrases = new ArrayList<>();
         int current_index_size = 1;
-        String comparison_coding = "";
         for(int i = 0; i < text.length(); ++i){
             if(current_index >= 2){
                 double aux = (Math.log(current_index) / log_2);
@@ -96,15 +97,10 @@ public class LZ78 extends Algoritme {
                 index_string += Character.toString(text.charAt(i));
                 ++i;
             }
-            if(current_index == 256){
-                int y = 0;
-            }
             int index = Integer.parseInt(index_string, 2);
-            comparison_coding += Integer.toString(index)+ ",";
             String word = "";
             if(i != text.length()){
                 word = LZ78.getLetter(text, i);
-                comparison_coding += word;
             }
             i += 7;
             if(index == 0){
@@ -155,9 +151,6 @@ public class LZ78 extends Algoritme {
         int current_index = 0;
 
         for(int i = 0; i < coding.length(); i++){
-            if(current_index == 257){
-                int y = 0;
-            }
             String index = "";
             while(i < coding.length() && coding.charAt(i) != ','){
                 index += coding.charAt(i);
