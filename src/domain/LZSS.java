@@ -1,4 +1,4 @@
-package domain;
+/*package domain;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
@@ -268,3 +268,4 @@ public class LZSS extends Algoritme{
 
     private String out;
 }
+*/
