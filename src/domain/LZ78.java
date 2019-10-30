@@ -57,6 +57,47 @@ public class LZ78 extends Algoritme {
         return toByteArray(binary_string);
     }
 
+    @Override
+    public byte[] descomprimir(byte[] texto) {
+        String text = toString(texto);
+        String coding = "";
+        double log_2 = Math.log(2.0);
+        int current_index = 0;
+        ArrayList<String> phrases = new ArrayList<>();
+        int current_index_size = 1;
+        for(int i = 0; i < text.length(); ++i){
+            if(current_index >= 2){
+                double aux = (Math.log(current_index) / log_2);
+                if(aux == Math.round(aux)){
+                    current_index_size += 1;
+                }
+            }
+            String index_string = Character.toString(text.charAt(i));
+            i++;
+            while(index_string.length() < current_index_size){
+
+                index_string += Character.toString(text.charAt(i));
+                ++i;
+            }
+            int index = Integer.parseInt(index_string, 2);
+            String word = "";
+            if(i != text.length()){
+                word = LZ78.getLetter(text, i);
+            }
+            i += 7;
+            if(index == 0){
+                phrases.add(word);
+            }
+            else{
+                word = phrases.get(index - 1) + word;
+                phrases.add(word);
+            }
+            coding += word;
+            current_index++;
+        }
+        return coding.getBytes();
+    }
+
     private static byte[] toByteArray(String binary_string){
         int size = (int)Math.ceil(binary_string.length() / 8.0) + 1; // number of bytes + offset byte
         byte [] byte_coding = new byte[size];
@@ -152,46 +193,7 @@ public class LZ78 extends Algoritme {
         return binary_string;
     }
 
-    @Override
-    public byte[] descomprimir(byte[] texto) {
-        String text = toString(texto);
-        String coding = "";
-        double log_2 = Math.log(2.0);
-        int current_index = 0;
-        ArrayList<String> phrases = new ArrayList<>();
-        int current_index_size = 1;
-        for(int i = 0; i < text.length(); ++i){
-            if(current_index >= 2){
-                double aux = (Math.log(current_index) / log_2);
-                if(aux == Math.round(aux)){
-                    current_index_size += 1;
-                }
-            }
-            String index_string = Character.toString(text.charAt(i));
-            i++;
-            while(index_string.length() < current_index_size){
 
-                index_string += Character.toString(text.charAt(i));
-                ++i;
-            }
-            int index = Integer.parseInt(index_string, 2);
-            String word = "";
-            if(i != text.length()){
-                word = LZ78.getLetter(text, i);
-            }
-            i += 7;
-            if(index == 0){
-                phrases.add(word);
-            }
-            else{
-                word = phrases.get(index - 1) + word;
-                phrases.add(word);
-            }
-            coding += word;
-            current_index++;
-        }
-        return coding.getBytes();
-    }
 
 
 
