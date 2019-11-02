@@ -40,6 +40,7 @@ public class LZ78 extends Algoritme {
      */
     @Override
     public byte[] comprimir(byte[] texto) {
+        if(texto.length == 0)return texto; // empty file
         String text = new String(texto, StandardCharsets.UTF_8);
         SortedMap< String, Integer> dict = new TreeMap<>();
         String current = "";
@@ -73,6 +74,7 @@ public class LZ78 extends Algoritme {
 
     @Override
     public byte[] descomprimir(byte[] texto) {
+        if(texto.length == 0)return texto; // empty file
         String text = toString(texto);
         StringBuilder coding = new StringBuilder();
         double log_2 = Math.log(2.0);

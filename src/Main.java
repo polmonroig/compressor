@@ -1,11 +1,13 @@
 import domain.LZ78;
+import domain.LZSS;
 import persistencia.controllers.CtrlPersistencia;
 
 public class Main {
 
     static public void main(String[] args){
-        LZ78 compresor = new LZ78();
-        String fileName = "texto_largo.txt";
+
+       LZ78 compresor = new LZ78();
+        String fileName = "empty.txt";
         byte[] s = CtrlPersistencia.ReadFileAsBytes("/home/pol/Documents/fib/PROP/compressor/src/test_files/original/" + fileName);
         byte[] code = compresor.comprimir(s);
         System.out.println("compressed done.");
