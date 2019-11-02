@@ -1,8 +1,6 @@
 package domain;
 
-import java.io.ByteArrayOutputStream;
 import java.util.*;
-import java.lang.Math;
 
 public class LZSS extends Algoritme{
 
@@ -28,6 +26,8 @@ public class LZSS extends Algoritme{
         //COMPROBAR SI ESTA BIEN ESTO
         //byte[] out = new byte[BUF_SIZE];
 
+        System.out.println(texto.length);
+
         short i; // an iterator
         short r; // node number in the binary tree
         short s; // position in the ring buffer
@@ -40,7 +40,7 @@ public class LZSS extends Algoritme{
 
         initTree();
 
-        codeBuff[0] = 0;
+        codeBuff[0] = 0;//Aqui gurado los flags
         codeBufPos = 1;
 
         mask = 1;
@@ -72,7 +72,7 @@ public class LZSS extends Algoritme{
             mask <<= 1;
 
             if (mask == 0){
-                writexBytes(codeBuff, 0, codeBufPos);
+                writexBytes(codeBuff, codeBufPos);
                 //reset
                 codeBuff[0] = 0;
                 codeBufPos = 1;
@@ -91,7 +91,7 @@ public class LZSS extends Algoritme{
                 if (s < MAX_STORE_LENGTH - 1) ringBuffer[s + RING_SIZE] = c;
 
                 s = (short) ((s + 1) & RING_WRAP);
-                s = (short) ((r + 1) & RING_WRAP);
+                r = (short) ((r + 1) & RING_WRAP);
 
                 insertNode(r);
             }
@@ -99,16 +99,62 @@ public class LZSS extends Algoritme{
                 deleteNode(s);
 
                 s = (short) ((s + 1) & RING_WRAP);
-                s = (short) ((r + 1) & RING_WRAP);
+                r = (short) ((r + 1) & RING_WRAP);
 
                 if (--len != 0) insertNode(r);
             }
         } while (len > 0);
 
-        if (codeBufPos > 1) writexBytes(codeBuff, 0, codeBufPos);
+        if (codeBufPos > 1) writexBytes(codeBuff, codeBufPos);
 
-        String output = out + writePoint;
-        return  output.getBytes();
+        return  out.getBytes();
+    }
+
+
+    public byte[] descomprimir(byte[] texto) {
+        byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars
+        byte flags; //8 bits de flags
+
+        int r = RING_SIZE - MAX_STORE_LENGTH;
+        Arrays.fill(ringBuffer, 0, r, (byte) ' ');
+        flags = 0;
+        int flagCount = 0;
+
+        while(true){
+            if (flagCount > 0){
+                flags = (byte) (flags >> 1);
+                --flagCount;
+            }
+            else {
+                int readResult = readDecodification(texto, c, 1);
+                if (readResult == -1)   break;
+
+                flags = (byte) (readResult & 0xFF);
+                flagCount = 7;
+            }
+
+            if ((flags & 1) != 0) {//viene un caracter no codificado
+                if (readDecodification(texto, c, 1) != 1) break;
+                writexBytes(c, 1);
+
+                ringBuffer[r] = c[0];
+                r = (short) ((r + 1) & RING_WRAP);
+            }
+            else {//viene un pair de posicion(12 bits) y longitud (4 bits)
+                if (readDecodification(texto, c, 2) != 2)    break;
+            }
+
+            short pos = (short) ((c[0] & 0xFF) | ((c[1] & 0xF0) << 4));
+            short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
+
+            for (int k = 0; k < len; k++) {
+                c[k] = ringBuffer[(pos + k) & RING_WRAP];
+                ringBuffer[r] = c[k];
+                r = (r + 1) & RING_WRAP;
+            }
+            writexBytes(c, len);
+        }
+        return out.getBytes();
     }
 
     private void initTree() {
@@ -151,7 +197,7 @@ public class LZSS extends Algoritme{
                 }
             }
 
-            short i = 0;
+            short i;
             for (i = 1; i < MAX_STORE_LENGTH; i++) {
                 cmp = (ringBuffer[key + i] & 0xFF) - (ringBuffer[p + i] & 0xFF);
                 if (cmp != 0) {
@@ -239,22 +285,21 @@ public class LZSS extends Algoritme{
         else return j;
     }
 
-    private int writexBytes(byte[] texto, int offset, int x){
-        int j = 0, auxPointer = writePoint;
-        byte[] aux = new byte[x];
-        for (int i = 0; i < x && writePoint < texto.length; ++i, ++j) {
-            aux[i] = texto[writePoint];
-            ++writePoint;
+    private int readDecodification(byte[] texto, byte[] chars, int x){
+        int j = 0;
+        for (int i = 0; i < x && lecturePoint < texto.length; ++i,++j){
+            chars[i] = texto[lecturePoint];
+            ++lecturePoint;
         }
-        String auxStr = new String(aux);
-        System.out.println(auxStr);
-        out=out+auxStr;
         if(j == 0) return -1;
         else return j;
     }
 
-    public byte[] descomprimir(byte[] texto){
-        return texto;
+    private void writexBytes(byte[] code, int x){
+        byte[] aux = new byte[x];
+        for (int i = 0; i < x; ++i) aux[i] = code[i];
+        String auxStr = new String(aux);
+        out += auxStr;
     }
 
     private byte[] ringBuffer;
@@ -263,7 +308,6 @@ public class LZSS extends Algoritme{
     private short matchLength;
 
     private int lecturePoint = 0;
-    private int writePoint = 0;
 
     private short[] dad;
     private short[] leftSon;
