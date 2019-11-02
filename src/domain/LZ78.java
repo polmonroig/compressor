@@ -62,12 +62,7 @@ public class LZ78 extends Algoritme {
             }
         }
         if(inDict)coding += Integer.toString(lastWordPos);
-        System.out.println("Converting to binary");
         String binary_string = toBinaryString(coding);
-        String decoded = toString(toByteArray(binary_string));
-        if(decoded.equals(binary_string)){
-            System.out.println("EQUAL == TRUE");
-        }
 
         this.original_size = text.length();
         this.compressed_size = (int)Math.ceil(binary_string.length() / 8.0);
