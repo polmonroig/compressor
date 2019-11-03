@@ -3,7 +3,7 @@ import java.util.*;
 
 public class LZW {
     public byte[] comprimir(byte[] text) {
-        //System.out.println(text.length);
+        System.out.println("bytes de l'arxiu " + text.length);
         SortedMap< String, Integer> dict = new TreeMap<>(); //map per guardar el diccionari
         String cadenachars = new String(text); // convertir l'array de bytes en un String
         List<Integer> res = new ArrayList<Integer>();
@@ -37,11 +37,11 @@ public class LZW {
                 w = k;
             }
         }
+        res.add(dict.get(w));
+        s += to12bit(dict.get(w));
 
-        //System.out.println(res);
-        //System.out.println(s);
+
         s = round2byte(s);
-        //System.out.println(s);
 
 
         int retsize = s.length()/8;
@@ -55,8 +55,6 @@ public class LZW {
             //System.out.println(e + " " + ret[i] + " " );
 
         }
-
-
 
         return ret;
     }
@@ -199,12 +197,9 @@ public class LZW {
         //System.out.println(s.length());
 
         for (int i = 0; i < s.length()-4; i = i + 12) {
-            String e = "" + s.charAt(i) + s.charAt(i+1) + s.charAt(i+2) + s.charAt(i+3) + s.charAt(i+4) + s.charAt(i+5) + s.charAt(i+6) + s.charAt(i+7) + s.charAt(i+8) + s.charAt(i+9) + s.charAt(i+10) + s.charAt(i+11) ;
-            l.add(Integer.parseInt(e, 2));
-
+            String e = "" + s.charAt(i) + s.charAt(i+1) + s.charAt(i+2) + s.charAt(i+3) + s.charAt(i+4) + s.charAt(i+5) + s.charAt(i+6) + s.charAt(i+7) + s.charAt(i+8) + s.charAt(i+9) + s.charAt(i+10) + s.charAt(i+11) ;l.add(Integer.parseInt(e, 2));
 
         }
-        //System.out.println(l);
 
         SortedMap< Integer, String> dict = new TreeMap<>();
 
@@ -236,11 +231,11 @@ public class LZW {
             dict.put(dictSize, dic_inp);
             ++dictSize;
             cod_vell = cod_nou;
-            if (i == l.size()-1) res += dict.get(cod_nou);
+
+
 
         }
 
-        //System.out.println(res);
         byte[] ret = res.toString().getBytes();
 
         return ret;
@@ -248,4 +243,5 @@ public class LZW {
 
 
 }
+
 
