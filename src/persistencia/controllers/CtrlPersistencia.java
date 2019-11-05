@@ -1,6 +1,8 @@
 package persistencia.controllers;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CtrlPersistencia {
     static public String ReadFileAsString(String fileDir){
@@ -56,5 +58,20 @@ public class CtrlPersistencia {
         catch (IOException e){
             System.out.println("Exception while writing file " + e);
         }
+    }
+
+    public static ArrayList<String> getFilesFromDir(String[] fileName) {
+        ArrayList<String> files = new ArrayList<>();
+        File folder = new File(Arrays.toString(fileName));
+        try{
+
+            for(final File file: folder.listFiles()){
+                files.add(file.getName());
+            }
+        }
+        catch (NullPointerException e){
+            System.out.println("Directory not found" + e);
+        }
+        return files;
     }
 }
