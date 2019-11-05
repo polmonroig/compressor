@@ -3,6 +3,7 @@ package persistencia.controllers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CtrlPersistencia {
     static public String ReadFileAsString(String fileDir){
@@ -60,13 +61,12 @@ public class CtrlPersistencia {
         }
     }
 
-    public static ArrayList<String> getFilesFromDir(String[] fileName) {
+    public static ArrayList<String> getFilesFromDir(String dir) {
         ArrayList<String> files = new ArrayList<>();
-        File folder = new File(Arrays.toString(fileName));
+        File folder = new File(dir);
         try{
-
-            for(final File file: folder.listFiles()){
-                files.add(file.getName());
+            for(final File file: Objects.requireNonNull(folder.listFiles())){
+                files.add(dir + "/" + file.getName());
             }
         }
         catch (NullPointerException e){
