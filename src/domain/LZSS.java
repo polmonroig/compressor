@@ -15,32 +15,30 @@ public class LZSS extends Algoritme{
     private static final short NOT_USED=RING_SIZE;
 
     public LZSS(){
-        ringBuffer=new byte[RING_SIZE+MAX_STORE_LENGTH-1];
+        ringBuffer=new byte[RING_SIZE+MAX_STORE_LENGTH-1];//4096+17 bytes para encontrar coincidencias
         dad=new short[RING_SIZE+1];
         leftSon=new short[RING_SIZE+1];
         rightSon=new short[RING_SIZE+257];
     }
 
-    @Override
     public byte[] comprimir(byte[] texto){
-        //COMPROBAR SI ESTA BIEN ESTO
-        //byte[] out = new byte[BUF_SIZE];
-
-        System.out.println(texto.length);
+        lecturePoint = 0;
+        out = "";
 
         short i; // an iterator
         short r; // node number in the binary tree
         short s; // position in the ring buffer
         short len; // length of initial string
-        short lastMatchLength; // length of last match
-        short codeBufPos; // position in the output buffer
-        byte[] codeBuff = new byte[17]; // the output buffer
-        byte mask; // bit mask for byte 0 of out input
+        short lastMatchLength;
+        short codeBufPos;
+        byte[] codeBuff = new byte[17];
+        // buffer de la codificacion, [0] guarda los flags y las otras 16 sirven para guardar 8 unidades de codigo
+        byte mask; // mete los 1 a codeBuff[0] cuando no hay coincidencia
         byte c; // character read from string
 
         initTree();
 
-        codeBuff[0] = 0;//Aqui gurado los flags
+        codeBuff[0] = 0;//1 si es una letra no codificada, 0 si viene un pair<posicion,length>
         codeBufPos = 1;
 
         mask = 1;
@@ -48,7 +46,7 @@ public class LZSS extends Algoritme{
         r = RING_SIZE - MAX_STORE_LENGTH;
 
         Arrays.fill(ringBuffer, 0, r, (byte) ' ');
-        //Para los reads
+
         int x = readxBytes(texto, r, MAX_STORE_LENGTH);
         if(x <= 0) return out.getBytes();
         len = (short) x;
@@ -60,7 +58,7 @@ public class LZSS extends Algoritme{
         do {
             if (matchLength > len) matchLength = len;
 
-            if (matchLength < THRESHOLD){
+            if (matchLength < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
                 matchLength = 1;
                 codeBuff[0] |= mask;
                 codeBuff[codeBufPos++] = ringBuffer[r];
@@ -68,33 +66,36 @@ public class LZSS extends Algoritme{
             else{
                 codeBuff[codeBufPos++] = (byte) matchPosition;
                 codeBuff[codeBufPos++] = (byte) (((matchPosition >> 4) & 0xF0) | (matchLength - THRESHOLD));
+                //2Bytes guardo los 12 primeros bits la posicion de match y la longitud de match en los otros 4
             }
             mask <<= 1;
 
-            if (mask == 0){
+            if (mask == 0){//hemos almacenado 8 caracteres
                 writexBytes(codeBuff, codeBufPos);
-                //reset
                 codeBuff[0] = 0;
                 codeBufPos = 1;
+                mask = 1;
             }
 
             lastMatchLength = matchLength;
 
             for (i = 0; i < lastMatchLength; ++i) {
-                x = readxBytes(texto, 0, 1);
+                byte[] aux = new byte[1];
+                x = readDecodification(texto, aux, 1);
                 if (x == -1) break;
-                c = (byte) x;
+                c = aux[0];
 
                 deleteNode(s);
-
+                //duplico el principio y el final del buffer
                 ringBuffer[s] = c;
                 if (s < MAX_STORE_LENGTH - 1) ringBuffer[s + RING_SIZE] = c;
-
+                //incremento la posicion y reinicio si ya estoy al final del tamaño
                 s = (short) ((s + 1) & RING_WRAP);
                 r = (short) ((r + 1) & RING_WRAP);
-
+                //nueva string
                 insertNode(r);
             }
+            //podriamos haber salido porque no quedaban caracteres, entonces acabamos el trabajo que nos queedaba
             while (i++ < lastMatchLength){
                 deleteNode(s);
 
@@ -103,17 +104,19 @@ public class LZSS extends Algoritme{
 
                 if (--len != 0) insertNode(r);
             }
-        } while (len > 0);
+        } while (len > 0);//hasta que no queden caracteres por comprimir
 
         if (codeBufPos > 1) writexBytes(codeBuff, codeBufPos);
-
+        byte[] ret = out.getBytes();
         return  out.getBytes();
     }
 
 
     public byte[] descomprimir(byte[] texto) {
-        byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars
+        byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
         byte flags; //8 bits de flags
+        lecturePoint = 0;
+        out = "";
 
         int r = RING_SIZE - MAX_STORE_LENGTH;
         Arrays.fill(ringBuffer, 0, r, (byte) ' ');
@@ -126,10 +129,11 @@ public class LZSS extends Algoritme{
                 --flagCount;
             }
             else {
-                int readResult = readDecodification(texto, c, 1);
+                byte[] aux = new byte[1];
+                int readResult = readDecodification(texto, aux, 1);
                 if (readResult == -1)   break;
 
-                flags = (byte) (readResult & 0xFF);
+                flags = (byte) (aux[0] & 0xFF);
                 flagCount = 7;
             }
 
@@ -141,18 +145,18 @@ public class LZSS extends Algoritme{
                 r = (short) ((r + 1) & RING_WRAP);
             }
             else {//viene un pair de posicion(12 bits) y longitud (4 bits)
-                if (readDecodification(texto, c, 2) != 2)    break;
-            }
+                if (readDecodification(texto, c, 2) != 2) break;
+                //De estos dos bytes sacamos su string de coincidencia del ringBuffer
+                short pos = (short) ((c[0] & 0xFF) | ((c[1] & 0xF0) << 4));
+                short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
 
-            short pos = (short) ((c[0] & 0xFF) | ((c[1] & 0xF0) << 4));
-            short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
-
-            for (int k = 0; k < len; k++) {
-                c[k] = ringBuffer[(pos + k) & RING_WRAP];
-                ringBuffer[r] = c[k];
-                r = (r + 1) & RING_WRAP;
+                for (int k = 0; k < len; k++) {
+                    c[k] = ringBuffer[(pos + k) & RING_WRAP];
+                    ringBuffer[r] = c[k];
+                    r = (r + 1) & RING_WRAP;
+                }
+                writexBytes(c, len);
             }
-            writexBytes(c, len);
         }
         return out.getBytes();
     }
@@ -162,7 +166,7 @@ public class LZSS extends Algoritme{
         Arrays.fill(leftSon, 0, leftSon.length, NOT_USED);
         Arrays.fill(rightSon, 0, rightSon.length, NOT_USED);
     }
-
+    //Busca para el nuevo caracter todas las coincidencias y se queda con la mas grande
     private void insertNode(short pos) {
         assert pos >= 0 && pos < RING_SIZE;
 
@@ -232,14 +236,13 @@ public class LZSS extends Algoritme{
         // Remove "p"
         dad[p] = NOT_USED;
     }
-
+    //Borra el arbol creado para encontrar las coincidencias, porque ya se ha usado
     private void deleteNode(short node) {
         assert node >= 0 && node < (RING_SIZE + 1);
 
         short q;
 
         if (dad[node] == NOT_USED) {
-            // not in tree, nothing to do
             return;
         }
 
@@ -302,10 +305,10 @@ public class LZSS extends Algoritme{
         out += auxStr;
     }
 
-    private byte[] ringBuffer;
+    private byte[] ringBuffer;//buffer para encontrar coincidencias
 
-    private short matchPosition;
-    private short matchLength;
+    private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
+    private short matchLength;//numero de coincidencias consecutivas en ringBuffer
 
     private int lecturePoint = 0;
 
