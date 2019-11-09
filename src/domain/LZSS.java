@@ -22,8 +22,9 @@ public class LZSS extends Algoritme{
     }
 
     public byte[] comprimir(byte[] texto){
+        out = new byte[texto.length];
         lecturePoint = 0;
-        out = "";
+        writePoint = 0;
 
         short i; // an iterator
         short r; // node number in the binary tree
@@ -48,7 +49,7 @@ public class LZSS extends Algoritme{
         Arrays.fill(ringBuffer, 0, r, (byte) ' ');
 
         int x = readxBytes(texto, r, MAX_STORE_LENGTH);
-        if(x <= 0) return out.getBytes();
+        if(x <= 0) return texto;
         len = (short) x;
 
         for (i=1; i<=MAX_STORE_LENGTH; i++) insertNode((short) (r-i));
@@ -107,16 +108,26 @@ public class LZSS extends Algoritme{
         } while (len > 0);//hasta que no queden caracteres por comprimir
 
         if (codeBufPos > 1) writexBytes(codeBuff, codeBufPos);
-        byte[] ret = out.getBytes();
-        return  out.getBytes();
-    }
 
+        int bytesTamFchr = texto.length/256;
+        if (texto.length%256 != 0)  ++bytesTamFchr;
+        byte[] ret = new byte[writePoint+bytesTamFchr+1];
+
+        for (int j = 0; j < writePoint; ++j) ret[j] = out[j];
+        ret[writePoint] = '#';
+        byte[] aux = putTamañoTexto(texto, bytesTamFchr);
+        for (int j = 0; j < bytesTamFchr; ++j)
+            ret[writePoint+j+1] = aux[j];
+
+        return ret;
+    }
 
     public byte[] descomprimir(byte[] texto) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
         byte flags; //8 bits de flags
+        out = new byte[getTamañoTexto(texto)];
         lecturePoint = 0;
-        out = "";
+        writePoint = 0;
 
         int r = RING_SIZE - MAX_STORE_LENGTH;
         Arrays.fill(ringBuffer, 0, r, (byte) ' ');
@@ -158,7 +169,29 @@ public class LZSS extends Algoritme{
                 writexBytes(c, len);
             }
         }
-        return out.getBytes();
+        return out;
+    }
+
+    //añado al final del output #texto.length para saber la medida
+    private byte[] putTamañoTexto(byte[] texto, int extra){
+        byte[] aux = new byte[extra];
+        int i = 0;
+        for (int j = extra-1; j >= 0; --j, ++i){
+            aux[i] = (byte) (texto.length >>> j*8);
+        }
+        return aux;
+    }
+
+    private int getTamañoTexto(byte[] texto){
+        int t = 0, i = texto.length-1, j = -1;
+        while(texto[i] != '#' && i >= 0) {
+            --i;
+            ++j;
+        }
+        for (;i < texto.length-1; ++i, --j){
+            t += ((int) (texto[i+1] & 0xFF) << j*8);
+        }
+        return t;
     }
 
     private void initTree() {
@@ -243,6 +276,7 @@ public class LZSS extends Algoritme{
         short q;
 
         if (dad[node] == NOT_USED) {
+            // not in tree, nothing to do
             return;
         }
 
@@ -299,10 +333,10 @@ public class LZSS extends Algoritme{
     }
 
     private void writexBytes(byte[] code, int x){
-        byte[] aux = new byte[x];
-        for (int i = 0; i < x; ++i) aux[i] = code[i];
-        String auxStr = new String(aux);
-        out += auxStr;
+        for (int i = 0; i < x && writePoint < out.length; ++i){
+            out[writePoint] = code[i];
+            ++writePoint;
+        }
     }
 
     private byte[] ringBuffer;//buffer para encontrar coincidencias
@@ -310,12 +344,13 @@ public class LZSS extends Algoritme{
     private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
     private short matchLength;//numero de coincidencias consecutivas en ringBuffer
 
-    private int lecturePoint = 0;
+    private int lecturePoint;
+    private int writePoint;
 
     private short[] dad;
     private short[] leftSon;
     private short[] rightSon;
 
 
-    private String out = "";
+    private byte[] out;
 }
