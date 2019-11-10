@@ -46,7 +46,7 @@ public class LZW {
 
         int retsize = s.length()/8;
 
-        byte[] ret = toByteArray(s);
+        byte[] ret = Utils.toByteArray(s);
 
         //System.out.println(retsize);
         for (int i = 0; i < retsize; i++ ){
@@ -83,20 +83,6 @@ public class LZW {
         }
         return s;
     }
-
-    private static byte[] toByteArray(String binary_string){
-        int size = (int)Math.ceil(binary_string.length() / 8.0) + 1; // number of bytes + offset byte
-        byte [] byte_coding = new byte[size];
-        int it = 0;
-        byte_coding[0] = (byte)(binary_string.length() % 8); // offset of 0
-        for(int i = 1; i < size; ++i){
-            byte_coding[i] = (byte)Utils.getIntFromString(binary_string, it);
-            it += 8;
-        }
-
-        return  byte_coding;
-    }
-
 
 
 
