@@ -1,15 +1,6 @@
-package domain;
+/*package domain;
 
 import java.util.*;
-
-public class LZSS extends Algoritme{
-
-    private static final short RING_SIZE = 4096;
-
-    private static final short RING_WRAP = RING_SIZE - 1;
-
-    private static final int MAX_STORE_LENGTH=18;
-package domain;
 
 import java.util.*;
 
@@ -711,3 +702,4 @@ public class LZSS extends Algoritme{
 
     private byte[] out;
 }
+*/

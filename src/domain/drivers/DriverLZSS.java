@@ -1,4 +1,4 @@
-package domain.drivers;
+/*package domain.drivers;
 
 import domain.LZSS;
 import persistencia.controllers.CtrlPersistencia;
@@ -43,3 +43,4 @@ public class DriverLZSS {
         System.out.println("Compression accuracy: " + counter + "/" + files.size());
     }
 }
+*/
