@@ -31,7 +31,7 @@ public class CtrlPresentation {
                                     ctrlDomain.comprimir("lz78", userInput);
                                     break;
                                 case "lzSS":
-                                    System.out.println("Lo siento, esta funcion aun no esta implementada");
+                                    ctrlDomain.comprimir("lzss", userInput);;
                                     break;
                                 case "lzW":
                                     System.out.println("Lo siento, esta funcion aun no esta implementada");
@@ -63,7 +63,7 @@ public class CtrlPresentation {
                                     ctrlDomain.descomprimir("lz78", userInput);
                                     break;
                                 case "lzSS":
-                                    System.out.println("Lo siento, esta funcion aun no esta implementada");
+                                    ctrlDomain.descomprimir("lzss", userInput);;
                                     break;
                                 case "lzW":
                                     System.out.println("Lo siento, esta funcion aun no esta implementada");
