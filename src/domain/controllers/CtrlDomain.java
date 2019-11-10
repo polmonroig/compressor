@@ -19,12 +19,21 @@ public class CtrlDomain {
 
     }
 
-    public void comprimir(String archivo){
+    public void comprimir(String algoritmo, String archivo){
+        if(algoritmo == "lz78"){
+            byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
+            byte[] compressed = lz78.comprimir(file);
+            CtrlPersistencia.WriteBytesToFile(archivo + ".lz78", compressed);
+        }
 
     }
 
-    public void descomprimir(String archivo){
-
+    public void descomprimir(String algoritmo, String archivo){
+        if(algoritmo == "lz78"){
+            byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
+            byte[] decompressed = lz78.descomprimir(file);
+            CtrlPersistencia.WriteBytesToFile(archivo , decompressed);
+        }
     }
 
     public void comprimirDirectorio(String dir){

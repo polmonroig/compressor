@@ -18,20 +18,21 @@ public class DriverLZ78 {
         boolean input = false;
 
         while(!input){
-            System.out.println("What do you want to do?");
+            System.out.println("Que desea hacer?");
+            System.out.println("comprimir/descomprimir/nada");
             String userInput = Input.nextLine();
             switch (userInput.toLowerCase().trim()) {
-                case "compress":
+                case "comprimir":
                     TestCompression(encoder);
                     break;
-                case "decompress":
+                case "descomprimir":
                     TestDecompression(encoder);
                     break;
-                case "nothing":
+                case "nada":
                     input = true;
                     break;
                 default:
-                    System.out.println("Please retry and make sure spelling is correct");
+                    System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo :(");
                     break;
             }
         }
