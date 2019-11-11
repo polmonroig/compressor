@@ -14,11 +14,42 @@ public class LZSS extends Algoritme{
 
     private static final short NOT_USED=RING_SIZE;
 
+    private byte[] ringBuffer;//buffer para encontrar coincidencias
+
+    private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
+    private short matchLength;//numero de coincidencias consecutivas en ringBuffer
+
+    private int lecturePoint;
+    private int writePoint;
+
+    private short[] dad;
+    private short[] leftSon;
+    private short[] rightSon;
+
+    private int original_size = 0;
+    private int compressed_size = 0;
+    private float compression_ratio = 0;
+
+    private byte[] out;
+
+
     public LZSS(){
         ringBuffer=new byte[RING_SIZE+MAX_STORE_LENGTH-1];//4096+17 bytes para encontrar coincidencias
         dad=new short[RING_SIZE+1];
         leftSon=new short[RING_SIZE+1];
         rightSon=new short[RING_SIZE+257];
+    }
+
+    public int getOriginalSize(){
+        return this.original_size;
+    }
+
+    public int getCompressedSize(){
+        return this.compressed_size;
+    }
+
+    public float getCompression_ratio(){
+        return this.compression_ratio;
     }
 
     public byte[] comprimir(byte[] texto){
@@ -90,7 +121,7 @@ public class LZSS extends Algoritme{
                 //duplico el principio y el final del buffer
                 ringBuffer[s] = c;
                 if (s < MAX_STORE_LENGTH - 1) ringBuffer[s + RING_SIZE] = c;
-                //incremento la posicion y reinicio si ya estoy al final del tamaño
+                //incremento la posicion y reinicio si ya estoy al final del taanom
                 s = (short) ((s + 1) & RING_WRAP);
                 r = (short) ((r + 1) & RING_WRAP);
                 //nueva string
@@ -120,6 +151,10 @@ public class LZSS extends Algoritme{
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
 
+        original_size = texto.length;
+        compressed_size = ret.length;
+        compression_ratio = ((float)compressed_size / (float)original_size) * 100;
+        
         return ret;
     }
 
@@ -190,7 +225,7 @@ public class LZSS extends Algoritme{
             ++j;
         }
         for (;i < texto.length-1; ++i, --j){
-            t += ((int) (texto[i+1] & 0xFF) << j*8);
+            t += ((texto[i+1] & 0xFF) << j*8);
         }
         return t;
     }
@@ -339,19 +374,4 @@ public class LZSS extends Algoritme{
             ++writePoint;
         }
     }
-
-    private byte[] ringBuffer;//buffer para encontrar coincidencias
-
-    private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
-    private short matchLength;//numero de coincidencias consecutivas en ringBuffer
-
-    private int lecturePoint;
-    private int writePoint;
-
-    private short[] dad;
-    private short[] leftSon;
-    private short[] rightSon;
-
-
-    private byte[] out;
 }
