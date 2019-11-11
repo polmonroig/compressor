@@ -116,7 +116,7 @@ public class LZSS extends Algoritme{
 
         for (int j = 0; j < writePoint; ++j) ret[j] = out[j];
         ret[writePoint] = '#';
-        byte[] aux = putTamañoTexto(texto, bytesTamFchr);
+        byte[] aux = putTamanoTexto(texto, bytesTamFchr);
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
 
@@ -126,7 +126,7 @@ public class LZSS extends Algoritme{
     public byte[] descomprimir(byte[] texto) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
         byte flags; //8 bits de flags
-        out = new byte[getTamañoTexto(texto)-1];
+        out = new byte[getTamanoTexto(texto)-1];
         lecturePoint = 0;
         writePoint = 0;
 
@@ -174,7 +174,7 @@ public class LZSS extends Algoritme{
     }
 
     //añado al final del output #texto.length para saber la medida
-    private byte[] putTamañoTexto(byte[] texto, int extra){
+    private byte[] putTamanoTexto(byte[] texto, int extra){
         byte[] aux = new byte[extra];
         int i = 0;
         for (int j = extra-1; j >= 0; --j, ++i){
@@ -183,7 +183,7 @@ public class LZSS extends Algoritme{
         return aux;
     }
 
-    private int getTamañoTexto(byte[] texto){
+    private int getTamanoTexto(byte[] texto){
         int t = 0, i = texto.length-1, j = -1;
         while(texto[i] != '#' && i >= 0) {
             --i;
