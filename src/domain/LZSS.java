@@ -57,9 +57,9 @@ public class LZSS extends Algoritme{
     }
     
     /**
-     * <p>The compression method makes a compression of a given text</>
-     * @param texto the text to compress
-     * @return the compressed text
+     * <p>El metodo de comprimir hace una compresion del texto introducido, con la codificación para LZSS</>
+     * @param texto el texto a comprimir
+     * @return el texto comprimido
      */
     @Override
     public byte[] comprimir(byte[] texto){
@@ -173,6 +173,11 @@ public class LZSS extends Algoritme{
         return ret;
     }
 
+    /**
+     * <p>El metodo de descomprimir hace una descompresion del texto introducido</>
+     * @param texto el texto a comprimir, codificado con formato LZSS
+     * @return el texto descomprimido
+     */
     @Override
     public byte[] descomprimir(byte[] texto) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
