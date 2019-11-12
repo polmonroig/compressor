@@ -3,7 +3,7 @@ package domain;
 import java.util.*;
 
 /**
- * LZ78 ASCII compression algorithm
+ * LZSS ASCII compression algorithm
  *
  * @author David Santos Plana
  *
@@ -229,6 +229,11 @@ public class LZSS extends Algoritme{
         return out;
     }
 
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     //añado al final del output #texto.length para saber la medida
     private byte[] putTamanoTexto(byte[] texto, int extra){
         byte[] aux = new byte[extra];
@@ -239,6 +244,11 @@ public class LZSS extends Algoritme{
         return aux;
     }
 
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     private int getTamanoTexto(byte[] texto){
         int t = 0, i = texto.length-1, j = -1;
         while(texto[i] != '#' && i >= 0) {
@@ -251,11 +261,22 @@ public class LZSS extends Algoritme{
         return t;
     }
 
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     private void initTree() {
         Arrays.fill(dad, 0, dad.length, NOT_USED);
         Arrays.fill(leftSon, 0, leftSon.length, NOT_USED);
         Arrays.fill(rightSon, 0, rightSon.length, NOT_USED);
     }
+    
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     //Busca para el nuevo caracter todas las coincidencias y se queda con la mas grande
     private void insertNode(short pos) {
         assert pos >= 0 && pos < RING_SIZE;
@@ -326,6 +347,12 @@ public class LZSS extends Algoritme{
         // Remove "p"
         dad[p] = NOT_USED;
     }
+    
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     //Borra el arbol creado para encontrar las coincidencias, porque ya se ha usado
     private void deleteNode(short node) {
         assert node >= 0 && node < (RING_SIZE + 1);
@@ -369,6 +396,11 @@ public class LZSS extends Algoritme{
         dad[node] = NOT_USED;
     }
 
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     private int readxBytes(byte[] texto, int offset, int x){
         int j = 0;
         for (int i = 0; i < x && lecturePoint < texto.length; ++i,++j){
@@ -379,6 +411,11 @@ public class LZSS extends Algoritme{
         else return j;
     }
 
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     private int readDecodification(byte[] texto, byte[] chars, int x){
         int j = 0;
         for (int i = 0; i < x && lecturePoint < texto.length; ++i,++j){
@@ -388,7 +425,12 @@ public class LZSS extends Algoritme{
         if(j == 0) return -1;
         else return j;
     }
-
+    
+    /**
+     * <p></>
+     * @param 
+     * @return 
+     */
     private void writexBytes(byte[] code, int x){
         for (int i = 0; i < x && writePoint < out.length; ++i){
             out[writePoint] = code[i];
