@@ -2,6 +2,13 @@ package domain;
 
 import java.util.*;
 
+/**
+ * LZ78 ASCII compression algorithm
+ *
+ * @author David Santos Plana
+ *
+ */
+
 public class LZSS extends Algoritme{
 
     private static final short RING_SIZE = 4096;
@@ -48,7 +55,13 @@ public class LZSS extends Algoritme{
     public float getCompression_ratio(){
         return this.estadisticaLocal.getGrauCompresio();
     }
-
+    
+    /**
+     * <p>The compression method makes a compression of a given text</>
+     * @param texto the text to compress
+     * @return the compressed text
+     */
+    @Override
     public byte[] comprimir(byte[] texto){
         long startTime = System.nanoTime(); // empezar contador de tiempo
         out = new byte[texto.length];
@@ -160,6 +173,7 @@ public class LZSS extends Algoritme{
         return ret;
     }
 
+    @Override
     public byte[] descomprimir(byte[] texto) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
         byte flags; //8 bits de flags
