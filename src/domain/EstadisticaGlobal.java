@@ -1,3 +1,5 @@
+package domain;
+
 public class EstadisticaGlobal extends Estadistica{
     private float nArxius;
 

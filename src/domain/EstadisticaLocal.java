@@ -1,22 +1,24 @@
+package domain;
+
 public class EstadisticaLocal extends  Estadistica {
-    private float midaArxiuInicial;
-    private float midaArxiuFinañ;
+    private int midaArxiuInicial;
+    private int midaArxiuFinal;
 
 
 
-    public float getMidaArxiuInicial() {
+    public int getMidaArxiuInicial() {
         return midaArxiuInicial;
     }
 
-    public void setMidaArxiuInicial(float midaArxiuInicial) {
+    public void setMidaArxiuInicial(int midaArxiuInicial) {
         this.midaArxiuInicial = midaArxiuInicial;
     }
 
-    public float getMidaArxiuFinañ() {
-        return midaArxiuFinañ;
+    public int getMidaArxiuFinal() {
+        return midaArxiuFinal;
     }
 
-    public void setMidaArxiuFinañ(float midaArxiuFinañ) {
-        this.midaArxiuFinañ = midaArxiuFinañ;
+    public void setMidaArxiuFinal(int midaArxiuFinal) {
+        this.midaArxiuFinal = midaArxiuFinal;
     }
 }

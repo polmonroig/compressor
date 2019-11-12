@@ -19,22 +19,23 @@ public class CtrlPresentation {
             System.out.println("Que desea hacer?");
             System.out.println("comprimir/descomprimir/nada");
             String userInput = Input.nextLine();
+            String file;
             switch (userInput.toLowerCase().trim()) {
                 case "comprimir":
+                    file = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
                     userInput = getUserInput(Input, "Desea comprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
                             userInput = getUserInput(Input, "Que algoritmo desea utilizar?(LZ78, LZW, LSS, auto)");
                             switch (userInput.toLowerCase().trim()){
                                 case "lz78":
-                                    userInput = getUserInput(Input, "Introduce el archivo que deseas comprimir");
-                                    ctrlDomain.comprimir("lz78", userInput);
+                                    ctrlDomain.comprimir("lz78", file);
                                     break;
-                                case "lzSS":
-                                    ctrlDomain.comprimir("lzss", userInput);;
+                                case "lzss":
+                                    ctrlDomain.comprimir("lzss", file);;
                                     break;
-                                case "lzW":
-                                    System.out.println("Lo siento, esta funcion aun no esta implementada");
+                                case "lzw":
+                                    ctrlDomain.comprimir("lzw", file);;
                                     break;
                                 case "auto":
                                     System.out.println("Lo siento, esta funcion aun no esta implementada");
@@ -53,20 +54,20 @@ public class CtrlPresentation {
                     }
                     break;
                 case "descomprimir":
+                    file = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
                     userInput = getUserInput(Input, "Desea descomprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
                             userInput = getUserInput(Input, "Que algoritmo desea utilizar?(LZ78, LZW, LSS)");
                             switch (userInput.toLowerCase().trim()){
                                 case "lz78":
-                                    userInput = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
-                                    ctrlDomain.descomprimir("lz78", userInput);
+                                    ctrlDomain.descomprimir("lz78", file);
                                     break;
-                                case "lzSS":
-                                    ctrlDomain.descomprimir("lzss", userInput);;
+                                case "lzss":
+                                    ctrlDomain.descomprimir("lzss", file);;
                                     break;
-                                case "lzW":
-                                    System.out.println("Lo siento, esta funcion aun no esta implementada");
+                                case "lzw":
+                                    ctrlDomain.descomprimir("lzw", file);;
                                     break;
                                 default:
                                     System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo :(");

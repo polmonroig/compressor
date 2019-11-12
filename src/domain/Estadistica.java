@@ -1,3 +1,5 @@
+package domain;
+
 public abstract class Estadistica {
     private float tiempoCompresio;
     private float grauCompresio;

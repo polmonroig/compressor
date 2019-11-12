@@ -26,9 +26,6 @@ public class LZSS extends Algoritme{
     private short[] leftSon;
     private short[] rightSon;
 
-    private int original_size = 0;
-    private int compressed_size = 0;
-    private float compression_ratio = 0;
 
     private byte[] out;
 
@@ -41,18 +38,19 @@ public class LZSS extends Algoritme{
     }
 
     public int getOriginalSize(){
-        return this.original_size;
+        return this.estadisticaLocal.getMidaArxiuInicial();
     }
 
     public int getCompressedSize(){
-        return this.compressed_size;
+        return this.estadisticaLocal.getMidaArxiuFinal();
     }
 
     public float getCompression_ratio(){
-        return this.compression_ratio;
+        return this.estadisticaLocal.getGrauCompresio();
     }
 
     public byte[] comprimir(byte[] texto){
+        long startTime = System.nanoTime(); // empezar contador de tiempo
         out = new byte[texto.length];
         lecturePoint = 0;
         writePoint = 0;
@@ -151,9 +149,13 @@ public class LZSS extends Algoritme{
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
 
-        original_size = texto.length;
-        compressed_size = ret.length;
-        compression_ratio = ((float)compressed_size / (float)original_size) * 100;
+        // Calculo estadisticas
+        long endTime = System.nanoTime();
+        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
+        this.estadisticaLocal.setMidaArxiuFinal(ret.length);
+        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
+        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
         
         return ret;
     }

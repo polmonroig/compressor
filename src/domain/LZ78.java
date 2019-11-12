@@ -13,25 +13,7 @@ import java.lang.Math;
 
 public class LZ78 extends Algoritme {
 
-    /** Sets the number of bits the a char uses,
-     *  we use UTF-8 so CHAR_SIZE = 8
-     * */
-
-    private int original_size;
-    private int compressed_size;
-    private float compression_ratio;
-
-    public int getOriginalSize(){
-        return this.original_size;
-    }
-
-    public int getCompressedSize(){
-        return this.compressed_size;
-    }
-
-    public float getCompression_ratio(){
-        return this.compression_ratio;
-    }
+  
 
     /**
      * <p>The compression method makes a compression of a given text</>
@@ -40,6 +22,7 @@ public class LZ78 extends Algoritme {
      */
     @Override
     public byte[] comprimir(byte[] texto) {
+        long startTime = System.nanoTime(); // empezar contador de tiempo
         if(texto.length == 0)return texto; // empty file
         String text = new String(texto, StandardCharsets.UTF_8);
         SortedMap< String, Integer> dict = new TreeMap<>();
@@ -66,10 +49,19 @@ public class LZ78 extends Algoritme {
         if(inDict) coding.append(lastWordPos);
         String binary_string = Utils.toBinaryString(coding.toString());
 
-        this.original_size = text.length();
-        this.compressed_size = (int)Math.ceil(binary_string.length() / 8.0);
-        this.compression_ratio = ((float)compressed_size / (float)text.length()) * 100;
-        return Utils.toByteArray(binary_string);
+
+
+        byte[] compression = Utils.toByteArray(binary_string);
+
+        // Calculo estadisticas
+        long endTime = System.nanoTime();
+        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
+        this.estadisticaLocal.setMidaArxiuFinal((int)Math.ceil(binary_string.length() / 8.0) + 1);
+        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
+
+        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
+        return compression;
     }
 
     @Override

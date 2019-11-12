@@ -1,11 +1,13 @@
 package domain;
 import java.util.*;
 
-public class LZW {
-    public byte[] comprimir(byte[] text) {
-        System.out.println("bytes de l'arxiu " + text.length);
+public class LZW extends Algoritme{
+
+    @Override
+    public byte[] comprimir(byte[] texto) {
+        long startTime = System.nanoTime(); // empezar contador de tiempo
         SortedMap< String, Integer> dict = new TreeMap<>(); //map per guardar el diccionari
-        String cadenachars = new String(text); // convertir l'array de bytes en un String
+        String cadenachars = new String(texto); // convertir l'array de bytes en un String
         List<Integer> res = new ArrayList<Integer>();
         String s = "";
 
@@ -55,7 +57,14 @@ public class LZW {
             //System.out.println(e + " " + ret[i] + " " );
 
         }
+        // Calculo estadisticas
+        long endTime = System.nanoTime();
+        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
+        this.estadisticaLocal.setMidaArxiuFinal(ret.length);
+        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
 
+        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
         return ret;
     }
 
@@ -88,7 +97,7 @@ public class LZW {
 
 
 
-
+    @Override
     public byte[] descomprimir(byte[] text) {
 
 
