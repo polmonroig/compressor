@@ -14,9 +14,9 @@ import java.util.Arrays;
 
 public class JPEG extends Algoritme{
 
-    private static int calidad = 0;
+    private int calidad = 0;
 
-    private static void setCalidad(int calidad){
+    public void setCalidad(int calidad){
         this.calidad = calidad;
     }
 
