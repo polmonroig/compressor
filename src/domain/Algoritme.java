@@ -2,7 +2,9 @@ package domain;
 
 public abstract class Algoritme {
 
-    protected EstadisticaLocal estadisticaLocal;
+
+
+    protected EstadisticaLocal estadisticaLocal = new EstadisticaLocal();
 
     public int getOriginalSize(){
         return this.estadisticaLocal.getMidaArxiuInicial();
