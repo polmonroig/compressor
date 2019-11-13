@@ -1,12 +1,5 @@
 package domain;
 
-/**
- * Utilty functions for compression and decompression
- *
- * @author Pol Monroig Company
- *
- */
-
 public class Utils {
 
     static public String intToString(int b, int binary_size){
@@ -88,7 +81,19 @@ public class Utils {
         byte [] byte_coding = new byte[size];
         int it = 0;
         byte_coding[0] = (byte)(binary_string.length() % 8); // offset of 0
-        for(int i = 1; i < size; ++i){
+        for(int i = 0; i < size; ++i){
+            byte_coding[i] = (byte)getIntFromString(binary_string, it);
+            it += 8;
+        }
+
+        return  byte_coding;
+    }
+
+    static public byte[] toByteArray2(String binary_string){
+        int size = (int)Math.ceil(binary_string.length() / 8.0);
+        byte [] byte_coding = new byte[size];
+        int it = 0;
+        for(int i = 0; i < size; ++i){
             byte_coding[i] = (byte)getIntFromString(binary_string, it);
             it += 8;
         }
@@ -107,5 +112,14 @@ public class Utils {
         }
         binary_string.append(addZeros(intToString(byte_coding[byte_coding.length - 1], 8), zeros_offset));
         return binary_string.toString();
+    }
+
+    static public String AndofString(String code){
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < code.length(); ++i){
+            if(code.charAt(i) == '0') result.append("1");
+            else result.append("0");
+        }
+        return result.toString();
     }
 }
