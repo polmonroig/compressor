@@ -46,7 +46,7 @@ public class CtrlPresentation {
                         case "imagen":
                             String calidad = getUserInput(Input, "Con que grado de calidad desea comprimir? (Siendo 0 el más bajo y 12 el más alto)");
                             ctrlDomain.setCalidad(Integer.parseInt(calidad));
-                            ctrlDomain.comprimir("JPEG", file);
+                            ctrlDomain.comprimir("jpeg", file);
                             break;
                         default:
                             System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo :(");
