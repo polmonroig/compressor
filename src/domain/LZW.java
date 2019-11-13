@@ -78,7 +78,7 @@ public class LZW extends Algoritme{
         return temp;
     }
 
-    public String to8bit(int i) {
+    private String to8bit(int i) {
         String temp = Integer.toBinaryString(i);
         while (temp.length() < 8) {
             temp = "0" + temp;
@@ -100,55 +100,59 @@ public class LZW extends Algoritme{
     @Override
     public byte[] descomprimir(byte[] text) {
 
+        if (text.length > 0) {
+            String s = Utils.toString(text);
+            List<Integer> l = new ArrayList<Integer>();
 
-        String s = Utils.toString(text);
-        List<Integer> l = new ArrayList<Integer>();
+            //System.out.println(s.length());
 
-        //System.out.println(s.length());
+            for (int i = 0; i < s.length()-4; i = i + 12) {
+                String e = "" + s.charAt(i) + s.charAt(i+1) + s.charAt(i+2) + s.charAt(i+3) + s.charAt(i+4) + s.charAt(i+5) + s.charAt(i+6) + s.charAt(i+7) + s.charAt(i+8) + s.charAt(i+9) + s.charAt(i+10) + s.charAt(i+11) ;l.add(Integer.parseInt(e, 2));
 
-        for (int i = 0; i < s.length()-4; i = i + 12) {
-            String e = "" + s.charAt(i) + s.charAt(i+1) + s.charAt(i+2) + s.charAt(i+3) + s.charAt(i+4) + s.charAt(i+5) + s.charAt(i+6) + s.charAt(i+7) + s.charAt(i+8) + s.charAt(i+9) + s.charAt(i+10) + s.charAt(i+11) ;l.add(Integer.parseInt(e, 2));
-
-        }
-
-        SortedMap< Integer, String> dict = new TreeMap<>();
-
-        String res = "";
-
-
-        int dictSize = 256;
-        for (int i = 0; i < 256; i++) {
-            dict.put(i, "" + (char)i);
-        }
-
-        int cod_nou;
-        String cadena;
-        int cod_vell = l.get(0);
-        String caracter = dict.get(cod_vell);
-        res += caracter;
-
-        for (int i = 1; i < l.size(); ++i) {
-            cod_nou = l.get(i);
-            if (!dict.containsKey(cod_nou)) {
-                cadena = dict.get(cod_vell) + caracter;
             }
-            else {
-                cadena = dict.get(cod_nou);
+
+            SortedMap< Integer, String> dict = new TreeMap<>();
+
+            String res = "";
+
+
+            int dictSize = 256;
+            for (int i = 0; i < 256; i++) {
+                dict.put(i, "" + (char)i);
             }
-            res += cadena;
-            caracter = String.valueOf(cadena.charAt(0));
-            String dic_inp = dict.get(cod_vell)+caracter;
-            dict.put(dictSize, dic_inp);
-            ++dictSize;
-            cod_vell = cod_nou;
+
+            int cod_nou;
+            String cadena;
+            int cod_vell = l.get(0);
+            String caracter = dict.get(cod_vell);
+            res += caracter;
+
+            for (int i = 1; i < l.size(); ++i) {
+                cod_nou = l.get(i);
+                if (!dict.containsKey(cod_nou)) {
+                    cadena = dict.get(cod_vell) + caracter;
+                }
+                else {
+                    cadena = dict.get(cod_nou);
+                }
+                res += cadena;
+                caracter = String.valueOf(cadena.charAt(0));
+                String dic_inp = dict.get(cod_vell)+caracter;
+                dict.put(dictSize, dic_inp);
+                ++dictSize;
+                cod_vell = cod_nou;
 
 
 
+            }
+
+            byte[] ret = res.toString().getBytes();
+
+            return ret;
         }
 
-        byte[] ret = res.toString().getBytes();
+        return text;
 
-        return ret;
     }
 
 
