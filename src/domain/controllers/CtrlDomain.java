@@ -8,6 +8,7 @@ public class CtrlDomain {
     private LZ78 lz78;
     private LZSS lzss;
     private LZW lzw;
+    private JPEG jpeg;
     private EstadisticaGlobal estadisticaGlobal;
 
 
@@ -20,6 +21,7 @@ public class CtrlDomain {
         lz78 = new LZ78();
         lzss = new LZSS();
         lzw = new LZW();
+        jpeg = new JPEG();
     }
 
     public void comprimir(String algoritmo, String archivo){
@@ -35,10 +37,16 @@ public class CtrlDomain {
                 CtrlPersistencia.WriteBytesToFile(archivo + ".lzss", compressed);
                 break;
             }
-            case "lzw":
+            case "lzw": {
                 byte[] compressed = lzw.comprimir(file);
                 CtrlPersistencia.WriteBytesToFile(archivo + ".lzw", compressed);
                 break;
+            }
+            case "jpeg": {
+                byte[] compressed = jpeg.comprimir(file);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".jpeg", compressed);
+                break;
+            }
         }
     }
 
@@ -55,10 +63,16 @@ public class CtrlDomain {
                 CtrlPersistencia.WriteBytesToFile(archivo + ".lzss", compressed);
                 break;
             }
-            case "lzw":
+            case "lzw": {
                 byte[] compressed = lzw.descomprimir(file);
                 CtrlPersistencia.WriteBytesToFile(archivo + ".lzw", compressed);
                 break;
+            }
+            case "jpeg": {
+                byte[] compressed = jpeg.descomprimir(file);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".jpeg", compressed);
+                break;
+            }
         }
     }
 
@@ -66,4 +80,7 @@ public class CtrlDomain {
 
     }
 
+    public void setCalidad(int parseInt) {
+        jpeg.setCalidad(parseInt);
+    }
 }
