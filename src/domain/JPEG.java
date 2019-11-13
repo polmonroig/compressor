@@ -12,7 +12,13 @@ import java.util.Arrays;
 
  */
 
-public class JPEG {
+public class JPEG extends Algoritme{
+
+    private static int calidad = 0;
+
+    private static void setCalidad(int calidad){
+        this.calidad = calidad;
+    }
 
     private static double [][][] QtablesLuminance = {
         {
@@ -98,7 +104,8 @@ public class JPEG {
         }
     };
     
-    static public byte[] descomprimir(byte [] imagen){
+    @Override
+    public byte[] descomprimir(byte [] imagen){
 
         /*
         Declaraciones de variables
@@ -167,7 +174,8 @@ public class JPEG {
         return null;
     }
 
-    static public byte[] comprimir (byte [] imagen){
+    @Override
+    public byte[] comprimir (byte [] imagen){
 
         /*
         Declaraciones de variables
@@ -175,7 +183,6 @@ public class JPEG {
         int width = 0;
         int height = 0;
         int color = 0;
-        int calidad = 0;
         boolean anchura = true;
         int iterator = 0;
         StringBuilder Yen = new StringBuilder();
