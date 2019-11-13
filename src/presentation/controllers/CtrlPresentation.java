@@ -1,7 +1,5 @@
 package presentation.controllers;
 
-
-import domain.LZ78;
 import domain.controllers.CtrlDomain;
 
 import java.util.Scanner;
@@ -22,7 +20,7 @@ public class CtrlPresentation {
             String file;
             switch (userInput.toLowerCase().trim()) {
                 case "comprimir":
-                    file = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
+                    file = getUserInput(Input, "Introduce el archivo que deseas comprimir");
                     userInput = getUserInput(Input, "Desea comprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
