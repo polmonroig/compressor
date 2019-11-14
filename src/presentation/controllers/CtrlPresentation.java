@@ -1,3 +1,4 @@
+  
 package presentation.controllers;
 
 import domain.controllers.CtrlDomain;
@@ -24,18 +25,18 @@ public class CtrlPresentation {
                     userInput = getUserInput(Input, "Desea comprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
-                            userInput = getUserInput(Input, "Que algoritmo desea utilizar?(LZ78, LZW, LSS, auto)");
+                            userInput = getUserInput(Input, "Que algoritmo desea utilizar?(1-LZ78, 2-LZW, 3-LZSS, 4-auto)");
                             switch (userInput.toLowerCase().trim()){
-                                case "lz78":
+                                case "1":
                                     ctrlDomain.comprimir("lz78", file);
                                     break;
-                                case "lzss":
-                                    ctrlDomain.comprimir("lzss", file);;
-                                    break;
-                                case "lzw":
+                                case "2":
                                     ctrlDomain.comprimir("lzw", file);;
                                     break;
-                                case "auto":
+                                case "3":
+                                    ctrlDomain.comprimir("lzss", file);;
+                                    break;
+                                case "4":
                                     System.out.println("Lo siento, esta funcion aun no esta implementada");
                                     break;
                                 default:
@@ -58,16 +59,16 @@ public class CtrlPresentation {
                     userInput = getUserInput(Input, "Desea descomprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
-                            userInput = getUserInput(Input, "Que algoritmo desea utilizar?(LZ78, LZW, LSS)");
+                            userInput = getUserInput(Input, "Que algoritmo desea utilizar?(1-LZ78, 2-LZW, 3-LZSS)");
                             switch (userInput.toLowerCase().trim()){
-                                case "lz78":
+                                case "1":
                                     ctrlDomain.descomprimir("lz78", file);
                                     break;
-                                case "lzss":
-                                    ctrlDomain.descomprimir("lzss", file);;
-                                    break;
-                                case "lzw":
+                                case "2":
                                     ctrlDomain.descomprimir("lzw", file);;
+                                    break;
+                                case "3":
+                                    ctrlDomain.descomprimir("lzss", file);;
                                     break;
                                 default:
                                     System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo :(");
