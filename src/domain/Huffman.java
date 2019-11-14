@@ -1,9 +1,5 @@
 package domain;
 
-import java.security.AlgorithmConstraints;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -50,7 +46,7 @@ public class Huffman {
         if(sequencia.get(0) < 0){
             int aux = -1*sequencia.get(0);
             String aux1 = Integer.toBinaryString(aux);
-            binari = Utils.AndofString(aux1);
+            binari = Utils.andOfString(aux1);
         }
         else binari = Integer.toBinaryString(sequencia.get(0));
         String codi = huffmanDC[binari.length()];
@@ -65,7 +61,7 @@ public class Huffman {
                 if(sequencia.get(i) < 0){
                     int aux = -1*sequencia.get(i);
                     String aux1 = Integer.toBinaryString(aux);
-                    binari = Utils.AndofString(aux1);
+                    binari = Utils.andOfString(aux1);
                 }
                 else binari = Integer.toBinaryString(sequencia.get(i));
                 codi = huffmanAC[zeros][binari.length() - 1];
@@ -116,7 +112,7 @@ public class Huffman {
         }
         Dit = Dit + size + 1;
         if (bin.charAt(0) == '0') {
-            bin = Utils.AndofString(bin);
+            bin = Utils.andOfString(bin);
             result.add((-1)*Integer.parseInt(bin,2));
         }
         else result.add(Integer.parseInt(bin,2));
@@ -156,7 +152,7 @@ public class Huffman {
                     count++;
                 }
                 if (bin.charAt(0) == '0') {
-                    bin = Utils.AndofString(bin);
+                    bin = Utils.andOfString(bin);
                     result.add((-1)*Integer.parseInt(bin,2));
                 }
                 else result.add(Integer.parseInt(bin,2));

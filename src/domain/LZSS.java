@@ -52,7 +52,7 @@ public class LZSS extends Algoritme{
         return this.estadisticaLocal.getMidaArxiuFinal();
     }
 
-    public float getCompression_ratio(){
+    public float getCompressionRatio(){
         return this.estadisticaLocal.getGrauCompresio();
     }
     
@@ -156,7 +156,7 @@ public class LZSS extends Algoritme{
         if ((bytes - bytesTamFchr) != 0)  ++bytesTamFchr;
         byte[] ret = new byte[writePoint+bytesTamFchr+1];
 
-        for (int j = 0; j < writePoint; ++j) ret[j] = out[j];
+        if (writePoint >= 0) System.arraycopy(out, 0, ret, 0, writePoint);
         ret[writePoint] = '#';
         byte[] aux = putTamanoTexto(texto, bytesTamFchr);
         for (int j = 0; j < bytesTamFchr; ++j)
@@ -169,7 +169,6 @@ public class LZSS extends Algoritme{
         this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
         this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
         this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
-        System.out.println(estadisticaLocal.getGrauCompresio() + "% de compression\n" + estadisticaLocal.getVelocitatCompresio() + "Bytes/segundo");
         
         return ret;
     }

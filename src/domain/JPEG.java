@@ -176,7 +176,7 @@ public class JPEG extends Algoritme{
 
     @Override
     public byte[] comprimir (byte [] imagen){
-
+        long startTime = System.nanoTime(); // empezar contador de tiempo
         /*
         Declaraciones de variables
          */
@@ -380,15 +380,16 @@ public class JPEG extends Algoritme{
         int compressed_size = (int)Math.ceil(c.length);
         float compression_ratio = ((float)imagen.length /(float)compressed_size)*100;
 
-        System.out.print("El archivo original mide: ");
-        System.out.print(original_size);
-        System.out.println();
-        System.out.print("El archivo comprimido mide: ");
-        System.out.print(compressed_size);
-        System.out.println();
-        System.out.print("El ratio de compression es (en porcentaje): ");
-        System.out.print(compression_ratio);
-        System.out.print("%");
+
+
+        // Calculo estadisticas
+        long endTime = System.nanoTime();
+        this.estadisticaLocal.setMidaArxiuInicial(imagen.length);
+        this.estadisticaLocal.setMidaArxiuFinal(compressed_size);
+        this.estadisticaLocal.setGrauCompresio(compression_ratio);
+        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.estadisticaLocal.setVelocitatCompresio(imagen.length / this.estadisticaLocal.getTiempoCompresio());
+
 
         return c;
     }

@@ -2,7 +2,7 @@ package domain;
 
 public class Utils {
 
-    static public String intToString(int b, int binary_size){
+    static private String intToString(int b, int binary_size){
         String s = Integer.toBinaryString(b);
         StringBuilder result = new StringBuilder();
         for(int i = s.length() - 1; i >= s.length() - binary_size && i >= 0; --i){
@@ -12,7 +12,7 @@ public class Utils {
     }
 
     /**
-     * <p>Transforms a given LZ78 compression into a binary string</>
+     * <p>Transforms a given compression into a binary string</>
      * @param coding text to transform into binary
      * @return the encoding as a binary text
      */
@@ -81,7 +81,7 @@ public class Utils {
         byte [] byte_coding = new byte[size];
         int it = 0;
         byte_coding[0] = (byte)(binary_string.length() % 8); // offset of 0
-        for(int i = 0; i < size; ++i){
+        for(int i = 1; i < size; ++i){
             byte_coding[i] = (byte)getIntFromString(binary_string, it);
             it += 8;
         }
@@ -114,7 +114,7 @@ public class Utils {
         return binary_string.toString();
     }
 
-    static public String AndofString(String code){
+    static public String andOfString(String code){
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < code.length(); ++i){
             if(code.charAt(i) == '0') result.append("1");
