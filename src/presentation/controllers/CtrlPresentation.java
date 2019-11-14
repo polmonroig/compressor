@@ -94,7 +94,7 @@ public class CtrlPresentation {
                 break;
                 default:
                     System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo");
-                    writeFunctions(functions);
+                    //writeFunctions(functions);
                     break;
             }
         }
