@@ -104,7 +104,7 @@ public class Utils {
     static  public String toString(byte[] byte_coding){ // CORRECTA
         StringBuilder binary_string = new StringBuilder();
         int zeros_offset = byte_coding[0];
-        for(int i = 1; i < byte_coding.length - 1; ++i){
+        for(int i = 0; i < byte_coding.length - 1; ++i){
             binary_string.append(addZeros(intToString(byte_coding[i], 8), 8));
         }
         if(zeros_offset == 0){
