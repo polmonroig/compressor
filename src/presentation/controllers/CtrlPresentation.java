@@ -87,7 +87,7 @@ public class CtrlPresentation {
                     else if (file.endsWith("lzss")) ctrlDomain.descomprimir("lzss", file);
                     else if (file.endsWith("lzw")) ctrlDomain.descomprimir("lzw", file);
                     else if (file.endsWith("jpeg")) ctrlDomain.descomprimir("jpeg", file);
-                    else System.out.println("El archivo introducido no es valido, porfavor introduce un archivo .txt o .ppm");
+                    else System.out.println("El archivo introducido no es valido, porfavor introduce un archivo .lz78, .lzss, .lzw o .jpeg");
                     break;
                 case "3":
                 input = true;
