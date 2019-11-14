@@ -169,6 +169,7 @@ public class LZSS extends Algoritme{
         this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
         this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
         this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
+        System.out.println(estadisticaLocal.getGrauCompresio() + "% de compression\n" + estadisticaLocal.getVelocitatCompresio() + "Bytes/segundo");
         
         return ret;
     }
