@@ -26,6 +26,8 @@ public class CtrlDomain {
 
     public void comprimir(String algoritmo, String archivo){
         byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
+        int lastPeriodPos = archivo.lastIndexOf('.');
+        archivo = archivo.substring(0,lastPeriodPos);
         switch (algoritmo) {
             case "lz78": {
                 byte[] decompressed = lz78.comprimir(file);
@@ -52,25 +54,27 @@ public class CtrlDomain {
 
     public void descomprimir(String algoritmo, String archivo){
         byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
+        int lastPeriodPos = archivo.lastIndexOf('.');
+        archivo = archivo.substring(0,lastPeriodPos);
         switch (algoritmo) {
             case "lz78": {
                 byte[] decompressed = lz78.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo, decompressed);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
                 break;
             }
             case "lzss": {
-                byte[] compressed = lzss.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".lzss", compressed);
+                byte[] decompressed = lzss.descomprimir(file);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
                 break;
             }
             case "lzw": {
-                byte[] compressed = lzw.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".lzw", compressed);
+                byte[] decompressed = lzw.descomprimir(file);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
                 break;
             }
             case "jpeg": {
-                byte[] compressed = jpeg.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".jpeg", compressed);
+                byte[] decompressed = jpeg.descomprimir(file);
+                CtrlPersistencia.WriteBytesToFile(archivo + ".ppm", decompressed);
                 break;
             }
         }
