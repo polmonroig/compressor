@@ -29,4 +29,8 @@ public abstract class Estadistica {
     public void setVelocitatCompresio(float velocitatCompresio) {
         this.velocitatCompresio = velocitatCompresio;
     }
+
+
+
+
 }

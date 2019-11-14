@@ -12,11 +12,19 @@ public abstract class Algoritme {
 
     public int getCompressedSize(){ return this.estadisticaLocal.getMidaArxiuFinal(); }
 
-    public float getCompression_ratio(){
+    public float getCompressionRatio(){
         return this.estadisticaLocal.getGrauCompresio();
     }
 
     public abstract byte[] comprimir(byte[] texto);
     public abstract byte[] descomprimir(byte[] texto);
 
+
+    public float getTempsCompressio(){
+        return estadisticaLocal.getTiempoCompresio();
+    }
+
+    public float getVelocitatCompressio(){
+        return estadisticaLocal.getVelocitatCompresio();
+    }
 }

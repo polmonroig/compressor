@@ -13,7 +13,7 @@ import java.lang.Math;
 
 public class LZ78 extends Algoritme {
 
-  
+
 
     /**
      * <p>The compression method makes a compression of a given text</>
@@ -22,6 +22,7 @@ public class LZ78 extends Algoritme {
      */
     @Override
     public byte[] comprimir(byte[] texto) {
+        this.estadisticaLocal.reset(); // reset stats
         long startTime = System.nanoTime(); // empezar contador de tiempo
         if(texto.length == 0)return texto; // empty file
         String text = new String(texto, StandardCharsets.UTF_8);
