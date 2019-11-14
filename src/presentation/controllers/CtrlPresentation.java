@@ -1,4 +1,4 @@
-  
+
 package presentation.controllers;
 
 import domain.controllers.CtrlDomain;
@@ -16,15 +16,16 @@ public class CtrlPresentation {
 
         while(!input){
             System.out.println("Que desea hacer?");
-            System.out.println("comprimir/descomprimir/nada");
+            System.out.println("1-comprimir/2-descomprimir/3-nada");
             String userInput = Input.nextLine();
             String file;
             switch (userInput.toLowerCase().trim()) {
-                case "comprimir":
+                case "1":
                     file = getUserInput(Input, "Introduce el archivo que deseas comprimir");
-                    userInput = getUserInput(Input, "Desea comprimir un texto o una imagen?");
+                    System.out.println("Que desea comprimir?");
+                    System.out.println("1-texto/2-imagen");
                     switch (userInput.toLowerCase().trim()){
-                        case "texto":
+                        case "1":
                             userInput = getUserInput(Input, "Que algoritmo desea utilizar?(1-LZ78, 2-LZW, 3-LZSS, 4-auto)");
                             switch (userInput.toLowerCase().trim()){
                                 case "1":
@@ -44,7 +45,7 @@ public class CtrlPresentation {
                                     break;
                             }
                             break;
-                        case "imagen":
+                        case "2":
                             String calidad = getUserInput(Input, "Con que grado de calidad desea comprimir? (Siendo 0 el más bajo y 12 el más alto)");
                             ctrlDomain.setCalidad(Integer.parseInt(calidad));
                             ctrlDomain.comprimir("jpeg", file);
@@ -54,7 +55,7 @@ public class CtrlPresentation {
                             break;
                     }
                     break;
-                case "descomprimir":
+                case "2":
                     file = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
                     userInput = getUserInput(Input, "Desea descomprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
@@ -83,7 +84,7 @@ public class CtrlPresentation {
                             break;
                     }
                     break;
-                case "nada":
+                case "3":
                     input = true;
                     break;
                 default:
