@@ -23,7 +23,7 @@ public class CtrlPresentation {
                 case "1":
                     file = getUserInput(Input, "Introduce el archivo que deseas comprimir");
                     System.out.println("Que desea comprimir?");
-                    System.out.println("1-texto/2-imagen");
+                    userInput = getUserInput(Input, "1-texto/2-imagen");
                     switch (userInput.toLowerCase().trim()){
                         case "1":
                             userInput = getUserInput(Input, "Que algoritmo desea utilizar?(1-LZ78, 2-LZW, 3-LZSS, 4-auto)");
@@ -56,7 +56,7 @@ public class CtrlPresentation {
                     }
                     break;
                 case "2":
-                    file = getUserInput(Input, "Introduce el archivo que deseas decomprimir");
+                    file = getUserInput(Input, "Introduce el archivo que deseas descomprimir");
                     userInput = getUserInput(Input, "Desea descomprimir un texto o una imagen?");
                     switch (userInput.toLowerCase().trim()){
                         case "texto":
