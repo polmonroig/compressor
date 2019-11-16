@@ -1,7 +1,7 @@
 package domain.drivers;
 
 import domain.JPEG;
-import persistencia.controllers.DataCtrl;
+import data.controllers.DataCtrl;
 
 import java.util.Scanner;
 

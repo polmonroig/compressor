@@ -1,7 +1,7 @@
 package domain.drivers;
 
 import domain.LZ78;
-import persistencia.controllers.DataCtrl;
+import data.controllers.DataCtrl;
 import java.util.Scanner;
 
 public class DriverLZ78 {

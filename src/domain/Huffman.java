@@ -4,109 +4,109 @@ import java.util.*;
 
 public class Huffman {
 
-    Map<Integer, Integer> frequencias = new HashMap<>();
+    Map<Integer, Integer> frequencies = new HashMap<>();
 
-    public Map<Integer, Integer> ObtenerFrequencias(){
-        return this.frequencias;
+    public Map<Integer, Integer> getFrequencies(){
+        return this.frequencies;
     }
 
-    public String ComprimirHuffman(ArrayList<Integer> imagen){
-        InicializarFrequencias(imagen);
-        NodoArbol raiz = CrearArbol();
-        Map<Integer, String> Codigos = CrearCodigos(raiz);
-        StringBuilder imagencomprimida = new StringBuilder();
-        for(int i = 0; i < imagen.size(); ++i){
-            imagencomprimida.append(Codigos.get(imagen.get(i)));
+    public String compressHuffman(ArrayList<Integer> image){
+        initializeFrequencies(image);
+        TreeNode root = createTree();
+        Map<Integer, String> codes = createCodes(root);
+        StringBuilder compressedImage = new StringBuilder();
+        for(int i = 0; i < image.size(); ++i){
+            compressedImage.append(codes.get(image.get(i)));
         }
-        return imagencomprimida.toString();
+        return compressedImage.toString();
     }
 
-    public ArrayList<Integer> DescomprimirHuffman (String imagen, Map<Integer, Integer> freq){
-        this.frequencias = freq; //Pongo las frequencias en la classe para poder crear el arbol
-        NodoArbol ArbolComprimido = CrearArbol();
-        ArrayList<Integer> imagendescomprimirda = new ArrayList<Integer>();
-        NodoArbol actual = ArbolComprimido;
+    public ArrayList<Integer> decompressHuffman(String image, Map<Integer, Integer> freq){
+        this.frequencies = freq; //Pongo las frequencias en la classe para poder crear el arbol
+        TreeNode compressedTree = createTree();
+        ArrayList<Integer> decompressedImage = new ArrayList<Integer>();
+        TreeNode actual = compressedTree;
         int i = 0;
-        while(i < imagen.length()){
-            while(!actual.EsHoja()){
-                char bit = imagen.charAt(i);
-                if(bit == '0') actual = actual.izquierda;
-                else actual = actual.derecha;
+        while(i < image.length()){
+            while(!actual.isLeaf()){
+                char bit = image.charAt(i);
+                if(bit == '0') actual = actual.left;
+                else actual = actual.right;
                 ++i;
             }
-            imagendescomprimirda.add(actual.caracter);
-            actual = ArbolComprimido;
+            decompressedImage.add(actual.character);
+            actual = compressedTree;
         }
-        return imagendescomprimirda;
+        return decompressedImage;
     }
 
-    private static Map<Integer, String> CrearCodigos(NodoArbol raiz){
-        Map<Integer, String> Codigos = new HashMap<>();
-        CrearCodigosRecursivo(raiz, "", Codigos);
-        return Codigos;
+    private static Map<Integer, String> createCodes(TreeNode root){
+        Map<Integer, String> codes = new HashMap<>();
+        createCodesRecursively(root, "", codes);
+        return codes;
     }
 
-    private static void CrearCodigosRecursivo(NodoArbol raiz, String codigo, Map<Integer, String> Codigos){
-        if(raiz.EsHoja()) Codigos.put(raiz.caracter, codigo);
+    private static void createCodesRecursively(TreeNode root, String code, Map<Integer, String> codes){
+        if(root.isLeaf()) codes.put(root.character, code);
         else{
-            CrearCodigosRecursivo(raiz.izquierda, codigo + '0', Codigos);
-            CrearCodigosRecursivo(raiz.derecha, codigo + '1', Codigos);
+            createCodesRecursively(root.left, code + '0', codes);
+            createCodesRecursively(root.right, code + '1', codes);
         }
     }
 
-    private NodoArbol CrearArbol(){
-        PriorityQueue<NodoArbol> ColadeNodos = new PriorityQueue<>();
+    private TreeNode createTree(){
+        PriorityQueue<TreeNode> nodeQueue = new PriorityQueue<>();
         //Recorrer mapa y meter en la cola de nodos
-        for(Map.Entry<Integer, Integer> entry: this.frequencias.entrySet()){
-            ColadeNodos.add(new NodoArbol(entry.getKey(), entry.getValue(), null, null));
+        for(Map.Entry<Integer, Integer> entry: this.frequencies.entrySet()){
+            nodeQueue.add(new TreeNode(entry.getKey(), entry.getValue(), null, null));
         }
-        if(ColadeNodos.size() == 1) ColadeNodos.add(new NodoArbol(256, 1, null, null));
-        while(ColadeNodos.size() > 1){
-            NodoArbol izquierdo = ColadeNodos.poll();
-            NodoArbol derecho = ColadeNodos.poll();
-            NodoArbol raiz = new NodoArbol(256, izquierdo.frequencia + derecho.frequencia, izquierdo, derecho);
-            ColadeNodos.add(raiz);
+        if(nodeQueue.size() == 1) nodeQueue.add(new TreeNode(256, 1, null, null));
+        while(nodeQueue.size() > 1){
+            TreeNode left = nodeQueue.poll();
+            TreeNode right = nodeQueue.poll();
+            TreeNode root = new TreeNode(256, left.frequency + right.frequency, left, right);
+            nodeQueue.add(root);
         }
 
-        return ColadeNodos.poll();
+        return nodeQueue.poll();
     }
 
-    private void InicializarFrequencias(ArrayList<Integer> imagen){
-        for (int i = 0; i < imagen.size(); ++i){
-            if(!this.frequencias.isEmpty()){
-                if(this.frequencias.containsKey(imagen.get(i))){
-                    int aux = frequencias.get(imagen.get(i));
+    private void initializeFrequencies(ArrayList<Integer> image){
+        for (int i = 0; i < image.size(); ++i){
+            if(!this.frequencies.isEmpty()){
+                if(this.frequencies.containsKey(image.get(i))){
+                    int aux = frequencies.get(image.get(i));
                     aux++;
-                    frequencias.put(imagen.get(i), aux);
+                    frequencies.put(image.get(i), aux);
                 }
-                else this.frequencias.put(imagen.get(i), 1);
+                else this.frequencies.put(image.get(i), 1);
             }
-            else this.frequencias.put(imagen.get(i), 1);
+            else this.frequencies.put(image.get(i), 1);
         }
     }
 
-    static class NodoArbol implements Comparable<NodoArbol>{
-        private final int caracter;
-        private final int frequencia;
-        private final NodoArbol izquierda;
-        private final NodoArbol derecha;
+    static class TreeNode implements Comparable<TreeNode>{
+        private final int character;
+        private final int frequency;
+        private final TreeNode left;
+        private final TreeNode right;
 
-        private NodoArbol(final int caracter, final int frequencia, final NodoArbol izquierda, final NodoArbol derecha){
-            this.caracter = caracter;
-            this.derecha = derecha;
-            this.frequencia = frequencia;
-            this.izquierda = izquierda;
+        private TreeNode(final int character, final int frequency, final TreeNode left, final TreeNode right){
+            this.character = character;
+            this.right = right;
+            this.frequency = frequency;
+            this.left = left;
         }
 
-        private boolean EsHoja(){
-            return (this.izquierda == null & this.derecha == null);
+        private boolean isLeaf(){
+            return (this.left == null & this.right == null);
         }
 
         @Override
-        public int compareTo(NodoArbol nodo) {
-            int comparacion = Integer.compare(this.frequencia , nodo.frequencia);
-            if(comparacion == 0) return Integer.compare(this.caracter , nodo.caracter);
-            else return comparacion;
+        public int compareTo(TreeNode node) {
+            int comparison = Integer.compare(this.frequency, node.frequency);
+            if(comparison == 0) return Integer.compare(this.character, node.character);
+            else return comparison;
         }
     }
 

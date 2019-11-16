@@ -1,7 +1,7 @@
 package domain.drivers;
 
 import domain.LZSS;
-import persistencia.controllers.DataCtrl;
+import data.controllers.DataCtrl;
 
 import java.util.ArrayList;
 import java.util.Scanner;

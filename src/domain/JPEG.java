@@ -432,13 +432,13 @@ public class JPEG extends Algorithm {
             Huffman comprimirCB = new Huffman();
             Huffman comprimirCR = new Huffman();
 
-            String Yen = comprimirY.ComprimirHuffman(Yencoding);
-            String Cben = comprimirCB.ComprimirHuffman(Cbencoding);
-            String Cren = comprimirCR.ComprimirHuffman(Crencoding);
+            String Yen = comprimirY.compressHuffman(Yencoding);
+            String Cben = comprimirCB.compressHuffman(Cbencoding);
+            String Cren = comprimirCR.compressHuffman(Crencoding);
 
-            Map<Integer, Integer> freqY = comprimirY.ObtenerFrequencias();
-            Map<Integer, Integer> freqCb = comprimirCB.ObtenerFrequencias();
-            Map<Integer, Integer> freqCr = comprimirCR.ObtenerFrequencias();
+            Map<Integer, Integer> freqY = comprimirY.getFrequencies();
+            Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
+            Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
 
             StringBuilder FY = new StringBuilder();
             StringBuilder FCB = new StringBuilder();

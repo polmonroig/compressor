@@ -5,7 +5,7 @@ import domain.controllers.DomainCtrl;
 
 import java.util.Scanner;
 
-public class presentationCtrl {
+public class PresentationCtrl {
 
     public static void main(String[] args) {
         DomainCtrl domainCtrl = new DomainCtrl();

@@ -1,7 +1,7 @@
 package domain.controllers;
 
 import domain.*;
-import persistencia.controllers.DataCtrl;
+import data.controllers.DataCtrl;
 
 public class DomainCtrl {
     private DataCtrl dataCtrl;

@@ -11,15 +11,15 @@ JAVAC = javac -cp
 JAR = jar cmf
 
 # path to the presentation controller
-presentationController = presentation/controllers/CtrlPresentation.java
+presentationController = presentation/controllers/PresentationCtrl.java
 # path to the data controller
-dataController = persistencia/controllers/CtrlPersistencia.java
+dataController = data/controllers/DataCtrl.java
 # path to every domain class
 domainObjects = domain/*.java
 # path to the domain controller
-domainController = domain/controllers/CtrlDomain.java
+domainController = domain/controllers/DomainCtrl.java
 
-etc = domain/Algoritme.java domain/Estadistica.java domain/EstadisticaLocal.java
+etc = domain/Algorithm.java domain/Stats.java
 utils = domain/Utils.java
 
 # LZ78 driver
@@ -73,7 +73,7 @@ driverjpeg:
 
 # compile and build main program
 program:
-	echo 'Main-Class: presentation.controllers.presentationCtrl' > $(manifest)
+	echo 'Main-Class: presentation.controllers.PresentationCtrl' > $(manifest)
 	$(JAVAC) $(files)
 	$(JAR) $(manifest) $(programName) $(classes)
 
