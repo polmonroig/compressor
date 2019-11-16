@@ -109,7 +109,7 @@ public class JPEG extends Algoritme{
         Declaraciones de variables
          */
 
-        int width = 0;
+        /*int width = 0;
         int height = 0;
         int calidad = 0;
         int iterator = 0;
@@ -168,7 +168,7 @@ public class JPEG extends Algoritme{
             }
 
             ++iteradorY;
-        }
+        }*/
         return null;
     }
 
@@ -183,9 +183,9 @@ public class JPEG extends Algoritme{
         int color = 0;
         boolean anchura = true;
         int iterator = 0;
-        StringBuilder Yen = new StringBuilder();
-        StringBuilder Cben = new StringBuilder();
-        StringBuilder Cren = new StringBuilder();
+        ArrayList<Integer> Yencoding = new ArrayList<Integer>();
+        ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
+        ArrayList<Integer> Crencoding = new ArrayList<Integer>();
 
 
         char [] imagenaux = new char[imagen.length];
@@ -300,14 +300,6 @@ public class JPEG extends Algoritme{
             Hacemos el encoding con Huffman HAY QUE RECORRER EN ZIGZAG CADA MATRIZ
              */
 
-            ArrayList<Integer> Yencoding = new ArrayList<Integer>();
-            ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
-            ArrayList<Integer> Crencoding = new ArrayList<Integer>();
-
-                Huffman comprimirY = new Huffman();
-                Huffman comprimirCB = new Huffman();
-                Huffman comprimirCR = new Huffman();
-
                 int u = 1;
                 int k = 1;
                 int contador = 0;
@@ -331,13 +323,16 @@ public class JPEG extends Algoritme{
                             k--;
                     }
                 }
-
-                Yen.append(comprimirY.encode(Yencoding));
-                Cben.append(comprimirCB.encode(Cbencoding));
-                Cren.append(comprimirCR.encode(Crencoding));
-
             }
         }
+
+            Huffman comprimirY = new Huffman();
+            Huffman comprimirCB = new Huffman();
+            Huffman comprimirCR = new Huffman();
+
+            String Yen = comprimirY.ComprimirHuffman(Yencoding);
+            String Cben = comprimirCB.ComprimirHuffman(Cbencoding);
+            String Cren = comprimirCR.ComprimirHuffman(Crencoding);
 
             String calidadE =  Integer.toBinaryString(calidad);
             String widthE =  Integer.toBinaryString(width);
@@ -347,10 +342,6 @@ public class JPEG extends Algoritme{
             while(heightE.length() < 16) heightE = "0" + heightE;
             String result = calidadE + widthE + heightE + Yen.toString() + Cben.toString() + Cren.toString();
             byte [] c = Utils.toByteArray2(result);
-
-
-
-
 
         /*
 
