@@ -2,6 +2,7 @@ package domain;
 
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -110,7 +111,7 @@ public class JPEG extends Algorithm {
         Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
          */
 
-        /*int width = 0;
+        int width = 0;
         int height = 0;
         int calidad = 0;
         int iterator = 0;
@@ -143,13 +144,109 @@ public class JPEG extends Algorithm {
             ++i;
         }
         height = Integer.parseInt(heightS.toString(), 2);
+        StringBuilder sizeYS = new StringBuilder();
+        while(i<48){
+            sizeYS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeY = Integer.parseInt(sizeYS.toString(), 2);
+        StringBuilder sizeCBS = new StringBuilder();
+        while(i<56){
+            sizeCBS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCB = Integer.parseInt(sizeCBS.toString(), 2);
+        StringBuilder sizeCRS = new StringBuilder();
+        while(i<64){
+            sizeCRS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCR = Integer.parseInt(sizeCRS.toString(), 2);
+
+        Map<Integer, Integer> FreqY = new HashMap<>();
+        Map<Integer, Integer> FreqCB = new HashMap<>();
+        Map<Integer, Integer> FreqCR = new HashMap<>();
+
+        for (int x = 0; x<sizeY; ++x){
+            StringBuilder auxKey = new StringBuilder();
+            StringBuilder auxValue = new StringBuilder();
+            int Key;
+            int Value;
+            while(i<i+8){
+                auxKey.append(aux.charAt(i));
+                ++i;
+            }
+            while(i<i+16){
+                auxValue.append(aux.charAt(i));
+                ++i;
+            }
+            if(aux.charAt(i-16) == '1'){
+                String n = auxValue.toString();
+                n = Utils.andOfString(n);
+                Value = Integer.parseInt(n,2);
+                Value = -1*Value;
+            }else{
+                Value = Integer.parseInt(auxValue.toString(),2);
+            }
+            Key = Integer.parseInt(auxKey.toString(), 2);
+            FreqY.put(Key, Value);
+        }
+
+        for (int x = 0; x<sizeCB; ++x){
+            StringBuilder auxKey = new StringBuilder();
+            StringBuilder auxValue = new StringBuilder();
+            int Key;
+            int Value;
+            while(i<i+8){
+                auxKey.append(aux.charAt(i));
+                ++i;
+            }
+            while(i<i+16){
+                auxValue.append(aux.charAt(i));
+                ++i;
+            }
+            if(aux.charAt(i-16) == '1'){
+                String n = auxValue.toString();
+                n = Utils.andOfString(n);
+                Value = Integer.parseInt(n,2);
+                Value = -1*Value;
+            }else{
+                Value = Integer.parseInt(auxValue.toString(),2);
+            }
+            Key = Integer.parseInt(auxKey.toString(), 2);
+            FreqCB.put(Key, Value);
+        }
+
+        for (int x = 0; x<sizeCR; ++x){
+            StringBuilder auxKey = new StringBuilder();
+            StringBuilder auxValue = new StringBuilder();
+            int Key;
+            int Value;
+            while(i<i+8){
+                auxKey.append(aux.charAt(i));
+                ++i;
+            }
+            while(i<i+16){
+                auxValue.append(aux.charAt(i));
+                ++i;
+            }
+            if(aux.charAt(i-16) == '1'){
+                String n = auxValue.toString();
+                n = Utils.andOfString(n);
+                Value = Integer.parseInt(n,2);
+                Value = -1*Value;
+            }else{
+                Value = Integer.parseInt(auxValue.toString(),2);
+            }
+            Key = Integer.parseInt(auxKey.toString(), 2);
+            FreqCR.put(Key, Value);
+        }
 
         Huffman descomprimir = new Huffman();
-        descomprimir.InizialitingHashtable();
 
         int iteradorY = 0;
         while (0 < width/8*height/8){
-            ArrayList<Integer> Y = descomprimir.desHuffman(aux);
+            //ArrayList<Integer> Y = descomprimir.desHuffman(aux);
             int u = 1;
             int k = 1;
 
@@ -172,7 +269,7 @@ public class JPEG extends Algorithm {
             }
 
             ++iteradorY;
-        }*/
+        }
         return null;
     }
 
