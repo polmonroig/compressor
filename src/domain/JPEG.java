@@ -2,6 +2,7 @@ package domain;
 
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.Map;
 
 /*
 
@@ -334,14 +335,84 @@ public class JPEG extends Algoritme{
             String Cben = comprimirCB.ComprimirHuffman(Cbencoding);
             String Cren = comprimirCR.ComprimirHuffman(Crencoding);
 
+            Map<Integer, Integer> freqY = comprimirY.ObtenerFrequencias();
+            Map<Integer, Integer> freqCb = comprimirCB.ObtenerFrequencias();
+            Map<Integer, Integer> freqCr = comprimirCR.ObtenerFrequencias();
+
+            StringBuilder FY = new StringBuilder();
+            StringBuilder FCB = new StringBuilder();
+            StringBuilder FCR = new StringBuilder();
+
+            for(int key : freqY.keySet()){
+                int aux = key;
+                if(key < 0) {
+                    aux = key * -1;
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FY.append(Utils.andOfString(auxs));
+                }
+                else{
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FY.append(auxs);
+                }
+                String auxs = Integer.toBinaryString(freqY.get(key));
+                while (auxs.length() < 16) auxs = '0' + auxs;
+                FY.append(auxs);
+            }
+
+            for(int key : freqCb.keySet()){
+                int aux = key;
+                if(key < 0) {
+                    aux = key * -1;
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FY.append(Utils.andOfString(auxs));
+                }
+                else{
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FCB.append(auxs);
+                }
+                String auxs = Integer.toBinaryString(freqCb.get(key));
+                while (auxs.length() < 16) auxs = '0' + auxs;
+                FCB.append(auxs);
+            }
+
+            for(int key : freqCr.keySet()){
+                int aux = key;
+                if(key < 0) {
+                    aux = key * -1;
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FCR.append(Utils.andOfString(auxs));
+                }
+                else{
+                    String auxs = Integer.toBinaryString(aux);
+                    while (auxs.length() < 8) auxs = '0' + auxs;
+                    FCR.append(auxs);
+                }
+                String auxs = Integer.toBinaryString(freqCr.get(key));
+                while (auxs.length() < 16) auxs = '0' + auxs;
+                FCR.append(auxs);
+            }
+
+            String sizeY = Integer.toBinaryString(freqY.size());
+            String sizeCB = Integer.toBinaryString(freqCb.size());
+            String sizeCR = Integer.toBinaryString(freqCr.size());
             String calidadE =  Integer.toBinaryString(calidad);
             String widthE =  Integer.toBinaryString(width);
             String heightE =  Integer.toBinaryString(height);
             while(calidadE.length() < 8) calidadE = "0" + calidadE;
             while(widthE.length() < 16) widthE = "0" + widthE;
             while(heightE.length() < 16) heightE = "0" + heightE;
-            String result = calidadE + widthE + heightE + Yen.toString() + Cben.toString() + Cren.toString();
+            while(sizeY.length() < 8) sizeY = "0" + sizeY;
+            while(sizeCB.length() < 8) sizeCB = "0" + sizeCB;
+            while(sizeCR.length() < 8) sizeCR = "0" + sizeCR;
+            String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR
+                    + FY.toString() + FCB.toString() + FCR.toString() + Yen.toString() + Cben.toString() + Cren.toString();
             byte [] c = Utils.toByteArray2(result);
+
 
         /*
 
