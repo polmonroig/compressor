@@ -4,8 +4,12 @@ public class Stats {
     private float compressionTime;
     private float compressionDegree;
     private  float compressionSpeed;
-    private int originalFileSize;
-    private int compressedFileSize;
+    private float originalFileSize;
+    private float compressedFileSize;
+
+    Stats(){
+        reset();
+    }
 
     public void reset(){
         originalFileSize = 0;
@@ -15,19 +19,19 @@ public class Stats {
         compressionDegree = 0;
     };
 
-    public int getOriginalFileSize() {
+    public float getOriginalFileSize() {
         return originalFileSize;
     }
 
-    public void setOriginalFileSize(int size) {
+    public void setOriginalFileSize(float size) {
         this.originalFileSize = size;
     }
 
-    public int getCompressedFileSize() {
+    public float getCompressedFileSize() {
         return compressedFileSize;
     }
 
-    public void setCompressedFileSize(int size) {
+    public void setCompressedFileSize(float size) {
         this.compressedFileSize = size;
     }
 

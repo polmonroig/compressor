@@ -6,11 +6,11 @@ public abstract class Algorithm {
 
     protected Stats localStats = new Stats();
 
-    public int getOriginalSize(){
+    public float getOriginalSize(){
         return this.localStats.getOriginalFileSize();
     }
 
-    public int getCompressedSize(){ return this.localStats.getCompressedFileSize(); }
+    public float getCompressedSize(){ return this.localStats.getCompressedFileSize(); }
 
     public float getCompressionRatio(){
         return this.localStats.getCompressionDegree();

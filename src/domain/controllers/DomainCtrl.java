@@ -18,13 +18,39 @@ public class DomainCtrl {
 
     private void init() {
         dataCtrl = new DataCtrl();
+        globalStats = new GlobalStats();
         lz78 = new LZ78();
         lzss = new LZSS();
         lzw = new LZW();
         jpeg = new JPEG();
     }
 
+    public float getMeanOriginalFileSize(){
+        return globalStats.getOriginalFileSize();
+    }
+
+    public float getMeanCompressedFileSize(){
+        return globalStats.getCompressedFileSize();
+    }
+
+    public float getMeanCompressionDegree(){
+        return globalStats.getCompressionDegree();
+    }
+
+    public float getMeanCompressionSpeed(){
+        return globalStats.getCompressionSpeed();
+    }
+
+    public float getMeanCompressionTime(){
+        return globalStats.getCompressionTime();
+    }
+
+    public float getMeanFiles(){
+        return globalStats.getNumberArxius();
+    }
+
     public void compress(String algorithm, String fileName){
+        globalStats.setNumberArxius(globalStats.getNumberArxius() + 1);
         byte[] file = DataCtrl.ReadFileAsBytes(fileName);
         int lastPeriodPos = fileName.lastIndexOf('.');
         fileName = fileName.substring(0,lastPeriodPos);
@@ -85,7 +111,7 @@ public class DomainCtrl {
         jpeg.setQuality(parseInt);
     }
 
-    public int getOriginalFileSize(String algorithm) {
+    public float getOriginalFileSize(String algorithm) {
         switch (algorithm) {
             case "lz78": {
                 return lz78.getOriginalSize();
@@ -103,7 +129,7 @@ public class DomainCtrl {
         return 0;
     }
 
-    public int getMidaArxiuFinal(String algorithm) {
+    public float getMidaArxiuFinal(String algorithm) {
         switch (algorithm) {
             case "lz78": {
                 return lz78.getCompressedSize();
@@ -173,5 +199,13 @@ public class DomainCtrl {
             }
         }
         return 0;
+    }
+
+    public void setStats(float originalFileSize, float compressedFileSize, float compressionTime, float compressionDegree, float compressionSpeed) {
+        globalStats.addOriginalSize(originalFileSize);
+        globalStats.addCompressedSize(compressedFileSize);
+        globalStats.addCompressionTime(compressionTime);
+        globalStats.addCompressionDegree(compressionDegree);
+        globalStats.addCompressionSpeed(compressionSpeed);
     }
 }

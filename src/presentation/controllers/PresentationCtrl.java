@@ -16,12 +16,12 @@ public class PresentationCtrl {
         while(!input){
 
             String userInput;
-            String[] functions = {"comprimir", "descomprimir", "salir"};
+            String[] functions = {"comprimir", "descomprimir", "estadisticas globales", "salir"};
             writeFunctions(functions);
             userInput = getUserInput(Input, "Introduce una opcion");
             String file;
-            int originalFileSize;
-            int compressedFileSize ;
+            float originalFileSize;
+            float compressedFileSize ;
             float compressionTime;
             float compressionDegree;
             float compressionSpeed;
@@ -41,6 +41,7 @@ public class PresentationCtrl {
                                 compressionDegree = domainCtrl.getCompressionDegree("lz78");
                                 compressionSpeed = domainCtrl.getCompressionSpeed("lz78");
                                 showStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
+                                domainCtrl.setStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
                                 break;
                             case "2":
                                 domainCtrl.compress("lzw", file);
@@ -50,6 +51,7 @@ public class PresentationCtrl {
                                 compressionDegree = domainCtrl.getCompressionDegree("lzw");
                                 compressionSpeed = domainCtrl.getCompressionSpeed("lzw");
                                 showStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
+                                domainCtrl.setStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
                                 break;
                             case "3":
                                 domainCtrl.compress("lzss", file);
@@ -59,6 +61,7 @@ public class PresentationCtrl {
                                 compressionDegree = domainCtrl.getCompressionDegree("lzss");
                                 compressionSpeed = domainCtrl.getCompressionSpeed("lzss");
                                 showStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
+                                domainCtrl.setStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
                                 break;
                             case "4":
                                 System.out.println("Lo siento, esta funcion aun no esta implementada");
@@ -77,6 +80,7 @@ public class PresentationCtrl {
                         compressionDegree = domainCtrl.getCompressionDegree("jpeg");
                         compressionSpeed = domainCtrl.getCompressionSpeed("jpeg");
                         showStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
+                        domainCtrl.setStats(originalFileSize, compressedFileSize, compressionTime, compressionDegree, compressionSpeed);
                     } else {
                         System.out.println("El archivo introducido no es valido, porfavor introduce un archivo .txt o .ppm");
                     }
@@ -90,6 +94,17 @@ public class PresentationCtrl {
                     else System.out.println("El archivo introducido no es valido, porfavor introduce un archivo .lz78, .lzss, .lzw o .jpeg");
                     break;
                 case "3":
+                    float meanOriginalFileSize = domainCtrl.getMeanOriginalFileSize();
+                    float meanCompressedFileSize = domainCtrl.getMeanCompressedFileSize();
+                    float meanCompressionTime = domainCtrl.getMeanCompressionTime();
+                    float meanCompressionDegree = domainCtrl.getMeanCompressionDegree();
+                    float meanCompressionSpeed = domainCtrl.getMeanCompressionSpeed();
+                    float nFiles = domainCtrl.getMeanFiles();
+                    showGlobalStats(meanOriginalFileSize, meanCompressedFileSize,
+                                    meanCompressionTime, meanCompressionDegree,
+                                    meanCompressionSpeed, nFiles);
+                    break;
+                case "4":
                 input = true;
                 break;
                 default:
@@ -99,6 +114,18 @@ public class PresentationCtrl {
         }
     }
 
+    private static void showGlobalStats(float meanOriginalFileSize, float meanCompressedFileSize,
+                                        float meanCompressionTime, float meanCompressionDegree,
+                                        float meanCompressionSpeed, float nFiles) {
+        System.out.println("Estadisticas en mediana de todas las compresiones:");
+        System.out.println("Tamaño archivo inicial: " + meanOriginalFileSize +  " bytes");
+        System.out.println("Tamaño archivo final: " + meanCompressedFileSize + " bytes");
+        System.out.println("Tiempo de compresion: " + meanCompressionTime + " milisegundos");
+        System.out.println("Grado de compresion: " + meanCompressionDegree + "%");
+        System.out.println("Velocidad de compresion: " + meanCompressionSpeed + " bytes/milisegundos");
+        System.out.println("Numero de archivos: " + nFiles);
+    }
+
     private static String getUserInput(Scanner input, String s) {
         String userInput;
         System.out.println(s);
@@ -106,13 +133,14 @@ public class PresentationCtrl {
         return userInput;
     }
 
-    private static void showStats(int midaArxiuInicial, int midaArxiuFinal, float tiempoCompresio, float grauCompresio, float velocitatCompresio){
+
+    private static void showStats(float originalFileSize, float compressedFileSize, float compressionTime, float compressionDegree, float compressionSpeed){
         System.out.println("Estadisticas de la compression actual:");
-        System.out.println("Tamaño archivo inicial: " + midaArxiuInicial);
-        System.out.println("Tamaño archivo final: " + midaArxiuFinal);
-        System.out.println("Tiempo de compresion: " + tiempoCompresio + " milisegundos");
-        System.out.println("Grado de compresion: " + grauCompresio);
-        System.out.println("Velocidad de compresion: " + velocitatCompresio + " bytes/milisegundos");
+        System.out.println("Tamaño archivo inicial: " + originalFileSize + " bytes");
+        System.out.println("Tamaño archivo final: " + compressedFileSize + " bytes");
+        System.out.println("Tiempo de compresion: " + compressionTime + " milisegundos");
+        System.out.println("Grado de compresion: " + compressionDegree + "%");
+        System.out.println("Velocidad de compresion: " + compressionSpeed + " bytes/milisegundos");
     }
 
     private static void writeFunctions(String[] functions){
