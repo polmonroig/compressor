@@ -2,7 +2,7 @@
 #		MAKEFILE
 # To compile and build the program: 'make program'
 # To compile and build a driver: 'make driverX' where X=ALGORITHM
-# To clean manifest, *.jar and *.class: clean
+# To clean manifest, *.jar and *.class: 'make clean'
 #####################
 
 
