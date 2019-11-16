@@ -11,7 +11,7 @@ import java.util.Map;
 
  */
 
-public class JPEG extends Algoritme{
+public class JPEG extends Algorithm {
 
     private int calidad = 0;
 
@@ -104,7 +104,7 @@ public class JPEG extends Algoritme{
     };
     
     @Override
-    public byte[] descomprimir(byte [] imagen){
+    public byte[] decompress(byte [] imagen){
 
         /*
         Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
@@ -177,7 +177,7 @@ public class JPEG extends Algoritme{
     }
 
     @Override
-    public byte[] comprimir (byte [] imagen){
+    public byte[] compress(byte [] imagen){
         long startTime = System.nanoTime(); // empezar contador de tiempo
         /*
         Declaraciones de variables
@@ -448,11 +448,11 @@ public class JPEG extends Algoritme{
 
         // Calculo estadisticas
         long endTime = System.nanoTime();
-        this.estadisticaLocal.setMidaArxiuInicial(imagen.length);
-        this.estadisticaLocal.setMidaArxiuFinal(compressed_size);
-        this.estadisticaLocal.setGrauCompresio(compression_ratio);
-        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.estadisticaLocal.setVelocitatCompresio(imagen.length / this.estadisticaLocal.getTiempoCompresio());
+        this.localStats.setOriginalFileSize(imagen.length);
+        this.localStats.setCompressedFileSize(compressed_size);
+        this.localStats.setCompressionDegree(compression_ratio);
+        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.localStats.setCompressionSpeed(imagen.length / this.localStats.getCompressionTime());
 
 
         return c;

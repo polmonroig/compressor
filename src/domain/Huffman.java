@@ -74,12 +74,12 @@ public class Huffman {
     private void InicializarFrequencias(ArrayList<Integer> imagen){
         for (int i = 0; i < imagen.size(); ++i){
             if(!this.frequencias.isEmpty()){
-               if(this.frequencias.containsKey(imagen.get(i))){
+                if(this.frequencias.containsKey(imagen.get(i))){
                     int aux = frequencias.get(imagen.get(i));
                     aux++;
                     frequencias.put(imagen.get(i), aux);
                 }
-               else this.frequencias.put(imagen.get(i), 1);
+                else this.frequencias.put(imagen.get(i), 1);
             }
             else this.frequencias.put(imagen.get(i), 1);
         }

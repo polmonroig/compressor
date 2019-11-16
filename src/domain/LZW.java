@@ -1,15 +1,14 @@
 package domain;
 import java.util.*;
 
-public class LZW extends Algoritme{
+public class LZW extends Algorithm {
 
     @Override
-    public byte[] comprimir(byte[] texto) {
+    public byte[] compress(byte[] binaryFile) {
         long startTime = System.nanoTime(); // empezar contador de tiempo
         SortedMap< String, Integer> dict = new TreeMap<>(); //map per guardar el diccionari
-        String cadenachars = new String(texto); // convertir l'array de bytes en un String
-        List<Integer> res = new ArrayList<Integer>();
-        String s = "";
+        String charChain = new String(binaryFile); // convertir l'array de bytes en un String
+        StringBuilder s = new StringBuilder();
 
 
         int dictSize = 256;
@@ -21,16 +20,14 @@ public class LZW extends Algoritme{
         String k = "";
         String wk = "";
 
-        for (int i = 0; i < cadenachars.length(); ++i) {
-            k = String.valueOf(cadenachars.charAt(i));
+        for (int i = 0; i < charChain.length(); ++i) {
+            k = String.valueOf(charChain.charAt(i));
             wk = w+k;
             if (dict.containsKey(wk)) {
                 w = wk;
             }
             else {
-                //System.out.println("sortida: " + dict.get(w));
-                res.add(dict.get(w));
-                s += to12bit(dict.get(w));
+                s.append(to12bit(dict.get(w)));
 
                 if (dictSize < 4096) {
                     dict.put(wk,dictSize);
@@ -39,57 +36,42 @@ public class LZW extends Algoritme{
                 w = k;
             }
         }
-        res.add(dict.get(w));
-        s += to12bit(dict.get(w));
+        s.append(to12bit(dict.get(w)));
 
 
-        s = round2byte(s);
+        s = new StringBuilder(round2byte(s.toString()));
+        
 
-
-        int retsize = s.length()/8;
-
-        byte[] ret = Utils.toByteArray(s);
-
-        //System.out.println(retsize);
-        for (int i = 0; i < retsize; i++ ){
-            int j = i*8;
-            String e = "" + s.charAt(j) + s.charAt(i*8+1) + s.charAt(j+2) + s.charAt(j+3) + s.charAt(j+4) + s.charAt(j+5) + s.charAt(j+6) + s.charAt(j+7);
-            //System.out.println(e + " " + ret[i] + " " );
-
-        }
-        // Calculo estadisticas
+        byte[] ret = Utils.toByteArray(s.toString());
+        
+        
+        // Stats
         long endTime = System.nanoTime();
-        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
-        this.estadisticaLocal.setMidaArxiuFinal(ret.length);
-        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
+        this.localStats.setOriginalFileSize(binaryFile.length);
+        this.localStats.setCompressedFileSize(ret.length);
+        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
 
-        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
+        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
         return ret;
     }
 
 
     /** Convert 8 bit to 12 bit */
     private String to12bit(int i) {
-        String temp = Integer.toBinaryString(i);
+        StringBuilder temp = new StringBuilder(Integer.toBinaryString(i));
         while (temp.length() < 12) {
-            temp = "0" + temp;
+            temp.insert(0, "0");
         }
-        return temp;
-    }
-
-    private String to8bit(int i) {
-        String temp = Integer.toBinaryString(i);
-        while (temp.length() < 8) {
-            temp = "0" + temp;
-        }
-        return temp;
+        return temp.toString();
     }
 
     private String round2byte(String s) {
-        while (s.length()%8 != 0) {
-            s = s + "0";
+        StringBuilder sBuilder = new StringBuilder(s);
+        while (sBuilder.length()%8 != 0) {
+            sBuilder.append("0");
         }
+        s = sBuilder.toString();
         return s;
     }
 
@@ -98,13 +80,12 @@ public class LZW extends Algoritme{
 
 
     @Override
-    public byte[] descomprimir(byte[] text) {
+    public byte[] decompress(byte[] binaryFile) {
 
-        if (text.length > 0) {
-            String s = Utils.toString(text);
+        if (binaryFile.length > 0) {
+            String s = Utils.toString(binaryFile);
             List<Integer> l = new ArrayList<Integer>();
 
-            //System.out.println(s.length());
 
             for (int i = 0; i < s.length()-4; i = i + 12) {
                 String e = "" + s.charAt(i) + s.charAt(i+1) + s.charAt(i+2) + s.charAt(i+3) + s.charAt(i+4) + s.charAt(i+5) + s.charAt(i+6) + s.charAt(i+7) + s.charAt(i+8) + s.charAt(i+9) + s.charAt(i+10) + s.charAt(i+11) ;l.add(Integer.parseInt(e, 2));
@@ -113,7 +94,7 @@ public class LZW extends Algoritme{
 
             SortedMap< Integer, String> dict = new TreeMap<>();
 
-            String res = "";
+            StringBuilder res = new StringBuilder();
 
 
             int dictSize = 256;
@@ -122,21 +103,21 @@ public class LZW extends Algoritme{
             }
 
             int cod_nou;
-            String cadena;
+            String chain;
             int cod_vell = l.get(0);
             String caracter = dict.get(cod_vell);
-            res += caracter;
+            res.append(caracter);
 
             for (int i = 1; i < l.size(); ++i) {
                 cod_nou = l.get(i);
                 if (!dict.containsKey(cod_nou)) {
-                    cadena = dict.get(cod_vell) + caracter;
+                    chain = dict.get(cod_vell) + caracter;
                 }
                 else {
-                    cadena = dict.get(cod_nou);
+                    chain = dict.get(cod_nou);
                 }
-                res += cadena;
-                caracter = String.valueOf(cadena.charAt(0));
+                res.append(chain);
+                caracter = String.valueOf(chain.charAt(0));
                 String dic_inp = dict.get(cod_vell)+caracter;
                 dict.put(dictSize, dic_inp);
                 ++dictSize;
@@ -146,12 +127,10 @@ public class LZW extends Algoritme{
 
             }
 
-            byte[] ret = res.toString().getBytes();
-
-            return ret;
+            return res.toString().getBytes();
         }
 
-        return text;
+        return binaryFile;
 
     }
 

@@ -1,91 +1,91 @@
 package domain.controllers;
 
 import domain.*;
-import persistencia.controllers.CtrlPersistencia;
+import persistencia.controllers.DataCtrl;
 
-public class CtrlDomain {
-    private CtrlPersistencia controladorPersistencia;
+public class DomainCtrl {
+    private DataCtrl dataCtrl;
     private LZ78 lz78;
     private LZSS lzss;
     private LZW lzw;
     private JPEG jpeg;
-    private EstadisticaGlobal estadisticaGlobal;
+    private GlobalStats globalStats;
 
 
-    public CtrlDomain(){
+    public DomainCtrl(){
         init();
     }
 
     private void init() {
-        controladorPersistencia = new CtrlPersistencia();
+        dataCtrl = new DataCtrl();
         lz78 = new LZ78();
         lzss = new LZSS();
         lzw = new LZW();
         jpeg = new JPEG();
     }
 
-    public void comprimir(String algoritmo, String archivo){
-        byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
-        int lastPeriodPos = archivo.lastIndexOf('.');
-        archivo = archivo.substring(0,lastPeriodPos);
-        switch (algoritmo) {
+    public void compress(String algorithm, String fileName){
+        byte[] file = DataCtrl.ReadFileAsBytes(fileName);
+        int lastPeriodPos = fileName.lastIndexOf('.');
+        fileName = fileName.substring(0,lastPeriodPos);
+        switch (algorithm) {
             case "lz78": {
-                byte[] decompressed = lz78.comprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".lz78", decompressed);
+                byte[] decompressed = lz78.compress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".lz78", decompressed);
                 break;
             }
             case "lzss": {
-                byte[] compressed = lzss.comprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".lzss", compressed);
+                byte[] compressed = lzss.compress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".lzss", compressed);
                 break;
             }
             case "lzw": {
-                byte[] compressed = lzw.comprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".lzw", compressed);
+                byte[] compressed = lzw.compress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".lzw", compressed);
                 break;
             }
             case "jpeg": {
-                byte[] compressed = jpeg.comprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".jpeg", compressed);
+                byte[] compressed = jpeg.compress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".jpeg", compressed);
                 break;
             }
         }
     }
 
-    public void descomprimir(String algoritmo, String archivo){
-        byte[] file = CtrlPersistencia.ReadFileAsBytes(archivo);
-        int lastPeriodPos = archivo.lastIndexOf('.');
-        archivo = archivo.substring(0,lastPeriodPos);
-        switch (algoritmo) {
+    public void decompress(String algorithm, String fileName){
+        byte[] file = DataCtrl.ReadFileAsBytes(fileName);
+        int lastPeriodPos = fileName.lastIndexOf('.');
+        fileName = fileName.substring(0,lastPeriodPos);
+        switch (algorithm) {
             case "lz78": {
-                byte[] decompressed = lz78.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
+                byte[] decompressed = lz78.decompress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
                 break;
             }
             case "lzss": {
-                byte[] decompressed = lzss.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
+                byte[] decompressed = lzss.decompress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
                 break;
             }
             case "lzw": {
-                byte[] decompressed = lzw.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".txt", decompressed);
+                byte[] decompressed = lzw.decompress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
                 break;
             }
             case "jpeg": {
-                byte[] decompressed = jpeg.descomprimir(file);
-                CtrlPersistencia.WriteBytesToFile(archivo + ".ppm", decompressed);
+                byte[] decompressed = jpeg.decompress(file);
+                DataCtrl.WriteBytesToFile(fileName + ".ppm", decompressed);
                 break;
             }
         }
     }
 
 
-    public void setCalidad(int parseInt) {
+    public void setQuality(int parseInt) {
         jpeg.setCalidad(parseInt);
     }
 
-    public int getMidaArxiuInicial(String algorithm) {
+    public int getOriginalFileSize(String algorithm) {
         switch (algorithm) {
             case "lz78": {
                 return lz78.getOriginalSize();
@@ -121,7 +121,7 @@ public class CtrlDomain {
         return 0;
     }
 
-    public float getGrauCompressio(String algorithm) {
+    public float getCompressionDegree(String algorithm) {
         switch (algorithm) {
             case "lz78": {
                 return lz78.getCompressionRatio();
@@ -139,37 +139,37 @@ public class CtrlDomain {
         return 0;
     }
 
-    public float getTempsCompressio(String algorithm) {
+    public float getCompressionTime(String algorithm) {
         switch (algorithm) {
             case "lz78": {
-                return lz78.getTempsCompressio();
+                return lz78.getCompressionTime();
             }
             case "lzss": {
-                return lzss.getTempsCompressio();
+                return lzss.getCompressionTime();
             }
             case "lzw": {
-                return lzw.getTempsCompressio();
+                return lzw.getCompressionTime();
             }
             case "jpeg": {
-                return jpeg.getTempsCompressio();
+                return jpeg.getCompressionTime();
             }
         }
         return 0;
     }
 
-    public float getVelocitatCompressio(String algorithm) {
+    public float getCompressionSpeed(String algorithm) {
         switch (algorithm) {
             case "lz78": {
-                return lz78.getVelocitatCompressio();
+                return lz78.getCompressionSpeed();
             }
             case "lzss": {
-                return lzss.getVelocitatCompressio();
+                return lzss.getCompressionSpeed();
             }
             case "lzw": {
-                return lzw.getVelocitatCompressio();
+                return lzw.getCompressionSpeed();
             }
             case "jpeg": {
-                return jpeg.getVelocitatCompressio();
+                return jpeg.getCompressionSpeed();
             }
         }
         return 0;

@@ -1,7 +1,7 @@
 package domain.drivers;
 
 import domain.JPEG;
-import persistencia.controllers.CtrlPersistencia;
+import persistencia.controllers.DataCtrl;
 
 import java.util.Scanner;
 
@@ -23,10 +23,10 @@ public class DriverJPEG {
                 case "1":
                     System.out.println("Introduce el archivo a comprimir");
                     String file = Input.nextLine();
-                    byte[] compression = encoder.comprimir(CtrlPersistencia.ReadFileAsBytes(file));
+                    byte[] compression = encoder.compress(DataCtrl.ReadFileAsBytes(file));
                     int lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    CtrlPersistencia.WriteBytesToFile(file + ".jpeg", compression);
+                    DataCtrl.WriteBytesToFile(file + ".jpeg", compression);
                     break;
                 case "2":
                     System.out.println("Lo siento esta funcion todavia no esta implementada");

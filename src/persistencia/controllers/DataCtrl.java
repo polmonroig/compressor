@@ -2,12 +2,11 @@ package persistencia.controllers;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class CtrlPersistencia {
+public class DataCtrl {
     static public String ReadFileAsString(String fileDir){
-        byte [] content = CtrlPersistencia.ReadFileAsBytes(fileDir);
+        byte [] content = DataCtrl.ReadFileAsBytes(fileDir);
         if(content != null){
             return new String(content);
         }
@@ -44,7 +43,7 @@ public class CtrlPersistencia {
     }
 
     static public void WriteStringToFile(String fileDir, String text){
-        CtrlPersistencia.WriteBytesToFile(fileDir, text.getBytes());
+        DataCtrl.WriteBytesToFile(fileDir, text.getBytes());
     }
 
     static public void WriteBytesToFile(String fileDir, byte [] text){

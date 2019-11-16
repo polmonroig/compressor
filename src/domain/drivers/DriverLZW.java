@@ -1,7 +1,7 @@
 package domain.drivers;
 
 import domain.LZW;
-import persistencia.controllers.CtrlPersistencia;
+import persistencia.controllers.DataCtrl;
 
 import java.util.Scanner;
 
@@ -25,18 +25,18 @@ public class DriverLZW {
                 case "1":
                     System.out.print("Introduce el archivo a comprimir: ");
                     String file = Input.nextLine();
-                    byte[] compression = encoder.comprimir(CtrlPersistencia.ReadFileAsBytes(file));
+                    byte[] compression = encoder.compress(DataCtrl.ReadFileAsBytes(file));
                     int lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    CtrlPersistencia.WriteBytesToFile(file + ".lzw", compression);
+                    DataCtrl.WriteBytesToFile(file + ".lzw", compression);
                     break;
                 case "2":
                     System.out.print("Introduce el archivo a descomprimir: ");
                     file = Input.nextLine();
-                    compression = encoder.descomprimir(CtrlPersistencia.ReadFileAsBytes(file));
+                    compression = encoder.decompress(DataCtrl.ReadFileAsBytes(file));
                     lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    CtrlPersistencia.WriteBytesToFile(file + ".txt", compression);
+                    DataCtrl.WriteBytesToFile(file + ".txt", compression);
                     break;
                 case "3":
                     input = true;

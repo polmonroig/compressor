@@ -11,21 +11,21 @@ import java.lang.Math;
  *
  */
 
-public class LZ78 extends Algoritme {
+public class LZ78 extends Algorithm {
 
 
 
     /**
      * <p>The compression method makes a compression of a given text</>
-     * @param texto the text to compress
+     * @param binaryFile the text to compress
      * @return the compressed text
      */
     @Override
-    public byte[] comprimir(byte[] texto) {
-        this.estadisticaLocal.reset(); // reset stats
+    public byte[] compress(byte[] binaryFile) {
+        this.localStats.reset(); // reset stats
         long startTime = System.nanoTime(); // empezar contador de tiempo
-        if(texto.length == 0)return texto; // empty file
-        String text = new String(texto, StandardCharsets.UTF_8);
+        if(binaryFile.length == 0)return binaryFile; // empty file
+        String text = new String(binaryFile, StandardCharsets.UTF_8);
         SortedMap< String, Integer> dict = new TreeMap<>();
         String current = "";
         Integer lastWordPos = 0;
@@ -56,19 +56,19 @@ public class LZ78 extends Algoritme {
 
         // Calculo estadisticas
         long endTime = System.nanoTime();
-        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
-        this.estadisticaLocal.setMidaArxiuFinal((int)Math.ceil(binary_string.length() / 8.0) + 1);
-        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
+        this.localStats.setOriginalFileSize(binaryFile.length);
+        this.localStats.setCompressedFileSize((int)Math.ceil(binary_string.length() / 8.0) + 1);
+        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
 
-        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
+        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
         return compression;
     }
 
     @Override
-    public byte[] descomprimir(byte[] texto) {
-        if(texto.length == 0)return texto; // empty file
-        String text = Utils.toString(texto);
+    public byte[] decompress(byte[] binaryFile) {
+        if(binaryFile.length == 0)return binaryFile; // empty file
+        String text = Utils.toString(binaryFile);
         StringBuilder coding = new StringBuilder();
         double log_2 = Math.log(2.0);
         int current_index = 0;

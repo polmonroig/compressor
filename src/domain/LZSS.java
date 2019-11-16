@@ -9,7 +9,7 @@ import java.util.*;
  *
  */
 
-public class LZSS extends Algoritme{
+public class LZSS extends Algorithm {
 
     private static final short RING_SIZE = 4096;
 
@@ -44,27 +44,16 @@ public class LZSS extends Algoritme{
         rightSon=new short[RING_SIZE+257];
     }
 
-    public int getOriginalSize(){
-        return this.estadisticaLocal.getMidaArxiuInicial();
-    }
-
-    public int getCompressedSize(){
-        return this.estadisticaLocal.getMidaArxiuFinal();
-    }
-
-    public float getCompressionRatio(){
-        return this.estadisticaLocal.getGrauCompresio();
-    }
     
     /**
      * <p>El metodo de comprimir hace una compresion del texto introducido, con la codificación para LZSS</>
-     * @param texto el texto a comprimir
+     * @param binaryFile el texto a comprimir
      * @return el texto comprimido
      */
     @Override
-    public byte[] comprimir(byte[] texto){
+    public byte[] compress(byte[] binaryFile){
         long startTime = System.nanoTime(); // empezar contador de tiempo
-        out = new byte[texto.length];
+        out = new byte[binaryFile.length];
         lecturePoint = 0;
         writePoint = 0;
 
@@ -90,8 +79,8 @@ public class LZSS extends Algoritme{
 
         Arrays.fill(ringBuffer, 0, r, (byte) ' ');
 
-        int x = readxBytes(texto, r, MAX_STORE_LENGTH);
-        if(x <= 0) return texto;
+        int x = readXBytes(binaryFile, r, MAX_STORE_LENGTH);
+        if(x <= 0) return binaryFile;
         len = (short) x;
 
         for (i=1; i<=MAX_STORE_LENGTH; i++) insertNode((short) (r-i));
@@ -114,7 +103,7 @@ public class LZSS extends Algoritme{
             mask <<= 1;
 
             if (mask == 0){//hemos almacenado 8 caracteres
-                writexBytes(codeBuff, codeBufPos);
+                readXBytes(codeBuff, codeBufPos);
                 codeBuff[0] = 0;
                 codeBufPos = 1;
                 mask = 1;
@@ -124,7 +113,7 @@ public class LZSS extends Algoritme{
 
             for (i = 0; i < lastMatchLength; ++i) {
                 byte[] aux = new byte[1];
-                x = readDecodification(texto, aux, 1);
+                x = readDecoding(binaryFile, aux, 1);
                 if (x == -1) break;
                 c = aux[0];
 
@@ -149,40 +138,40 @@ public class LZSS extends Algoritme{
             }
         } while (len > 0);//hasta que no queden caracteres por comprimir
 
-        if (codeBufPos > 1) writexBytes(codeBuff, codeBufPos);
+        if (codeBufPos > 1) readXBytes(codeBuff, codeBufPos);
 
-        double bytes = Math.log(texto.length)/Math.log(256);
+        double bytes = Math.log(binaryFile.length)/Math.log(256);
         int bytesTamFchr = (int) bytes;
         if ((bytes - bytesTamFchr) != 0)  ++bytesTamFchr;
         byte[] ret = new byte[writePoint+bytesTamFchr+1];
 
         if (writePoint >= 0) System.arraycopy(out, 0, ret, 0, writePoint);
         ret[writePoint] = '#';
-        byte[] aux = putTamanoTexto(texto, bytesTamFchr);
+        byte[] aux = putTextSize(binaryFile, bytesTamFchr);
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
 
         // Calculo estadisticas
         long endTime = System.nanoTime();
-        this.estadisticaLocal.setMidaArxiuInicial(texto.length);
-        this.estadisticaLocal.setMidaArxiuFinal(ret.length);
-        this.estadisticaLocal.setGrauCompresio(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
-        this.estadisticaLocal.setTiempoCompresio((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.estadisticaLocal.setVelocitatCompresio(texto.length / this.estadisticaLocal.getTiempoCompresio());
+        this.localStats.setOriginalFileSize(binaryFile.length);
+        this.localStats.setCompressedFileSize(ret.length);
+        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
+        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
+        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
         
         return ret;
     }
 
     /**
      * <p>El metodo de descomprimir hace una descompresion del texto introducido</>
-     * @param texto el texto a comprimir, codificado con formato LZSS
+     * @param binaryFile el texto a comprimir, codificado con formato LZSS
      * @return el texto descomprimido
      */
     @Override
-    public byte[] descomprimir(byte[] texto) {
+    public byte[] decompress(byte[] binaryFile) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
         byte flags; //8 bits de flags
-        out = new byte[getTamanoTexto(texto)-1];
+        out = new byte[getTextSize(binaryFile)-1];
         lecturePoint = 0;
         writePoint = 0;
 
@@ -198,7 +187,7 @@ public class LZSS extends Algoritme{
             }
             else {
                 byte[] aux = new byte[1];
-                int readResult = readDecodification(texto, aux, 1);
+                int readResult = readDecoding(binaryFile, aux, 1);
                 if (readResult == -1)   break;
 
                 flags = (byte) (aux[0] & 0xFF);
@@ -206,14 +195,14 @@ public class LZSS extends Algoritme{
             }
 
             if ((flags & 1) != 0) {//viene un caracter no codificado
-                if (readDecodification(texto, c, 1) != 1) break;
-                writexBytes(c, 1);
+                if (readDecoding(binaryFile, c, 1) != 1) break;
+                readXBytes(c, 1);
 
                 ringBuffer[r] = c[0];
                 r = (short) ((r + 1) & RING_WRAP);
             }
             else {//viene un pair de posicion(12 bits) y longitud (4 bits)
-                if (readDecodification(texto, c, 2) != 2) break;
+                if (readDecoding(binaryFile, c, 2) != 2) break;
                 //De estos dos bytes sacamos su string de coincidencia del ringBuffer
                 short pos = (short) ((c[0] & 0xFF) | ((c[1] & 0xF0) << 4));
                 short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
@@ -223,7 +212,7 @@ public class LZSS extends Algoritme{
                     ringBuffer[r] = c[k];
                     r = (r + 1) & RING_WRAP;
                 }
-                writexBytes(c, len);
+                readXBytes(c, len);
             }
         }
         return out;
@@ -235,11 +224,11 @@ public class LZSS extends Algoritme{
      * @return 
      */
     //añado al final del output #texto.length para saber la medida
-    private byte[] putTamanoTexto(byte[] texto, int extra){
+    private byte[] putTextSize(byte[] text, int extra){
         byte[] aux = new byte[extra];
         int i = 0;
         for (int j = extra-1; j >= 0; --j, ++i){
-            aux[i] = (byte) (texto.length >>> j*8);
+            aux[i] = (byte) (text.length >>> j*8);
         }
         return aux;
     }
@@ -249,14 +238,14 @@ public class LZSS extends Algoritme{
      * @param 
      * @return 
      */
-    private int getTamanoTexto(byte[] texto){
-        int t = 0, i = texto.length-1, j = -1;
-        while(texto[i] != '#' && i >= 0) {
+    private int getTextSize(byte[] text){
+        int t = 0, i = text.length-1, j = -1;
+        while(text[i] != '#' && i >= 0) {
             --i;
             ++j;
         }
-        for (;i < texto.length-1; ++i, --j){
-            t += ((texto[i+1] & 0xFF) << j*8);
+        for (;i < text.length-1; ++i, --j){
+            t += ((text[i+1] & 0xFF) << j*8);
         }
         return t;
     }
@@ -401,10 +390,10 @@ public class LZSS extends Algoritme{
      * @param 
      * @return 
      */
-    private int readxBytes(byte[] texto, int offset, int x){
+    private int readXBytes(byte[] text, int offset, int x){
         int j = 0;
-        for (int i = 0; i < x && lecturePoint < texto.length; ++i,++j){
-            ringBuffer[offset+i] = texto[lecturePoint];
+        for (int i = 0; i < x && lecturePoint < text.length; ++i,++j){
+            ringBuffer[offset+i] = text[lecturePoint];
             ++lecturePoint;
         }
         if(j == 0) return -1;
@@ -416,10 +405,10 @@ public class LZSS extends Algoritme{
      * @param 
      * @return 
      */
-    private int readDecodification(byte[] texto, byte[] chars, int x){
+    private int readDecoding(byte[] text, byte[] chars, int x){
         int j = 0;
-        for (int i = 0; i < x && lecturePoint < texto.length; ++i,++j){
-            chars[i] = texto[lecturePoint];
+        for (int i = 0; i < x && lecturePoint < text.length; ++i,++j){
+            chars[i] = text[lecturePoint];
             ++lecturePoint;
         }
         if(j == 0) return -1;
@@ -431,7 +420,7 @@ public class LZSS extends Algoritme{
      * @param 
      * @return 
      */
-    private void writexBytes(byte[] code, int x){
+    private void readXBytes(byte[] code, int x){
         for (int i = 0; i < x && writePoint < out.length; ++i){
             out[writePoint] = code[i];
             ++writePoint;

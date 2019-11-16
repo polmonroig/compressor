@@ -73,7 +73,7 @@ driverjpeg:
 
 # compile and build main program
 program:
-	echo 'Main-Class: presentation.controllers.CtrlPresentation' > $(manifest)
+	echo 'Main-Class: presentation.controllers.presentationCtrl' > $(manifest)
 	$(JAVAC) $(files)
 	$(JAR) $(manifest) $(programName) $(classes)
 
