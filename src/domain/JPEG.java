@@ -107,13 +107,16 @@ public class JPEG extends Algoritme{
     public byte[] descomprimir(byte [] imagen){
 
         /*
-        Declaraciones de variables
+        Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
          */
 
         /*int width = 0;
         int height = 0;
         int calidad = 0;
         int iterator = 0;
+        int sizeY = 0;
+        int sizeCB = 0;
+        int sizeCR = 0;
         String Yen = new String();
         String Cben = new String();
         String Cren = new String();
@@ -326,6 +329,7 @@ public class JPEG extends Algoritme{
                 }
             }
         }
+
 
             Huffman comprimirY = new Huffman();
             Huffman comprimirCB = new Huffman();
