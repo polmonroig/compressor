@@ -82,7 +82,7 @@ public class DomainCtrl {
 
 
     public void setQuality(int parseInt) {
-        jpeg.setCalidad(parseInt);
+        jpeg.setQuality(parseInt);
     }
 
     public int getOriginalFileSize(String algorithm) {

@@ -14,10 +14,10 @@ import java.util.Map;
 
 public class JPEG extends Algorithm {
 
-    private int calidad = 0;
+    private int quality = 0;
 
-    public void setCalidad(int calidad){
-        this.calidad = calidad;
+    public void setQuality(int quality){
+        this.quality = quality;
     }
 
     private static double [][][] QtablesLuminance = {
@@ -388,9 +388,9 @@ public class JPEG extends Algorithm {
 
                 for (int v = 0; v < 8; ++v) {
                     for (int h = 0; h < 8; ++h) {
-                        Ydct[v][h] = Math.round(Ydct[v][h] / QtablesLuminance[calidad][v][h]);
-                        Cbdct[v][h] = Math.round(Cbdct[v][h] / QtablesChrominance[calidad][v][h]);
-                        Crdct[v][h] = Math.round(Crdct[v][h] / QtablesChrominance[calidad][v][h]);
+                        Ydct[v][h] = Math.round(Ydct[v][h] / QtablesLuminance[quality][v][h]);
+                        Cbdct[v][h] = Math.round(Cbdct[v][h] / QtablesChrominance[quality][v][h]);
+                        Crdct[v][h] = Math.round(Crdct[v][h] / QtablesChrominance[quality][v][h]);
                         //test[v][h] = test[v][h] / QtablesLuminance[calidad][v][h];
 
                     }
@@ -501,7 +501,7 @@ public class JPEG extends Algorithm {
             String sizeY = Integer.toBinaryString(freqY.size());
             String sizeCB = Integer.toBinaryString(freqCb.size());
             String sizeCR = Integer.toBinaryString(freqCr.size());
-            String calidadE =  Integer.toBinaryString(calidad);
+            String calidadE =  Integer.toBinaryString(quality);
             String widthE =  Integer.toBinaryString(width);
             String heightE =  Integer.toBinaryString(height);
             while(calidadE.length() < 8) calidadE = "0" + calidadE;
