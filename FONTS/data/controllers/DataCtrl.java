@@ -5,13 +5,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataCtrl {
-    static public String ReadFileAsString(String fileDir){
-        byte [] content = DataCtrl.ReadFileAsBytes(fileDir);
-        if(content != null){
-            return new String(content);
-        }
-        return "";
-    }
 
     static public byte[] ReadFileAsBytes(String fileDir){
         File file = new File(fileDir);
@@ -41,11 +34,6 @@ public class DataCtrl {
         }
         return null;
     }
-
-    static public void WriteStringToFile(String fileDir, String text){
-        DataCtrl.WriteBytesToFile(fileDir, text.getBytes());
-    }
-
     static public void WriteBytesToFile(String fileDir, byte [] text){
         File file = new File(fileDir);
 
@@ -60,17 +48,4 @@ public class DataCtrl {
         }
     }
 
-    public static ArrayList<String> getFilesFromDir(String dir) {
-        ArrayList<String> files = new ArrayList<>();
-        File folder = new File(dir);
-        try{
-            for(final File file: Objects.requireNonNull(folder.listFiles())){
-                files.add(dir + "/" + file.getName());
-            }
-        }
-        catch (NullPointerException e){
-            System.out.println("Directory not found" + e);
-        }
-        return files;
-    }
 }
