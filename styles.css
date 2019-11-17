@@ -1,0 +1,23 @@
+.folder{
+    color: blue;
+}
+
+.file{
+    font-weight: bold;
+}
+
+.t1{
+    margin-right: 0px;
+}
+
+.t2{
+    margin-left: 50px;
+}
+
+.t3{
+    margin-left: 100px;
+}
+
+.t4{
+    margin-left: 150px;
+}
