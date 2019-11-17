@@ -294,8 +294,7 @@ public class JPEG extends Algorithm {
             f = Integer.parseInt(Value.toString(), 2);
             FreqCR.put(n,f);
         }
-System.out.println(FreqCR);
-        //matrices width/8*height/8
+        System.out.println(FreqCR);
 
         Huffman DY = new Huffman();
         Huffman DCB = new Huffman();
@@ -327,19 +326,20 @@ System.out.println(FreqCR);
         SE ACABA LA LECTURA DEL ARCHIVO
          */
 
-        boolean hola = true;
-        while(hola){}
-
-        /*
-        Huffman descomprimir = new Huffman();
-
         int iteradorY = 0;
-        while (0 < width/8*height/8){
-            //ArrayList<Integer> Y = descomprimir.desHuffman(aux);
+        int iteradorarray = 0;
+        int fila = 0;
+        int columna = 0;
+        while (iteradorY < width/8*height/8){
             int u = 1;
             int k = 1;
-
+            double [][] Y = new double[8][8];
+            double [][] CB = new double[8][8];
+            double [][] CR = new double[8][8];
             for (int element = 0; element < 64; ++element) {
+                Y[u-1][k-1] = (double) Ydes.get(iteradorarray);
+                CB[u-1][k-1] = (double) CBdes.get(iteradorarray);
+                CR[u-1][k-1] = (double) CRdes.get(iteradorarray);
                 if ((k + u) % 2 != 0) {
                     if (k < 8)
                         k++;
@@ -355,10 +355,37 @@ System.out.println(FreqCR);
                     if (k > 1)
                         k--;
                 }
+                iteradorarray++;
             }
-
             ++iteradorY;
-        }*/
+            //DESQUANTIZAMOS
+            for(int m = 0; m < 8; ++m){
+                for(int n = 0; n < 8; ++n){
+                    Y[m][n] = Y[m][n] * QtablesLuminance[calidad][m][n];
+                    CB[m][n] = CB[m][n] * QtablesChrominance[calidad][m][n];
+                    CR[m][n] = CR[m][n] * QtablesChrominance[calidad][m][n];
+                }
+            }
+            //INVERSA DE LA DCT2
+            double [][] Ydct = dct3(Y);
+            double [][] CBdct = dct3(CB);
+            double [][] CRdct = dct3(CR);
+
+            //SUMAR 128
+            for(int m = 0; m < 8; ++m){
+                for(int n = 0; n < 8; ++n){
+                    Ydct[m][n] = Ydct[m][n] + 128;
+                    CBdct[m][n] = CBdct[m][n] + 128;
+                    CRdct[m][n] = CRdct[m][n] + 128;
+                }
+            }
+            
+        }
+
+        System.out.println("YA ESTA");
+        boolean hola = true;
+        while(hola){}
+
         return null;
     }
 
@@ -771,6 +798,40 @@ System.out.println(FreqCR);
         YCbCr[2] = Math.round(cr);
 
         return YCbCr;
+    }
+
+    static private double [][] dct3(double[][] input){
+        final int N = input.length;
+        final double mathPI = Math.PI;
+        final int halfN = N/2;
+        final double doubN = 2.0*N;
+
+        double[][] c = new double[N][N];
+        c = initMatrix(c);
+
+        double[][] output = new double[N][N];
+
+
+        for (int x=0; x<N; x++)
+        {
+            int temp_x = 2*x+1;
+            for (int y=0; y<N; y++)
+            {
+                int temp_y = 2*y+1;
+                double sum = 0.0;
+                for (int u=0; u<N; u++)
+                {
+                    double temp_u = u*mathPI;
+                    for (int v=0; v<N; v++)
+                    {
+                        sum += c[u][v] * input[u][v] * Math.cos((temp_x/doubN)*temp_u) * Math.cos((temp_y/doubN)*v*mathPI);
+                    }
+                }
+                sum /= halfN;
+                output[x][y] = sum;
+            }
+        }
+        return output;
     }
 
 }
