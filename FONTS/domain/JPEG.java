@@ -125,9 +125,6 @@ public class JPEG extends Algorithm {
         int sizeCBc = 0;
         int sizeCRc = 0;
         int iteradorFreq = 0;
-        String Yen = new String();
-        String Cben = new String();
-        String Cren = new String();
 
         char [] imagenaux = new char[imagen.length];
         for (int j = 0; j < imagen.length; j++) {
@@ -157,47 +154,51 @@ public class JPEG extends Algorithm {
         }
         height = Integer.parseInt(heightS.toString(), 2);
         StringBuilder sizeYS = new StringBuilder();
-        while(i<48){
+        while(i<72){
             sizeYS.append(aux.charAt(i));
             ++i;
         }
         sizeY = Integer.parseInt(sizeYS.toString(), 2);
         StringBuilder sizeCBS = new StringBuilder();
-        while(i<56){
+        while(i<104){
             sizeCBS.append(aux.charAt(i));
             ++i;
         }
         sizeCB = Integer.parseInt(sizeCBS.toString(), 2);
         StringBuilder sizeCRS = new StringBuilder();
-        while(i<64){
+        while(i<136){
             sizeCRS.append(aux.charAt(i));
             ++i;
         }
         sizeCR = Integer.parseInt(sizeCRS.toString(), 2);
         StringBuilder sizeYcS = new StringBuilder();
-        while(i<80){
+        while(i<168){
             sizeYcS.append(aux.charAt(i));
             ++i;
         }
         sizeYc = Integer.parseInt(sizeYcS.toString(), 2);
         StringBuilder sizeCBcS = new StringBuilder();
-        while(i<96){
+        while(i<200){
             sizeCBcS.append(aux.charAt(i));
             ++i;
         }
         sizeCBc = Integer.parseInt(sizeCBcS.toString(), 2);
         StringBuilder sizeCRcS = new StringBuilder();
-        while(i<112){
+        while(i<232){
             sizeCRcS.append(aux.charAt(i));
             ++i;
         }
         sizeCRc = Integer.parseInt(sizeCRcS.toString(), 2);
 
+        int [][] FinalR = new int [height][width];
+        int [][] FinalG = new int [height][width];
+        int [][] FinalB = new int [height][width];
+
         Map<Integer, Integer> FreqY = new HashMap<>();
         Map<Integer, Integer> FreqCB = new HashMap<>();
         Map<Integer, Integer> FreqCR = new HashMap<>();
-        if(calidad <= 9) iteradorFreq = 14;
-        else iteradorFreq = 15;
+        if(imagenaux[29] == '/') iteradorFreq = 29;
+        else iteradorFreq = 28;
         System.out.println(sizeY);
         for(int x = 0; x<sizeY; ++x){
             StringBuilder Key = new StringBuilder();
@@ -303,6 +304,9 @@ public class JPEG extends Algorithm {
         DCB.setFrequencies(FreqCB);
         DCR.setFrequencies(FreqCR);
         StringBuilder encoding = new StringBuilder();
+        System.out.println(sizeYc);
+        System.out.println(sizeCBc);
+        System.out.println(sizeCRc);
         int iteradorMatrix = aux.length() - sizeYc - sizeCBc - sizeCRc;
         for(int x = 0; x<sizeYc; ++x) {
             encoding.append(aux.charAt(iteradorMatrix));
@@ -377,16 +381,42 @@ public class JPEG extends Algorithm {
                     Ydct[m][n] = Ydct[m][n] + 128;
                     CBdct[m][n] = CBdct[m][n] + 128;
                     CRdct[m][n] = CRdct[m][n] + 128;
+                    int [] YCbCr = {(int) Ydct[m][n], (int) CBdct[m][n], (int) CRdct[m][n]};
+                    int [] RGB = YCbCrtoRGB(YCbCr);
+                    if(fila+m < height & columna+n < width) {
+                        FinalR[fila + m][columna + n] = RGB[0];
+                        FinalG[fila + m][columna + n] = RGB[1];
+                        FinalB[fila + m][columna + n] = RGB[2];
+                    }
                 }
             }
-            
+            if(columna + 8 < width) columna = columna + 8;
+            else{
+                fila = fila + 8;
+                columna = 0;
+            }
         }
-
-        System.out.println("YA ESTA");
-        boolean hola = true;
-        while(hola){}
-
-        return null;
+        StringBuilder Finald = new StringBuilder();
+        Finald.append("P6");
+        Finald.append("\n");
+        Finald.append(width);
+        Finald.append(" ");
+        Finald.append(height);
+        Finald.append("\n");
+        Finald.append(255);
+        Finald.append("\n");
+        for(int x = 0; x < height; ++x){
+            for(int y = 0; y < width; ++y){
+                Finald.append((char)FinalR[x][y]);
+                Finald.append(" ");
+                Finald.append((char)FinalG[x][y]);
+                Finald.append(" ");
+                Finald.append((char)FinalB[x][y]);
+                if(x+1 < height & y+1 < width) Finald.append(" ");
+            }
+        }
+        String Finaldes = Finald.toString();
+        return Finaldes.getBytes();
     }
 
     @Override
@@ -446,9 +476,9 @@ public class JPEG extends Algorithm {
             Cambiamos el color RGB original de la imagen a YCbCr
             */
 
-       int [][][] imagenYCbCr = new int [width][height][3];
-       for (int i = 0; i < width; ++i){
-           for (int j = 0; j < height; ++j){
+       int [][][] imagenYCbCr = new int [height][width][3];
+       for (int i = 0; i < height; ++i){
+           for (int j = 0; j < width; ++j){
                 int [] RGB = {(int)imagenaux[iterator],(int)imagenaux[iterator+1],(int)imagenaux[iterator+2]};
                 imagenYCbCr[i][j] = RGBtoYCbCr(RGB);
                 iterator+=3;
@@ -465,11 +495,11 @@ public class JPEG extends Algorithm {
          */
 
 
-        for (int i = 0; i < width; i+=8) {
-            for (int j = 0; j < height; j += 8) {
+        for (int i = 0; i < height; i+=8) {
+            for (int j = 0; j < width; j += 8) {
                 for (int x = 0; x < 8; ++x) {
                     for (int y = 0; y < 8; ++y) {
-                        if (i + x >= width || j + y >= height) {
+                        if (i + x >= height || j + y >= width) {
                             Ydct[x][y] = 0;
                             Cbdct[x][y] = 0;
                             Crdct[x][y] = 0;
@@ -554,14 +584,18 @@ public class JPEG extends Algorithm {
             String Cben = comprimirCB.compressHuffman(Cbencoding);
             String Cren = comprimirCR.compressHuffman(Crencoding);
 
+            System.out.println(Yencoding.size());
+            System.out.println(Cbencoding.size());
+            System.out.println(Crencoding.size());
+
             Map<Integer, Integer> freqY = comprimirY.getFrequencies();
             Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
             Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
 
             System.out.println();
-            System.out.println(freqY.size());
-            System.out.println(freqCb.size());
-            System.out.println(freqCr);
+            System.out.println(Yen.length());
+            System.out.println(Cben.length());
+            System.out.println(Cren.length());
             System.out.println();
 
 
@@ -657,24 +691,29 @@ public class JPEG extends Algorithm {
                 FCR.append(auxs);
             }*/
 
+
             String sizeY = Integer.toBinaryString(freqY.size());
             String sizeCB = Integer.toBinaryString(freqCb.size());
             String sizeCR = Integer.toBinaryString(freqCr.size());
+            System.out.println(freqY.size());
+        System.out.println(freqCb.size());
+        System.out.println(freqCr.size());
             String calidadE =  Integer.toBinaryString(quality);
             String widthE =  Integer.toBinaryString(width);
             String heightE =  Integer.toBinaryString(height);
             String sizeYc =  Integer.toBinaryString(Yen.length());
+            System.out.println(sizeYc);
             String sizeCBc =  Integer.toBinaryString(Cben.length());
             String sizeCRc =  Integer.toBinaryString(Cren.length());
             while(calidadE.length() < 8) calidadE = "0" + calidadE;
             while(widthE.length() < 16) widthE = "0" + widthE;
             while(heightE.length() < 16) heightE = "0" + heightE;
-            while(sizeY.length() < 8) sizeY = "0" + sizeY;
-            while(sizeCB.length() < 8) sizeCB = "0" + sizeCB;
-            while(sizeCR.length() < 8) sizeCR = "0" + sizeCR;
-            while(sizeYc.length() < 16) sizeYc = "0" + sizeYc;
-            while(sizeCBc.length() < 16) sizeCBc = "0" + sizeCBc;
-            while(sizeCRc.length() < 16) sizeCRc = "0" + sizeCRc;
+            while(sizeY.length() < 32) sizeY = "0" + sizeY;
+            while(sizeCB.length() < 32) sizeCB = "0" + sizeCB;
+            while(sizeCR.length() < 32) sizeCR = "0" + sizeCR;
+            while(sizeYc.length() < 32) sizeYc = "0" + sizeYc;
+            while(sizeCBc.length() < 32) sizeCBc = "0" + sizeCBc;
+            while(sizeCRc.length() < 32) sizeCRc = "0" + sizeCRc;
             String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR + sizeYc + sizeCBc + sizeCRc;
             String result2 = FY.toString() + FCB.toString() + FCR.toString();
             String result3 = Yen.toString() + Cben.toString() + Cren.toString();
@@ -789,13 +828,15 @@ public class JPEG extends Algorithm {
         float g = (float)RGB[1];
         float b = (float)RGB[2];
 
-        float y = (float)(16 + (65.738 * r)/256 + (129.057 * g)/256 + (25.064 * b)/256);
-        float cb = (float)(128 - (37.945 * r)/256 - (74.494 * g)/256 + (112.439 * b)/256);
-        float cr = (float)(128 + (112.439 * r)/256 - (94.154 * g)/256 - (18.285 * b)/256);
+        float y = (float)(0 + (0.299*r) + (0.587*g) + (0.114*b));
+        float cb = (float)(128 - (0.168736*r) - (0.331264 * g) + (0.5*b));
+        float cr = (float)(128 + (0.5*r) - (0.418688*g) - (0.081312*b));
+
 
         YCbCr[0] = Math.round(y);
         YCbCr[1] = Math.round(cb);
         YCbCr[2] = Math.round(cr);
+
 
         return YCbCr;
     }
@@ -832,6 +873,28 @@ public class JPEG extends Algorithm {
             }
         }
         return output;
+    }
+
+    static private int [] YCbCrtoRGB(int [] YCbCr){
+        int [] RGB = new int [3];
+
+        float Y = (float)YCbCr[0];
+        float CB = (float)YCbCr[1];
+        float CR = (float)YCbCr[2];
+
+        float R = (float)(Y + 1.402*(CR-128));
+        float G = (float)(Y + -0.344136 * (CB-128) + -0.714136 * (CR-128));
+        float B = (float)(Y + 1.772 * (CB-128));
+
+        if(R>255) R=255;
+        if(G>255) G=255;
+        if(B>255) B=255;
+
+        RGB[0] = Math.round(R);
+        RGB[1] = Math.round(G);
+        RGB[2] = Math.round(B);
+
+        return RGB;
     }
 
 }

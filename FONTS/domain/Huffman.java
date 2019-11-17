@@ -33,7 +33,6 @@ public class Huffman {
         while(i < image.length()){
             char bit = '0';
             while(!actual.isLeaf()){
-                System.out.println(decompressedImage.size());
                 if( i < image.length()) bit = image.charAt(i);
                 if(bit == '0') actual = actual.left;
                 else actual = actual.right;
