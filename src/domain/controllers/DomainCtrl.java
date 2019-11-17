@@ -46,11 +46,11 @@ public class DomainCtrl {
     }
 
     public float getMeanFiles(){
-        return globalStats.getNumberArxius();
+        return globalStats.getNumberFiles();
     }
 
     public void compress(String algorithm, String fileName){
-        globalStats.setNumberArxius(globalStats.getNumberArxius() + 1);
+        globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
         byte[] file = DataCtrl.ReadFileAsBytes(fileName);
         int lastPeriodPos = fileName.lastIndexOf('.');
         fileName = fileName.substring(0,lastPeriodPos);

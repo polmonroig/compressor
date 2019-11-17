@@ -4,12 +4,12 @@ public class GlobalStats extends Stats {
     private float nFiles = 0;
 
 
-    public float getNumberArxius() {
+    public float getNumberFiles() {
         return nFiles;
     }
 
 
-    public void setNumberArxius(float nFiles) {
+    public void setNumberFiles(float nFiles) {
         this.nFiles = nFiles;
     }
 
