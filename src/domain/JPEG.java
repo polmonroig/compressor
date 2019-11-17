@@ -124,6 +124,7 @@ public class JPEG extends Algorithm {
         int sizeYc = 0;
         int sizeCBc = 0;
         int sizeCRc = 0;
+        int iteradorFreq = 0;
         String Yen = new String();
         String Cben = new String();
         String Cren = new String();
@@ -195,8 +196,8 @@ public class JPEG extends Algorithm {
         Map<Integer, Integer> FreqY = new HashMap<>();
         Map<Integer, Integer> FreqCB = new HashMap<>();
         Map<Integer, Integer> FreqCR = new HashMap<>();
-
-        int iteradorFreq = 14;
+        if(calidad <= 9) iteradorFreq = 14;
+        else iteradorFreq = 15;
         System.out.println(sizeY);
         for(int x = 0; x<sizeY; ++x){
             StringBuilder Key = new StringBuilder();
