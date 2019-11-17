@@ -10,6 +10,10 @@ public class Huffman {
         return this.frequencies;
     }
 
+    public void setFrequencies(Map<Integer, Integer> Freq){
+        this.frequencies = Freq;
+    }
+
     public String compressHuffman(ArrayList<Integer> image){
         initializeFrequencies(image);
         TreeNode root = createTree();
@@ -21,15 +25,16 @@ public class Huffman {
         return compressedImage.toString();
     }
 
-    public ArrayList<Integer> decompressHuffman(String image, Map<Integer, Integer> freq){
-        this.frequencies = freq; //Pongo las frequencias en la classe para poder crear el arbol
+    public ArrayList<Integer> decompressHuffman(String image){
         TreeNode compressedTree = createTree();
         ArrayList<Integer> decompressedImage = new ArrayList<Integer>();
         TreeNode actual = compressedTree;
         int i = 0;
         while(i < image.length()){
+            char bit = '0';
             while(!actual.isLeaf()){
-                char bit = image.charAt(i);
+                System.out.println(decompressedImage.size());
+                if( i < image.length()) bit = image.charAt(i);
                 if(bit == '0') actual = actual.left;
                 else actual = actual.right;
                 ++i;

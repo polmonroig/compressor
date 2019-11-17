@@ -1,6 +1,9 @@
 package domain;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.Math;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -114,13 +117,21 @@ public class JPEG extends Algorithm {
         int width = 0;
         int height = 0;
         int calidad = 0;
-        int iterator = 0;
+        int iteratorC = 0;
         int sizeY = 0;
         int sizeCB = 0;
         int sizeCR = 0;
+        int sizeYc = 0;
+        int sizeCBc = 0;
+        int sizeCRc = 0;
         String Yen = new String();
         String Cben = new String();
         String Cren = new String();
+
+        char [] imagenaux = new char[imagen.length];
+        for (int j = 0; j < imagen.length; j++) {
+            imagenaux[j] = (char) (imagen[j] & 0xFF);
+        }
 
         StringBuilder imageBYTES = new StringBuilder(imagen.length * Byte.SIZE);
         for( int i = 0; i < Byte.SIZE * imagen.length; i++ ) imageBYTES.append((imagen[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
@@ -162,86 +173,163 @@ public class JPEG extends Algorithm {
             ++i;
         }
         sizeCR = Integer.parseInt(sizeCRS.toString(), 2);
+        StringBuilder sizeYcS = new StringBuilder();
+        while(i<80){
+            sizeYcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeYc = Integer.parseInt(sizeYcS.toString(), 2);
+        StringBuilder sizeCBcS = new StringBuilder();
+        while(i<96){
+            sizeCBcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCBc = Integer.parseInt(sizeCBcS.toString(), 2);
+        StringBuilder sizeCRcS = new StringBuilder();
+        while(i<112){
+            sizeCRcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCRc = Integer.parseInt(sizeCRcS.toString(), 2);
 
         Map<Integer, Integer> FreqY = new HashMap<>();
         Map<Integer, Integer> FreqCB = new HashMap<>();
         Map<Integer, Integer> FreqCR = new HashMap<>();
 
-        for (int x = 0; x<sizeY; ++x){
-            StringBuilder auxKey = new StringBuilder();
-            StringBuilder auxValue = new StringBuilder();
-            int Key;
-            int Value;
-            while(i<i+8){
-                auxKey.append(aux.charAt(i));
-                ++i;
+        int iteradorFreq = 14;
+        System.out.println(sizeY);
+        for(int x = 0; x<sizeY; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+                if(imagenaux[iteradorFreq] == '/'){
+                    ++iteradorFreq;
+                    while(imagenaux[iteradorFreq] != '/'){
+                        Key.append(imagenaux[iteradorFreq]);
+                        ++iteradorFreq;
+                    }
+                    ++iteradorFreq;
+                    while(imagenaux[iteradorFreq] != '/'){
+                        Value.append(imagenaux[iteradorFreq]);
+                        ++iteradorFreq;
+                    }
+                }
+                if(Key.length() > 9){
+                    //negativo
+                    String auxi = Key.toString();
+                    auxi = Utils.andOfString(auxi);
+                    n = Integer.parseInt(auxi,2);
+                    ++n;
+                    n = -1*n;
+                }
+                else{
+                    n = Integer.parseInt(Key.toString(), 2);
+                }
+                f = Integer.parseInt(Value.toString(), 2);
+                FreqY.put(n,f);
             }
-            while(i<i+16){
-                auxValue.append(aux.charAt(i));
-                ++i;
+
+        for(int x = 0; x<sizeCB; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+            if(imagenaux[iteradorFreq] == '/'){
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Key.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Value.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
             }
-            if(aux.charAt(i-16) == '1'){
-                String n = auxValue.toString();
-                n = Utils.andOfString(n);
-                Value = Integer.parseInt(n,2);
-                Value = -1*Value;
-            }else{
-                Value = Integer.parseInt(auxValue.toString(),2);
+            if(Key.length() > 9){
+                //negativo
+                String auxi = Key.toString();
+                auxi = Utils.andOfString(auxi);
+                n = Integer.parseInt(auxi,2);
+                ++n;
+                n = -1*n;
             }
-            Key = Integer.parseInt(auxKey.toString(), 2);
-            FreqY.put(Key, Value);
+            else{
+                n = Integer.parseInt(Key.toString(), 2);
+            }
+            f = Integer.parseInt(Value.toString(), 2);
+            FreqCB.put(n,f);
         }
 
-        for (int x = 0; x<sizeCB; ++x){
-            StringBuilder auxKey = new StringBuilder();
-            StringBuilder auxValue = new StringBuilder();
-            int Key;
-            int Value;
-            while(i<i+8){
-                auxKey.append(aux.charAt(i));
-                ++i;
+        for(int x = 0; x<sizeCR; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+            if(imagenaux[iteradorFreq] == '/'){
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Key.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Value.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
             }
-            while(i<i+16){
-                auxValue.append(aux.charAt(i));
-                ++i;
+            if(Key.length() > 9){
+                //negativo
+                String auxi = Key.toString();
+                auxi = Utils.andOfString(auxi);
+                n = Integer.parseInt(auxi,2);
+                ++n;
+                n = -1*n;
             }
-            if(aux.charAt(i-16) == '1'){
-                String n = auxValue.toString();
-                n = Utils.andOfString(n);
-                Value = Integer.parseInt(n,2);
-                Value = -1*Value;
-            }else{
-                Value = Integer.parseInt(auxValue.toString(),2);
+            else{
+                n = Integer.parseInt(Key.toString(), 2);
             }
-            Key = Integer.parseInt(auxKey.toString(), 2);
-            FreqCB.put(Key, Value);
+            f = Integer.parseInt(Value.toString(), 2);
+            FreqCR.put(n,f);
         }
+System.out.println(FreqCR);
+        //matrices width/8*height/8
 
-        for (int x = 0; x<sizeCR; ++x){
-            StringBuilder auxKey = new StringBuilder();
-            StringBuilder auxValue = new StringBuilder();
-            int Key;
-            int Value;
-            while(i<i+8){
-                auxKey.append(aux.charAt(i));
-                ++i;
-            }
-            while(i<i+16){
-                auxValue.append(aux.charAt(i));
-                ++i;
-            }
-            if(aux.charAt(i-16) == '1'){
-                String n = auxValue.toString();
-                n = Utils.andOfString(n);
-                Value = Integer.parseInt(n,2);
-                Value = -1*Value;
-            }else{
-                Value = Integer.parseInt(auxValue.toString(),2);
-            }
-            Key = Integer.parseInt(auxKey.toString(), 2);
-            FreqCR.put(Key, Value);
+        Huffman DY = new Huffman();
+        Huffman DCB = new Huffman();
+        Huffman DCR = new Huffman();
+        DY.setFrequencies(FreqY);
+        DCB.setFrequencies(FreqCB);
+        DCR.setFrequencies(FreqCR);
+        StringBuilder encoding = new StringBuilder();
+        int iteradorMatrix = aux.length() - sizeYc - sizeCBc - sizeCRc;
+        for(int x = 0; x<sizeYc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
         }
+        ArrayList<Integer> Ydes = DY.decompressHuffman(encoding.toString());
+        encoding = new StringBuilder();
+        for(int x = 0; x<sizeCBc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
+        }
+        ArrayList<Integer> CBdes = DCB.decompressHuffman(encoding.toString());
+        encoding = new StringBuilder();
+        for(int x = 0; x<sizeCRc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
+        }
+        ArrayList<Integer> CRdes = DCR.decompressHuffman(encoding.toString());
 
+        /*
+        SE ACABA LA LECTURA DEL ARCHIVO
+         */
+
+        boolean hola = true;
+        while(hola){}
+
+        /*
         Huffman descomprimir = new Huffman();
 
         int iteradorY = 0;
@@ -269,7 +357,7 @@ public class JPEG extends Algorithm {
             }
 
             ++iteradorY;
-        }
+        }*/
         return null;
     }
 
@@ -288,6 +376,7 @@ public class JPEG extends Algorithm {
         ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
         ArrayList<Integer> Crencoding = new ArrayList<Integer>();
 
+        System.out.println(imagen.length);
 
         char [] imagenaux = new char[imagen.length];
         for (int j = 0; j < imagen.length; j++) {
@@ -296,6 +385,7 @@ public class JPEG extends Algorithm {
             /*
             Conseguimos la altura y anchura de la imagen a codificar
             */
+
         for (iterator = 3; imagenaux[iterator] != '\n'; ++iterator) {
             if (imagenaux[iterator] == ' ') anchura = false;
             else {
@@ -440,11 +530,52 @@ public class JPEG extends Algorithm {
             Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
             Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
 
+            System.out.println();
+            System.out.println(freqY.size());
+            System.out.println(freqCb.size());
+            System.out.println(freqCr);
+            System.out.println();
+
+
             StringBuilder FY = new StringBuilder();
             StringBuilder FCB = new StringBuilder();
             StringBuilder FCR = new StringBuilder();
 
-            for(int key : freqY.keySet()){
+        for(int key : freqY.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FY.append("/");
+            FY.append(auxs);
+            auxs = Integer.toBinaryString(freqY.get(key));
+            FY.append("/");
+            FY.append(auxs);
+        }
+
+        for(int key : freqCb.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FCB.append("/");
+            FCB.append(auxs);
+            auxs = Integer.toBinaryString(freqCb.get(key));
+            FCB.append("/");
+            FCB.append(auxs);
+        }
+
+        for(int key : freqCr.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FCR.append("/");
+            FCR.append(auxs);
+            auxs = Integer.toBinaryString(freqCr.get(key));
+            FCR.append("/");
+            FCR.append(auxs);
+        }
+        FCR.append("/");
+
+
+
+
+            /*for(int key : freqY.keySet()){
                 int aux = key;
                 if(key < 0) {
                     aux = key * -1;
@@ -496,7 +627,7 @@ public class JPEG extends Algorithm {
                 String auxs = Integer.toBinaryString(freqCr.get(key));
                 while (auxs.length() < 16) auxs = '0' + auxs;
                 FCR.append(auxs);
-            }
+            }*/
 
             String sizeY = Integer.toBinaryString(freqY.size());
             String sizeCB = Integer.toBinaryString(freqCb.size());
@@ -504,16 +635,30 @@ public class JPEG extends Algorithm {
             String calidadE =  Integer.toBinaryString(quality);
             String widthE =  Integer.toBinaryString(width);
             String heightE =  Integer.toBinaryString(height);
+            String sizeYc =  Integer.toBinaryString(Yen.length());
+            String sizeCBc =  Integer.toBinaryString(Cben.length());
+            String sizeCRc =  Integer.toBinaryString(Cren.length());
             while(calidadE.length() < 8) calidadE = "0" + calidadE;
             while(widthE.length() < 16) widthE = "0" + widthE;
             while(heightE.length() < 16) heightE = "0" + heightE;
             while(sizeY.length() < 8) sizeY = "0" + sizeY;
             while(sizeCB.length() < 8) sizeCB = "0" + sizeCB;
             while(sizeCR.length() < 8) sizeCR = "0" + sizeCR;
-            String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR
-                    + FY.toString() + FCB.toString() + FCR.toString() + Yen.toString() + Cben.toString() + Cren.toString();
-            byte [] c = Utils.toByteArray2(result);
-
+            while(sizeYc.length() < 16) sizeYc = "0" + sizeYc;
+            while(sizeCBc.length() < 16) sizeCBc = "0" + sizeCBc;
+            while(sizeCRc.length() < 16) sizeCRc = "0" + sizeCRc;
+            String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR + sizeYc + sizeCBc + sizeCRc;
+            String result2 = FY.toString() + FCB.toString() + FCR.toString();
+            String result3 = Yen.toString() + Cben.toString() + Cren.toString();
+            byte [] a = Utils.toByteArray2(result);
+            byte [] b = result2.getBytes();
+            byte [] c = Utils.toByteArray2(result3);
+            byte[] code1 = new byte[a.length + b.length];
+            System.arraycopy(a, 0, code1, 0, a.length);
+            System.arraycopy(b, 0, code1, a.length, b.length);
+            byte[] finalcode = new byte[code1.length + c.length];
+            System.arraycopy(code1, 0, finalcode, 0, code1.length);
+            System.arraycopy(c, 0, finalcode, code1.length, c.length);
 
         /*
 
@@ -552,7 +697,7 @@ public class JPEG extends Algorithm {
         this.localStats.setCompressionSpeed(imagen.length / this.localStats.getCompressionTime());
 
 
-        return c;
+        return finalcode;
     }
 
     static private double[][] initMatrix(double [][] c) {
