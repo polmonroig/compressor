@@ -37,7 +37,7 @@ public class DriverLZ78 {
                     compression = encoder.decompress(DataCtrl.ReadFileAsBytes(file));
                     lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    DataCtrl.WriteBytesToFile(file + ".txt", compression);
+                    DataCtrl.WriteBytesToFile(file + "_new " + ".txt", compression);
                     break;
                 case "3":
                     input = true;
