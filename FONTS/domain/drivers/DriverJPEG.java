@@ -23,18 +23,21 @@ public class DriverJPEG {
                 case "1":
                     System.out.println("Introduce el archivo a comprimir");
                     String file = Input.nextLine();
+                    System.out.println("Con que grado de calidad desea comprimir? (Siendo 0 el más bajo y 12 el más alto)");
+                    String quality = Input.nextLine();
+                    encoder.setQuality(Integer.parseInt(quality));
                     byte[] compression = encoder.compress(DataCtrl.ReadFileAsBytes(file));
                     int lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
                     DataCtrl.WriteBytesToFile(file + ".jpeg", compression);
                     break;
                 case "2":
-                    System.out.println("Lo siento esta funcion todavia no esta implementada");
-                    /*file = Input.nextLine();
-                    compression = encoder.descomprimir(CtrlPersistencia.ReadFileAsBytes(file));
+                    System.out.println("Introduce el archivo a descomprimir");
+                    file = Input.nextLine();
+                    compression = encoder.decompress(DataCtrl.ReadFileAsBytes(file));
                     lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    CtrlPersistencia.WriteBytesToFile(file + ".ppm", compression);*/
+                    DataCtrl.WriteBytesToFile(file + ".ppm", compression);
                     break;
                 case "3":
                     input = true;
