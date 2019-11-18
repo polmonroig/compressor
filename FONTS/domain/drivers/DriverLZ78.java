@@ -45,7 +45,7 @@ public class DriverLZ78 {
                 default:
                     System.out.println("La opcion introducida no es valida, por favor intentalo de nuevo");
                     for(int i = 0; i < functions.length; ++i){
-                        System.out.println((i + 1)  + "-" + functions[i]);
+                        System.out.println((i + 1)  + ".-" + functions[i]);
                     }
                     break;
             }

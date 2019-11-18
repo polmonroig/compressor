@@ -28,7 +28,7 @@ public class DriverLZSS {
                     byte[] compression = encoder.compress(DataCtrl.ReadFileAsBytes(file));
                     int lastPeriodPos = file.lastIndexOf('.');
                     file = file.substring(0,lastPeriodPos);
-                    DataCtrl.WriteBytesToFile(file + ".lzw", compression);
+                    DataCtrl.WriteBytesToFile(file + ".lzss", compression);
                     break;
                 case "2":
                     System.out.print("Introduce el archivo a descomprimir: ");

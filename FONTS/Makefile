@@ -1,7 +1,7 @@
 ######################
 #		MAKEFILE
 # To compile and build the program: 'make program'
-# To compile and build a driver: 'make driverX' where X=ALGORITHM
+# To compile and build a driver: 'make driverX' where X=CLASS
 # To clean manifest, *.jar and *.class: 'make clean'
 #####################
 
@@ -9,6 +9,10 @@
 # bash commands
 JAVAC = javac -cp
 JAR = jar cmf
+
+#############################
+#    VARIABLE DEFINITION
+#############################
 
 # path to the presentation controller
 presentationController = presentation/controllers/PresentationCtrl.java
@@ -36,6 +40,22 @@ jpegDriver = $(dataController) $(etc) $(utils)  \
 			 domain/Huffman.java domain/JPEG.java \
 			 domain/drivers/DriverJPEG.java
 
+# driver DomainCtrl
+domainControllerDriver = $(domainObjects) $(domainController) \
+                         domain/drivers/DriverDomainCtrl.java $(domainObjects)
+
+# driver DataCtrl
+dataControllerDriver = $(dataController) data/drivers/DriverDataCtrl.java
+
+# driver and junit utils
+utilsDriver = $(utils) domain/drivers/UtilsTest.java domain/drivers/DriverUtils.java
+
+# stats driver
+statsDriver = domain/Stats.java domain/drivers/DriverStats.java
+
+# globalStats driver
+globalStatsDriver = domain/Stats.java domain/GlobalStats.java domain/drivers/DriverGlobalStats.java
+
 # collection of files needed to run the main program
 files = $(domainObjects) $(domainController) $(dataController) $(domainObjects) \
         $(domainController) $(presentationController)
@@ -49,26 +69,56 @@ manifest = manifest.mf
 # executable name
 programName = program.jar
 
+
+#############################
+#    RULES DEFINITION
+#############################
+
 # compile and build drivers
-driverlz78:
+driverLZ78:
 	echo 'Main-Class: domain.drivers.DriverLZ78' > $(manifest)
 	$(JAVAC) $(dataController) $(lz78Driver)
 	$(JAR) $(manifest) DriverLZ78.jar $(lz78Driver:.java=.class)
 
-driverlzw:
+driverLZW:
 	echo 'Main-Class: domain.drivers.DriverLZW' > $(manifest)
 	$(JAVAC) $(dataController) $(lzwDriver)
 	$(JAR) $(manifest) DriverLZW.jar $(lzwDriver:.java=.class)
 
-driverlzss:
+driverLZSS:
 	echo 'Main-Class: domain.drivers.DriverLZSS' > $(manifest)
 	$(JAVAC) $(dataController) $(lzssDriver)
 	$(JAR) $(manifest) DriverLZSS.jar $(lzssDriver:.java=.class)
 
-driverjpeg:
+driverJPEG:
 	echo 'Main-Class: domain.drivers.DriverJPEG' > $(manifest)
 	$(JAVAC) $(dataController) $(jpegDriver)
 	$(JAR) $(manifest) DriverJPEG.jar $(jpegDriver:.java=.class)
+
+driverDomainCtrl:
+	echo 'Main-Class: domain.drivers.DriverDomainCtrl' > $(manifest)
+	$(JAVAC) $(dataController) $(domainControllerDriver)
+	$(JAR) $(manifest) DriverDomainCtrl.jar $(domainControllerDriver:.java=.class)
+
+driverDataCtrl:
+	echo 'Main-Class: data.drivers.DriverDataCtrl' > $(manifest)
+	$(JAVAC) $(dataController) $(dataControllerDriver)
+	$(JAR) $(manifest) DriverDataCtrl.jar $(dataControllerDriver:.java=.class)
+
+driverUtils:
+    echo 'Main-Class: domain.drivers.DriverUtils' > $(manifest)
+    $(JAVAC) $(utilsDriver)
+    $(JAR) $(manifest) UtilsTest.jar $(utilsDriver:.java=.class)
+
+driverStats:
+    echo 'Main-Class: domain.drivers.DriverStats' > $(manifest)
+    $(JAVAC) $(statsDriver)
+    $(JAR) $(manifest) DriverStats.jar $(statsDriver:.java=.class)
+
+driverGlobalStats:
+    echo 'Main-Class: domain.drivers.DriverGlobalStats' > $(manifest)
+    $(JAVAC) $(globalStatsDriver)
+    $(JAR) $(manifest) DriverGlobalStats.jar $(globalStatsDriver:.java=.class)
 
 
 # compile and build main program

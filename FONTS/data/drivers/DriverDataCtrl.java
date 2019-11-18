@@ -12,10 +12,10 @@ class DriverDataCtrl{
         boolean input = false;
 
         System.out.println("Opciones:");
-        System.out.println("1.-Lleer archivo como bytes 2.- Escrivir archivo como bytes 3.-Salir");
+        System.out.println("1.-Leer archivo como bytes 2.- Escribir archivo como bytes 3.-Salir");
 
         while(!input) {
-            System.out.print("introducir opción: ");
+            System.out.print("Introducir opción: ");
             String userInput = Input.nextLine();
             switch (userInput) {
                 case "1":
@@ -38,7 +38,7 @@ class DriverDataCtrl{
                 default:
                     System.out.println("No ha selecionado ningua de las opciones validas. \nIntentelo de nuevo.");
                     System.out.println("Opciones:");
-                    System.out.println("1.-Lleer archivo como bytes 2.- Escrivir archivo como bytes 3.-Salir");
+                    System.out.println("1.-Leer archivo como bytes 2.- Escribir archivo como bytes 3.-Salir");
                     break;
             }
         }
