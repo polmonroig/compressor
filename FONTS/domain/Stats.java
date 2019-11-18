@@ -7,7 +7,7 @@ public class Stats {
     private float originalFileSize;
     private float compressedFileSize;
 
-    Stats(){
+    public Stats(){
         reset();
     }
 
