@@ -3,3 +3,7 @@ Aquest executable serveix per comprobar les funcionalitats de la classe LZW, en 
 2.-Comprimir
 On comprimir et preguntará el path i la calitat del arxiu a comprimir i la funcio de descomprimir solament et demanara el path del arxiu a descomprimir.
 Els casos de prova que hem utilitzat son els arxius que estan dintre de la carpeta jocDeProves que estan dintre d'aquesta carpeta, els quals comproven la correctesa dels algoritmes.
+Entre els casos de prova tenim diversos tipus, els textos amb una mida petita provan caracteristiques especifiques com els accents o l'incorporacio de nomes numeros,
+despres tenim casos mitjans com el LoremImpum que descriu text poc comu ja que no significa res, despres tenim un fragment del quijote y per ultim,
+tenim textos extremadament llargs com el LoremImpsumX que prova la velocitat per 20mb de caracters i un cas mes realista com el quijote_largo que conte
+tot el llibre del quijote en 2mb.
