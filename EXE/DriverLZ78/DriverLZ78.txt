@@ -1,0 +1,5 @@
+Aquest executable serveix per comprobar les funcionalitats de la classe LZ78, en té dos funcions:
+1.-Descomprimir
+2.-Comprimir
+On comprimir et preguntará el path i la calitat del arxiu a comprimir i la funcio de descomprimir solament et demanara el path del arxiu a descomprimir.
+Els casos de prova que hem utilitzat son els arxius que estan dintre de la carpeta jocDeProves que estan dintre d'aquesta carpeta, els quals comproven la correctesa dels algoritmes.
