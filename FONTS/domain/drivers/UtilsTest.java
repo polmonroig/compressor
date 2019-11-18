@@ -77,7 +77,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void toByteArray2Test(){//ns que hace
+    public void toByteArray2Test(){
         Assert.assertThat("Should return {64, 1}", new byte[]{ 64, 1}, IsEqual.equalTo(Utils.toByteArray2("010000000000001")));
         Assert.assertThat("Should return {65}", new byte[]{ 65}, IsEqual.equalTo(Utils.toByteArray2("01000001")));
     }
