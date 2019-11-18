@@ -1,0 +1,4 @@
+Aquest executable serveix per comprobar les funcionalitats de la classe DataCtrl, en té dos funcions:
+1.-ReadFileAsBytes
+2.-WriteBytesToFile
+On ReadFileAsBytes et demana el path d'un fitxer per tal de llegir-lo i WriteBytesToFile et demana entrar un text pel terminal i un path on guardar aquest text com a fitxer. Els casos de proba que em fet per ReadFileAsBytes han sigut provar amb si s'imprimien correctament els fitxers de text de test_files i per WriteBytesToFile em entrat varios textos per teclat i varios paths (existents i no existents) i em comprovat que s'escriguin correctament.
