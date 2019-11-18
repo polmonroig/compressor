@@ -143,4 +143,4 @@ clean:
 	$(lzwDriver:.java=.class) $(lzssDriver:.java=.class) $(jpegDriver:.java=.class) \
 	$(domainControllerDriver:.java=.class)  $(dataControllerDriver:.java=.class) \
 	$(utilsDriver:.java=.class)  $(statsDriver:.java=.class) \
-	$(globalStatsDriver:.java=.class)
+	$(globalStatsDriver:.java=.class) $(huffmanDriver:.java=.class) domain/drivers/UtilsTest.class
