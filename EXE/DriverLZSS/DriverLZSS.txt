@@ -1,0 +1,3 @@
+On comprimir et preguntara el path i la funcio de descomprimir fara el mateix.
+
+Els casos de prova que hem utilitzat son els arxius que estan dintr de la carpeta jocDeProves que estan dintre d'aquesta carpeta
