@@ -1,0 +1,6 @@
+Aquest executable serveix per comprobar les funcionalitats de la classe Huffman, en té cuatre funcions:
+1.-Descomprimir Huffman
+2.-Comprimir Huffman
+3.-Setfrequencies
+4.-GetFrequencies
+On principalment el funcionament és del Driver és comprimir i descomprimir amb huffman, la compressió es tracta de una tira de Integers on els comprimeix en una codificació binaria, ara hem de tenir en compte la funcio de descomprimir, perque per tal de que funcioni bé les frequencies han de ser les correctes, per que si no, no descomprimira bé. Llavors el descomprimir es donará un String binari i el descodificará. Per els casos de prova, hem utilitat una llista de integer, per exemple, 0 1 2 3 4 5 6 7 8 9 , i doná la descodificació en binari, i per descomprimir a l'inversa, 010111010101110100011010, una codificació en binari que donará una sequencia de integers.
