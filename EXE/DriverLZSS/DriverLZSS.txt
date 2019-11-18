@@ -1,5 +1,5 @@
 Aquest executable serveix per comprobar les funcionalitats de la classe LZSS, en té dos funcions:
 1.-Descomprimir
 2.-Comprimir
-On comprimir et preguntará el path i la calitat del arxiu a comprimir i la funcio de descomprimir solament et demanara el path del arxiu a descomprimir. Els casos de proba que hem utilitzat estan a la carpeta, són imatges de diferents mides, i colors, per tal d'observar el funcionament del algoritme. Hem observat que aplicant diferents images dona resultats incorrectes a la descompressió. On comprimir et preguntara el path i la funcio de descomprimir fara el mateix.
-Els casos de prova que hem utilitzat son els arxius que estan dintr de la carpeta jocDeProves que estan dintre d'aquesta carpeta
+On comprimir et preguntará el path i la calitat del arxiu a comprimir i la funcio de descomprimir solament et demanara el path del arxiu a descomprimir.
+Els casos de prova que hem utilitzat son els arxius que estan dintre de la carpeta jocDeProves que estan dintre d'aquesta carpeta, els quals comproven la correctesa dels algoritmes. Hem observat que hi han alguns caracters especials que no es descomprimeixen correctament.
