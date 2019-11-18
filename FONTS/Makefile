@@ -2,6 +2,7 @@
 #		MAKEFILE
 # To compile and build the program: 'make program'
 # To compile and build a driver: 'make driverX' where X=CLASS
+# To compile and test a class: 'make testX' where X=CLASS
 # To clean manifest, *.jar and *.class: 'make clean'
 #####################
 
@@ -105,20 +106,21 @@ driverDataCtrl:
 	$(JAVAC) $(dataController) $(dataControllerDriver)
 	$(JAR) $(manifest) DriverDataCtrl.jar $(dataControllerDriver:.java=.class)
 
-driverUtils:
-    echo 'Main-Class: domain.drivers.DriverUtils' > $(manifest)
-    $(JAVAC) $(utilsDriver)
-    $(JAR) $(manifest) UtilsTest.jar $(utilsDriver:.java=.class)
+
+
+testUtils:
+	javac -cp .:"../EXE/junit/*"  domain/drivers/UtilsTest.java
+	java -cp .:"../EXE/junit/*" org.junit.runner.JUnitCore domain.drivers.UtilsTest
 
 driverStats:
-    echo 'Main-Class: domain.drivers.DriverStats' > $(manifest)
-    $(JAVAC) $(statsDriver)
-    $(JAR) $(manifest) DriverStats.jar $(statsDriver:.java=.class)
+	echo 'Main-Class: domain.drivers.DriverStats' > $(manifest)
+	$(JAVAC) $(statsDriver)
+	$(JAR) $(manifest) DriverStats.jar $(statsDriver:.java=.class)
 
 driverGlobalStats:
-    echo 'Main-Class: domain.drivers.DriverGlobalStats' > $(manifest)
-    $(JAVAC) $(globalStatsDriver)
-    $(JAR) $(manifest) DriverGlobalStats.jar $(globalStatsDriver:.java=.class)
+	echo 'Main-Class: domain.drivers.DriverGlobalStats' > $(manifest)
+	$(JAVAC) $(globalStatsDriver)
+	$(JAR) $(manifest) DriverGlobalStats.jar $(globalStatsDriver:.java=.class)
 
 
 # compile and build main program
@@ -129,5 +131,8 @@ program:
 
 # clean all
 clean:
-	rm -f $(classes) $(manifest) $(programName) $(lz78Driver:.java=.class) \
-	$(lzwDriver:.java=.class) $(lzssDriver:.java=.class) $(jpegDriver:.java=.class)
+	rm -f $(classes) $(manifest) *.jar $(lz78Driver:.java=.class) \
+	$(lzwDriver:.java=.class) $(lzssDriver:.java=.class) $(jpegDriver:.java=.class) \
+	$(domainControllerDriver:.java=.class)  $(dataControllerDriver:.java=.class) \
+	$(utilsDriver:.java=.class)  $(statsDriver:.java=.class) \
+	$(globalStatsDriver:.java=.class)

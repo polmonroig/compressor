@@ -1,7 +1,6 @@
 package domain.drivers;
 
 import domain.Utils;
-import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,16 +69,16 @@ public class UtilsTest {
 
     @Test
     public void stringWithOffsetShouldReturnByteArray(){
-        Assert.assertThat("Should return {0, 32, 1}", new byte[]{0, 32, 1}, IsEqual.equalTo(Utils.toByteArray("0010000000000001")));
-        Assert.assertThat("Should return {1, 32, 1}", new byte[]{1, 32, 1}, IsEqual.equalTo(Utils.toByteArray("001000001")));
-        Assert.assertThat("Should return {2, 32, 1}", new byte[]{2, 32, 1}, IsEqual.equalTo(Utils.toByteArray("0010000001")));
-        Assert.assertThat("Should return {3, 32, 1}", new byte[]{3, 32, 1}, IsEqual.equalTo(Utils.toByteArray("00100000001")));
+        Assert.assertArrayEquals("Should return {0, 32, 1}", new byte[]{0, 32, 1}, Utils.toByteArray("0010000000000001"));
+        Assert.assertArrayEquals("Should return {1, 32, 1}", new byte[]{1, 32, 1}, Utils.toByteArray("001000001"));
+        Assert.assertArrayEquals("Should return {2, 32, 1}", new byte[]{2, 32, 1}, Utils.toByteArray("0010000001"));
+        Assert.assertArrayEquals("Should return {3, 32, 1}", new byte[]{3, 32, 1}, Utils.toByteArray("00100000001"));
     }
 
     @Test
     public void toByteArray2Test(){//ns que hace
-        Assert.assertThat("Should return {64, 1}", new byte[]{ 64, 1}, IsEqual.equalTo(Utils.toByteArray2("010000000000001")));
-        Assert.assertThat("Should return {65}", new byte[]{ 65}, IsEqual.equalTo(Utils.toByteArray2("01000001")));
+        Assert.assertArrayEquals("Should return {64, 1}", new byte[]{ 64, 1}, Utils.toByteArray2("010000000000001"));
+        Assert.assertArrayEquals("Should return {65}", new byte[]{ 65}, Utils.toByteArray2("01000001"));
     }
 
 
