@@ -628,7 +628,7 @@ public class JPEG extends Algorithm {
 
 
 
-        
+
 
 
             String sizeY = Integer.toBinaryString(freqY.size());
