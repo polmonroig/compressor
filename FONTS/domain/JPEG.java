@@ -515,16 +515,7 @@ public class JPEG extends Algorithm {
             /*
             Haremos el DCT2 de cada componente de color para el pixel
              */
-                /*double[][] test = {{16,  11,  10,  16,  24,  40,  51,  61},
-                {12,  12,  14,  19,  26,  58,  60,  55},
-                {14,  13,  16,  24,  40,  57,  69,  56},
-                    {14,  17,  22,  29,  51,  87,  80,  62},
-                    {18,  22,  37,  56,  68, 109, 103,  77},
-                    {24,  35,  55,  64,  81, 104, 113,  92},
-                    {49,  64,  78,  87, 103, 121, 120, 101},
-                    {72,  92,  95,  98, 112, 100, 103,  99} };
 
-                test = dct2(test);*/
 
                 Ydct = dct2(Ydct);
                 Cbdct = dct2(Cbdct);
@@ -637,59 +628,7 @@ public class JPEG extends Algorithm {
 
 
 
-            /*for(int key : freqY.keySet()){
-                int aux = key;
-                if(key < 0) {
-                    aux = key * -1;
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FY.append(Utils.andOfString(auxs));
-                }
-                else{
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FY.append(auxs);
-                }
-                String auxs = Integer.toBinaryString(freqY.get(key));
-                while (auxs.length() < 16) auxs = '0' + auxs;
-                FY.append(auxs);
-            }
-
-            for(int key : freqCb.keySet()){
-                int aux = key;
-                if(key < 0) {
-                    aux = key * -1;
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FY.append(Utils.andOfString(auxs));
-                }
-                else{
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FCB.append(auxs);
-                }
-                String auxs = Integer.toBinaryString(freqCb.get(key));
-                while (auxs.length() < 16) auxs = '0' + auxs;
-                FCB.append(auxs);
-            }
-
-            for(int key : freqCr.keySet()){
-                int aux = key;
-                if(key < 0) {
-                    aux = key * -1;
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FCR.append(Utils.andOfString(auxs));
-                }
-                else{
-                    String auxs = Integer.toBinaryString(aux);
-                    while (auxs.length() < 8) auxs = '0' + auxs;
-                    FCR.append(auxs);
-                }
-                String auxs = Integer.toBinaryString(freqCr.get(key));
-                while (auxs.length() < 16) auxs = '0' + auxs;
-                FCR.append(auxs);
-            }*/
+        
 
 
             String sizeY = Integer.toBinaryString(freqY.size());
