@@ -407,12 +407,12 @@ public class JPEG extends Algorithm {
         Finald.append("\n");
         for(int x = 0; x < height; ++x){
             for(int y = 0; y < width; ++y){
-                Finald.append((char)FinalR[x][y]);
-                Finald.append(" ");
-                Finald.append((char)FinalG[x][y]);
-                Finald.append(" ");
-                Finald.append((char)FinalB[x][y]);
-                if(x+1 < height & y+1 < width) Finald.append(" ");
+                char auxe = (char) FinalR[x][y];
+                Finald.append(auxe);
+                auxe = (char)FinalG[x][y];
+                Finald.append(auxe);
+                auxe = (char)FinalB[x][y];
+                Finald.append(auxe);
             }
         }
         String Finaldes = Finald.toString();
