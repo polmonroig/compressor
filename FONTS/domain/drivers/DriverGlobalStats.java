@@ -1,7 +1,6 @@
 package domain.drivers;
 
 
-import data.controllers.DataCtrl;
 import domain.GlobalStats;
 
 import java.util.Scanner;

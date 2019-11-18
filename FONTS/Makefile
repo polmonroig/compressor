@@ -52,10 +52,13 @@ dataControllerDriver = $(dataController) data/drivers/DriverDataCtrl.java
 utilsDriver = $(utils) domain/drivers/UtilsTest.java domain/drivers/DriverUtils.java
 
 # stats driver
-statsDriver = domain/Stats.java domain/drivers/DriverStats.java
+statsDriver = domain/Stats.java domain/drivers/DriverStats.java domain/Stats.java
 
 # globalStats driver
-globalStatsDriver = domain/Stats.java domain/GlobalStats.java domain/drivers/DriverGlobalStats.java
+globalStatsDriver = domain/Stats.java domain/GlobalStats.java domain/Stats.java domain/drivers/DriverGlobalStats.java
+
+# huffman driver
+huffmanDriver = domain/Huffman.java domain/drivers/DriverHuffman.java domain/Huffman.java
 
 # collection of files needed to run the main program
 files = $(domainObjects) $(domainController) $(dataController) $(domainObjects) \
@@ -122,6 +125,11 @@ driverGlobalStats:
 	$(JAVAC) $(globalStatsDriver)
 	$(JAR) $(manifest) DriverGlobalStats.jar $(globalStatsDriver:.java=.class)
 
+
+driverHuffman:
+	echo 'Main-Class: domain.drivers.DriverGlobalStats' > $(manifest)
+	$(JAVAC) $(huffmanDriver)
+	$(JAR) $(manifest) DriverHuffman.jar $(huffmanDriver:.java=.class)
 
 # compile and build main program
 program:

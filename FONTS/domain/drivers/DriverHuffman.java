@@ -1,7 +1,6 @@
 package domain.drivers;
 
 import domain.Huffman;
-import data.controllers.DataCtrl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
