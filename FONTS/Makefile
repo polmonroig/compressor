@@ -42,7 +42,7 @@ jpegDriver = $(dataController) $(etc) $(utils)  \
 			 domain/drivers/DriverJPEG.java
 
 # driver DomainCtrl
-domainControllerDriver = $(domainObjects) $(domainController) \
+domainControllerDriver = $(dataController) $(domainObjects) $(domainController) \
                          domain/drivers/DriverDomainCtrl.java $(domainObjects)
 
 # driver DataCtrl
@@ -127,7 +127,7 @@ driverGlobalStats:
 
 
 driverHuffman:
-	echo 'Main-Class: domain.drivers.DriverGlobalStats' > $(manifest)
+	echo 'Main-Class: domain.drivers.DriverHuffman' > $(manifest)
 	$(JAVAC) $(huffmanDriver)
 	$(JAR) $(manifest) DriverHuffman.jar $(huffmanDriver:.java=.class)
 
