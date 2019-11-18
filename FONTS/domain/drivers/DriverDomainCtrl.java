@@ -17,9 +17,9 @@ public class DriverDomainCtrl {
 
         while(!input) {
             System.out.print("opciones: ");
-            System.out.println("1.- getMeanOriginalFileSize() 2.- getMeanCompressedFileSize() 3.- getMeanCompressionDegree() 4.- getMeanCompressionSpeed() 5.- getMeanCompressionTime()");
-            System.out.println("6.- getMeanFiles() 7.- compress() 8.- decompress() 9.- setQuality() 10.-getOriginalFileSize() 11.- getMidaArxiuFinal()");
-            System.out.println("12.- getCompressionDegree() 13.- getCompressionTime() 14.- getCompressionSpeed() 15.- setStats() 16.- Salir");
+            System.out.println("1.- Imprimir tamaño del archivo original medio 2.- Imprimir tamaño de archivo comprimido medio 3.- Imprimir grado de compresión medio 4.- Imprimir velocidad de compresión medio 5.- Imprimir tiempo de compresión medio");
+            System.out.println("6.- Imprimir numero de archivos comprimidos 7.- Comprimir 8.- Descomprimir 9.- Configurar qualidad 10.- Imprimir tamaño archivo inicial 11.- Imprimir tamaño archivo final");
+            System.out.println("12.- Imprimir grado de compresión 13.- Imprimir tiempo de compresión 14.- Imprimir velocidad de compresión 15.- Introducir estadisticas de compresión 16.- Salir");
             System.out.print("introducir opción: ");
             String userInput = Input.nextLine();
             switch (userInput) {
