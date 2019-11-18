@@ -1,0 +1,9 @@
+Aquest executable serveix per comprobar les funcionalitats de la classe Stats, en té 7 funcions:
+1.-Set numero de fitxers
+2.-Obtenir numero de fitxers
+3.-Afegir mida del archiu original
+4.-Afegir mida del archiu comprimit
+5.-Afegir temps de compressió
+6.-Afegir factor de compressió
+7.-Afegir velocitat de compressió
+On principalment el funcionament del Driver son sets, gets i afegir de les estadistiques globals, com els seus noms indiquen les funcionalitats son basicament afegir el valor de la variable i agafar el valor de la variable. Per els casos de proba, hem fet un set de un numero a una variable, per exemple 12, i seguidament un get de la mateixa variable per veure si donaba el mateix numero, i en tots el casos eren iguals. En els casos de afegir hem repetit la funció varies vegades per veure si ho feia bé.
