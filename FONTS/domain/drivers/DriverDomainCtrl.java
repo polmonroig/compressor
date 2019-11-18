@@ -26,6 +26,7 @@ public class DriverDomainCtrl {
             System.out.println("7.- Comprimir");
             System.out.println("8.- Descomprimir");
             System.out.println("9.- Configurar calidad");
+            System.out.println("10.- Imprimir tamaño original del archivo");
             System.out.println("11.- Imprimir tamaño archivo final");
             System.out.println("12.- Imprimir grado de compresión");
             System.out.println("13.- Imprimir tiempo de compresión");
