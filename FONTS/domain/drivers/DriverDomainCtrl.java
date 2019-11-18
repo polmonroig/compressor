@@ -16,10 +16,22 @@ public class DriverDomainCtrl {
 
 
         while(!input) {
-            System.out.print("Opciones: ");
-            System.out.println("1.- Imprimir tamaño del archivo original medio 2.- Imprimir tamaño de archivo comprimido medio 3.- Imprimir grado de compresión medio 4.- Imprimir velocidad de compresión medio 5.- Imprimir tiempo de compresión medio");
-            System.out.println("6.- Imprimir numero de archivos comprimidos 7.- Comprimir 8.- Descomprimir 9.- Configurar calidad 10.- Imprimir tamaño archivo inicial 11.- Imprimir tamaño archivo final");
-            System.out.println("12.- Imprimir grado de compresión 13.- Imprimir tiempo de compresión 14.- Imprimir velocidad de compresión 15.- Introducir estadisticas de compresión 16.- Salir");
+            System.out.println("Opciones: ");
+            System.out.println("1.- Imprimir tamaño del archivo original medio");
+            System.out.println("2.- Imprimir tamaño de archivo comprimido medio");
+            System.out.println("3.- Imprimir grado de compresión medio");
+            System.out.println("4.- Imprimir velocidad de compresión medio");
+            System.out.println("5.- Imprimir tiempo de compresión medio");
+            System.out.println("6.- Imprimir numero de archivos comprimidos");
+            System.out.println("7.- Comprimir");
+            System.out.println("8.- Descomprimir");
+            System.out.println("9.- Configurar calidad");
+            System.out.println("11.- Imprimir tamaño archivo final");
+            System.out.println("12.- Imprimir grado de compresión");
+            System.out.println("13.- Imprimir tiempo de compresión");
+            System.out.println("14.- Imprimir velocidad de compresión");
+            System.out.println("15.- Introducir estadisticas de compresión");
+            System.out.println("16.- Salir");
             System.out.print("Introducir opción: ");
             String userInput = Input.nextLine();
             switch (userInput) {
