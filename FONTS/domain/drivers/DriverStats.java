@@ -1,6 +1,5 @@
 package domain.drivers;
 
-import data.controllers.DataCtrl;
 import domain.Stats;
 
 import java.util.Scanner;
