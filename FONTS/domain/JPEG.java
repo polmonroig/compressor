@@ -295,7 +295,6 @@ public class JPEG extends Algorithm {
             f = Integer.parseInt(Value.toString(), 2);
             FreqCR.put(n,f);
         }
-        System.out.println(FreqCR);
 
         Huffman DY = new Huffman();
         Huffman DCB = new Huffman();
@@ -304,9 +303,6 @@ public class JPEG extends Algorithm {
         DCB.setFrequencies(FreqCB);
         DCR.setFrequencies(FreqCR);
         StringBuilder encoding = new StringBuilder();
-        System.out.println(sizeYc);
-        System.out.println(sizeCBc);
-        System.out.println(sizeCRc);
         int iteradorMatrix = aux.length() - sizeYc - sizeCBc - sizeCRc;
         for(int x = 0; x<sizeYc; ++x) {
             encoding.append(aux.charAt(iteradorMatrix));
@@ -575,19 +571,10 @@ public class JPEG extends Algorithm {
             String Cben = comprimirCB.compressHuffman(Cbencoding);
             String Cren = comprimirCR.compressHuffman(Crencoding);
 
-            System.out.println(Yencoding.size());
-            System.out.println(Cbencoding.size());
-            System.out.println(Crencoding.size());
 
             Map<Integer, Integer> freqY = comprimirY.getFrequencies();
             Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
             Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
-
-            System.out.println();
-            System.out.println(Yen.length());
-            System.out.println(Cben.length());
-            System.out.println(Cren.length());
-            System.out.println();
 
 
             StringBuilder FY = new StringBuilder();
@@ -634,14 +621,10 @@ public class JPEG extends Algorithm {
             String sizeY = Integer.toBinaryString(freqY.size());
             String sizeCB = Integer.toBinaryString(freqCb.size());
             String sizeCR = Integer.toBinaryString(freqCr.size());
-            System.out.println(freqY.size());
-        System.out.println(freqCb.size());
-        System.out.println(freqCr.size());
             String calidadE =  Integer.toBinaryString(quality);
             String widthE =  Integer.toBinaryString(width);
             String heightE =  Integer.toBinaryString(height);
             String sizeYc =  Integer.toBinaryString(Yen.length());
-            System.out.println(sizeYc);
             String sizeCBc =  Integer.toBinaryString(Cben.length());
             String sizeCRc =  Integer.toBinaryString(Cren.length());
             while(calidadE.length() < 8) calidadE = "0" + calidadE;
