@@ -14,9 +14,11 @@ public class MainView extends JFrame {
     private JFileChooser jfc;
 
     public void setGUI(){
+        ImageIcon img = new ImageIcon("/home/adrian/Escritorio/compressor/DOCS/compresion.png");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 300);
         setContentPane(HOla);
+        this.setIconImage(img.getImage());
         jfc = new JFileChooser();
         setVisible(true);
 

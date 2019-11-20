@@ -1,10 +1,13 @@
 package data.controllers;
 
+import domain.controllers.DomainCtrl;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataCtrl {
+    private DomainCtrl domainCtrl;
 
     static public byte[] ReadFileAsBytes(String fileDir){
         File file = new File(fileDir);
