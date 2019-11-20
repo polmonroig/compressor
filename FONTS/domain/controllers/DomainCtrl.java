@@ -3,6 +3,9 @@ package domain.controllers;
 import domain.*;
 import data.controllers.DataCtrl;
 
+import java.io.File;
+import java.io.IOException;
+
 public class DomainCtrl {
     private DataCtrl dataCtrl;
     private LZ78 lz78;
@@ -17,7 +20,7 @@ public class DomainCtrl {
     }
 
     private void init() {
-        dataCtrl = new DataCtrl();
+        dataCtrl = new DataCtrl(this);
         globalStats = new GlobalStats();
         lz78 = new LZ78();
         lzss = new LZSS();
@@ -49,61 +52,44 @@ public class DomainCtrl {
         return globalStats.getNumberFiles();
     }
 
-    public void compress(String algorithm, String fileName){
+    public byte[] compress(String algorithm, byte[] file){
         globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
-        byte[] file = DataCtrl.ReadFileAsBytes(fileName);
-        int lastPeriodPos = fileName.lastIndexOf('.');
-        fileName = fileName.substring(0,lastPeriodPos);
+
         switch (algorithm) {
             case "lz78": {
-                byte[] decompressed = lz78.compress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".lz78", decompressed);
-                break;
+                return lz78.compress(file);
             }
             case "lzss": {
-                byte[] compressed = lzss.compress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".lzss", compressed);
-                break;
+                return lzss.compress(file);
             }
             case "lzw": {
-                byte[] compressed = lzw.compress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".lzw", compressed);
-                break;
+                return lzw.compress(file);
             }
             case "jpeg": {
-                byte[] compressed = jpeg.compress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".jpeg", compressed);
-                break;
+                return jpeg.compress(file);
             }
         }
+        return file;
+
     }
 
-    public void decompress(String algorithm, String fileName){
-        byte[] file = DataCtrl.ReadFileAsBytes(fileName);
-        int lastPeriodPos = fileName.lastIndexOf('.');
-        fileName = fileName.substring(0,lastPeriodPos);
+    public byte[] decompress(String algorithm, byte[] file){
+
         switch (algorithm) {
             case "lz78": {
-                byte[] decompressed = lz78.decompress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
-                break;
+                return lz78.decompress(file);
             }
             case "lzss": {
-                byte[] decompressed = lzss.decompress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
-                break;
+                return lzss.decompress(file);
             }
             case "lzw": {
-                byte[] decompressed = lzw.decompress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".txt", decompressed);
-                break;
+                return lzw.decompress(file);
             }
             case "jpeg": {
-                byte[] decompressed = jpeg.decompress(file);
-                DataCtrl.WriteBytesToFile(fileName + ".ppm", decompressed);
-                break;
+                return jpeg.decompress(file);
             }
         }
+        return file;
     }
 
 
@@ -207,5 +193,13 @@ public class DomainCtrl {
         globalStats.addCompressionTime(compressionTime);
         globalStats.addCompressionDegree(compressionDegree);
         globalStats.addCompressionSpeed(compressionSpeed);
+    }
+
+    public void compressFiles(File[] files) throws IOException {
+        dataCtrl.compressFiles(files);
+    }
+
+    public void decompressFile(File file) {
+        dataCtrl.decompressFile(file);
     }
 }

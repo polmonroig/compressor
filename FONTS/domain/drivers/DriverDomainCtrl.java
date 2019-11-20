@@ -62,19 +62,19 @@ public class DriverDomainCtrl {
                     userInput = Input.nextLine();
                     switch (userInput) {
                         case "1":
-                            domainCtrl.compress("LZ78", file);
+                            //domainCtrl.compress("LZ78", file);
                             break;
                         case "2":
-                            domainCtrl.compress("LZW", file);
+                            //domainCtrl.compress("LZW", file);
                             break;
                         case "3":
-                            domainCtrl.compress("LZSS", file);
+                            //domainCtrl.compress("LZSS", file);
                             break;
                         case "4":
-                            domainCtrl.compress("JPEG", file);
+                            //domainCtrl.compress("JPEG", file);
                             break;
                         default:
-                            System.out.println("Algoritmo no existente");
+                            ////System.out.println("Algoritmo no existente");
                             break;
                     }
                    break;
@@ -86,16 +86,16 @@ public class DriverDomainCtrl {
                     userInput = Input.nextLine();
                     switch (userInput) {
                         case "1":
-                            domainCtrl.decompress("LZ78", file);
+                            // domainCtrl.decompress("LZ78", file);
                             break;
                         case "2":
-                            domainCtrl.decompress("LZW", file);
+                            // domainCtrl.decompress("LZW", file);
                             break;
                         case "3":
-                            domainCtrl.decompress("LZSS", file);
+                            // domainCtrl.decompress("LZSS", file);
                             break;
                         case "4":
-                            domainCtrl.decompress("JPEG", file);
+                            // domainCtrl.decompress("JPEG", file);
                             break;
                         default:
                             System.out.println("Algoritmo no existente");
