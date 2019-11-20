@@ -58,8 +58,8 @@ public class DataCtrl {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         for (File file : files) {
             if(file.isDirectory()){
-                stream.writeBytes((file.getName() + "/" + "\n").getBytes());
-                ByteArrayOutputStream recursiveStream = recursiveCompressFile(file.listFiles(), file.getName());
+                stream.writeBytes((prefix + file.getName() + "/" + "\n").getBytes());
+                ByteArrayOutputStream recursiveStream = recursiveCompressFile(file.listFiles(), prefix + file.getName() + "/");
                 recursiveStream.writeTo(stream);
             }
             else{
