@@ -4,38 +4,62 @@ package presentation;
 import presentation.controllers.PresentationCtrl;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 
 public class MainView extends JFrame {
-    private JButton selectFilesButton;
     private JPanel mainPanel;
     private JButton exitButton;
-    private JButton compressButton;
-    private JButton decompressButton;
-    private JButton selectCompressedFile;
+    private JButton comprimirButton;
+    private JButton descomprimirButton;
+    private JButton estadisticasButton;
+    private CompressionView compressionView;
+    private DescompressionView descompressionView;
     private PresentationCtrl presentationCtrl;
-    private JFileChooser jfc;
+
 
     private void initComponents(){
         ImageIcon img = new ImageIcon("/home/adrian/Escritorio/compressor/DOCS/compresion.png");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 300);
+        setSize(375, 150);
+        setResizable(false);
         setContentPane(mainPanel);
         this.setIconImage(img.getImage());
-        jfc = new JFileChooser();
-        compressButton.setEnabled(false);
-        decompressButton.setEnabled(false);
+
+        estadisticasButton.setEnabled(false);
+//        compressButton.setEnabled(false);
+//        decompressButton.setEnabled(false);
         setVisible(true);
+        compressionView = new CompressionView(getTitle(), this);
+        descompressionView = new DescompressionView(getTitle(), this);
+
     }
 
     private void initEventListeners(){
 
+
+        comprimirButton.addActionListener(actionEvent -> {
+            setVisible(false);
+            compressionView.init();
+
+
+            //abrir nueva ventana y cerrar esta
+        });
+
+        descomprimirButton.addActionListener(actionEvent -> {
+            setVisible(false);
+            descompressionView.init();
+
+
+            //abrir nueva ventana y cerrar esta
+        });
+
+
+
+
         // select files button
-        selectFilesButton.addActionListener(new ActionListener() {
+/*        selectFilesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 jfc.setMultiSelectionEnabled(true);
@@ -89,15 +113,10 @@ public class MainView extends JFrame {
                 presentationCtrl.decompressFile();
             }
         });
-
+*/
 
         // exit app button
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exitButton.addActionListener(e -> System.exit(0));
     }
 
 

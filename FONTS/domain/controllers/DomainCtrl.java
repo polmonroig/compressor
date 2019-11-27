@@ -13,6 +13,7 @@ public class DomainCtrl {
     private LZW lzw;
     private JPEG jpeg;
     private GlobalStats globalStats;
+    private String [] Algoritmes = {"LZ78", "LZSS", "LZW", "JPEG"};
 
 
     public DomainCtrl(){
@@ -26,6 +27,10 @@ public class DomainCtrl {
         lzss = new LZSS();
         lzw = new LZW();
         jpeg = new JPEG();
+    }
+
+    public String[] getAlgoritmes(){
+        return Algoritmes;
     }
 
     public float getMeanOriginalFileSize(){
