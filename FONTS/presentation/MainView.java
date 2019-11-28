@@ -4,59 +4,73 @@ package presentation;
 import presentation.controllers.PresentationCtrl;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 
 
 public class MainView extends JFrame {
+    // define view components
     private JPanel mainPanel;
-    private JButton comprimirArchivoDeTextoButton;
-    private JButton comprimirImagenButton;
-    private JButton comprimirCarpetaButton;
+    private JButton compressTextButton;
+    private JButton compressImageButton;
+    private JButton compressFolderButton;
     private JButton exitButton;
-    private JButton mostrarEstadisticasGlobalesButton;
+    private JButton showStatsButton;
     private JButton welcomeButton;
     private JButton decompressButton;
     private JButton infoButton;
     private JPanel contentPanel;
     private JPanel buttonsPanel;
     private JPanel welcomePanel;
-    private JTextArea aplicacionParaComprimirYTextArea;
-    private CompressionView compressionView;
-    private DescompressionView descompressionView;
+    private JTextArea aboutText;
+    private JPanel compressTextPanel;
+    private JButton seleccionarArchivoButton;
+    private JButton comprimirButton;
+    private JPanel compressImagePanel;
+    private JButton seleccionarArchivosButton;
+    private JButton comprimirButton1;
+    private JButton button1;
+    private JPanel compressFolderPanel;
     private PresentationCtrl presentationCtrl;
     private int activeButton;
-    private Color deactivatedColor;
-    private Color activeColor;
+
+    // define color constants
+    private static final Color DEACTIVATED_COLOR = new Color(53, 71, 120);
+    private static final Color ACTIVE_COLOR = new Color(79, 131, 249);
+    private static final Color ACTIVE_TEXT = new Color(255, 255, 255);
+    private static final Color DEACTIVATED_TEXT = new Color(150, 178, 221);
+
+    // define panel constants
+    private static final int WELCOME_PI = 0;
+    private static final int COMPRESS_TEXT_PI = 1;
+    private static final int COMPRESS_IMAGE_PI = 2;
+    private static final int COMPRESS_FOLDER_PI = 3; // where PI = panel index
+    private static final int DECOMPRESS_PI = 4;
+    private static final int INFO_PI = 5;
+    private static final int STATS_PI = 6;
+
+
 
 
     private void initComponents(){
-        activeButton = 0;
+        activeButton = WELCOME_PI;
         ImageIcon img = new ImageIcon("/home/adrian/Escritorio/compressor/DOCS/compresion.png");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 500);
         //setResizable(false);
-        activeColor = new Color(79, 131, 249);
-        deactivatedColor = new Color(53, 71, 120);
+
 
         setContentPane(mainPanel);
         this.setIconImage(img.getImage());
 
 
-        //stadisticasButton.setEnabled(false);
-//        compressButton.setEnabled(false);
-//        decompressButton.setEnabled(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
-        compressionView = new CompressionView(getTitle(), this);
-        descompressionView = new DescompressionView(getTitle(), this);
 
 
-
+        // finally set view to visible
         setVisible(true);
     }
 
@@ -64,23 +78,84 @@ public class MainView extends JFrame {
     private void addHoverEffect(JButton button, int index){
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if(button.isEnabled())button.setBackground(activeColor);
+                if(button.isEnabled())button.setBackground(ACTIVE_COLOR);
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                if(button.isEnabled() && activeButton != index) button.setBackground(deactivatedColor);
+                if(button.isEnabled() && activeButton != index) button.setBackground(DEACTIVATED_COLOR);
             }
         });
     }
 
+    private void addOnClickEffect(JButton button, int panelIndex) {
+        button.addActionListener(actionEvent -> {
+            if(activeButton != panelIndex){
+                hideCurrentPanel();
+                activeButton = panelIndex;
+                showCurrentPanel();
+            }
+
+        });
+    }
+
+
     private void updateButtonsListeners(){
-        addHoverEffect(welcomeButton, 0);
-        addHoverEffect(comprimirArchivoDeTextoButton, 1);
-        addHoverEffect(comprimirImagenButton, 2);
-        addHoverEffect(comprimirCarpetaButton, 3);
-        addHoverEffect(decompressButton, 4);
-        addHoverEffect(infoButton, 5);
-        addHoverEffect(mostrarEstadisticasGlobalesButton, 6);
+
+        // add hover effects
+        addHoverEffect(welcomeButton, WELCOME_PI);
+        addHoverEffect(compressTextButton, COMPRESS_TEXT_PI);
+        addHoverEffect(compressImageButton, COMPRESS_IMAGE_PI);
+        addHoverEffect(compressFolderButton, COMPRESS_FOLDER_PI);
+        addHoverEffect(decompressButton, DECOMPRESS_PI);
+        addHoverEffect(infoButton, INFO_PI);
+        addHoverEffect(showStatsButton, STATS_PI);
+
+
+        // add on click effects
+        addOnClickEffect(welcomeButton, WELCOME_PI);
+        addOnClickEffect(compressTextButton, COMPRESS_TEXT_PI);
+        addOnClickEffect(compressImageButton, COMPRESS_IMAGE_PI);
+    }
+
+    private void showCurrentPanel() {
+        if(activeButton == WELCOME_PI){
+            welcomePanel.setVisible(true);
+            activateButton(welcomeButton);
+        }
+        else if(activeButton == COMPRESS_TEXT_PI){
+            compressTextPanel.setVisible(true);
+            activateButton(compressTextButton);
+        }
+        else if(activeButton == COMPRESS_IMAGE_PI){
+            compressImagePanel.setVisible(true);
+            activateButton(compressImageButton);
+        }
+    }
+
+    private void activateButton(JButton button) {
+        button.setForeground(ACTIVE_TEXT);
+    }
+
+
+    private void hideCurrentPanel() {
+        if(activeButton == WELCOME_PI){
+            welcomePanel.setVisible(false);
+            deactivateButton(welcomeButton);
+        }
+        else if(activeButton == COMPRESS_TEXT_PI){
+            compressTextPanel.setVisible(false);
+            deactivateButton(compressTextButton);
+        }
+        else if(activeButton == COMPRESS_IMAGE_PI){
+            compressImagePanel.setVisible(false);
+            deactivateButton(compressImageButton);
+        }
+
+    }
+
+    private void deactivateButton(JButton button) {
+        button.setForeground(DEACTIVATED_TEXT);
+        button.setBackground(DEACTIVATED_COLOR);
     }
 
 
@@ -186,4 +261,6 @@ public class MainView extends JFrame {
         setTitle(title);
         presentationCtrl = controller;
     }
+
+
 }

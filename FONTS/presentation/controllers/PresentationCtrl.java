@@ -3,6 +3,7 @@ package presentation.controllers;
 
 import domain.controllers.DomainCtrl;
 import presentation.MainView;
+import presentation.View;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +11,13 @@ import java.io.IOException;
 
 public class PresentationCtrl {
     private DomainCtrl domainCtrl;
-    private MainView mainView;
+    private View mainView;
     private File[] files;
     private File file;
 
     public PresentationCtrl(){
         domainCtrl = new DomainCtrl();
-        mainView = new MainView("MasterCompressor", this);
+        mainView = new View("MasterCompressor", this);
     }
 
     public void setFiles(File[] f){
