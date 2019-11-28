@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="219" y="98" width="1097" height="406"/>
+      <xy x="219" y="98" width="1101" height="406"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -75,7 +75,7 @@
                           <caretColor color="-4479938"/>
                           <disabledTextColor color="-12236470"/>
                           <editable value="false"/>
-                          <text value="Aplicacion para comprimir y descomprimir archivos de texto e imagenes &#10;&#10;Integrantes:&#10;&#9;Nombre&#10;&#9;Nombre&#10;&#9;Nombre"/>
+                          <text value="Aplicacion para comprimir y descomprimir archivos de texto e imagenes &#10;&#10;Integrantes:&#10;&#9;Adrián Álvarez&#10;&#9;David Santos&#10;&#9;Jaume Bernaus&#10;&#9;Pol Monroig"/>
                         </properties>
                       </component>
                       <hspacer id="80ea7">
