@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ButtonsPanel extends JPanel {
 
 
-    private ArrayList<CustomButton> buttons;
+    private ArrayList<ConnectedButton> buttons;
     private JButton exitButton;
     private JPanel innerPanel;
     private int currentSelected;
@@ -28,7 +28,6 @@ public class ButtonsPanel extends JPanel {
         innerPanel = new JPanel();
         innerPanel.setLayout(new GridLayout(names.length + 1, 1));
         innerPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
-        //innerPanel.setMaximumSize(new Dimension(1, -1));
         add(innerPanel);
         currentSelected = 0;
         parent = view;
@@ -40,7 +39,7 @@ public class ButtonsPanel extends JPanel {
 
         buttons = new ArrayList<>();
         for(int i = 0 ; i < names.length; ++i){
-            buttons.add(new CustomButton(names[i], i, DEACTIVATED_COLOR, ACTIVE_COLOR, DEACTIVATED_TEXT, ACTIVE_TEXT, this));
+            buttons.add(new ConnectedButton(names[i], DEACTIVATED_COLOR, ACTIVE_COLOR, DEACTIVATED_TEXT, ACTIVE_TEXT, this, i));
             innerPanel.add(buttons.get(i));
         }
         innerPanel.add(exitButton);
