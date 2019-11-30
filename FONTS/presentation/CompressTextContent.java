@@ -5,15 +5,17 @@ import java.awt.*;
 
 public class CompressTextContent extends Content {
 
-    private JButton fileSelectButton;
-    private JButton compressButton;
+    private CustomButton fileSelectButton;
+    private CustomButton compressButton;
     private JPanel buttonsPanel;
 
     public CompressTextContent(String title, String contentDescription, int i){
         super(title, contentDescription, i);
         buttonsPanel = new JPanel();
-        fileSelectButton = new JButton("Seleccionar archivos de texto");
-        compressButton = new JButton("Comprimir archivos");
+        fileSelectButton = new CustomButton("Seleccionar archivos de texto", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        compressButton = new CustomButton("Comprimir archivos", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        fileSelectButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        compressButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
     }
 
     @Override

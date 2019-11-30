@@ -16,12 +16,10 @@ public class ConnectedButton extends CustomButton {
         id = i;
         selected = false;
 
-        addHoverEffect();
-        addOnClickEffect();
-
     }
 
-    private void addOnClickEffect() {
+    @Override
+    protected void addOnClickEffect() {
         addActionListener(actionEvent -> {
             if(!selected){
                 selected = true;
@@ -32,8 +30,8 @@ public class ConnectedButton extends CustomButton {
         });
     }
 
-
-    private void addHoverEffect(){
+    @Override
+    protected void addOnHoverEffect(){
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if(isEnabled() )setBackground(getActiveBackgroundColor());

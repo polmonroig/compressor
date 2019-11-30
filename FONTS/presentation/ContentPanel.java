@@ -1,7 +1,6 @@
 package presentation;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class ContentPanel extends JPanel {

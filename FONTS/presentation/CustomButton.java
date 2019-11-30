@@ -3,7 +3,7 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomButton extends JButton {
+public  class CustomButton extends JButton {
 
 
 
@@ -17,6 +17,13 @@ public class CustomButton extends JButton {
     private Color activeTextColor;
 
 
+    private int borderRadius;
+    private static final int DEFAULT_RADIUS = 15;
+
+
+
+
+
 
 
     public CustomButton(String text,  Color colorBD, Color colorBA, Color colorFD, Color colorFA){
@@ -27,6 +34,7 @@ public class CustomButton extends JButton {
         activeBackgroundColor = colorBA;
         deactivatedTextColor = colorFD;
         activeTextColor = colorFA;
+        borderRadius = DEFAULT_RADIUS;
 
         // set attributes
         setFocusable(false);
@@ -35,9 +43,33 @@ public class CustomButton extends JButton {
         setForeground(deactivatedTextColor);
         setBorderPainted(false);
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
+        addOnClickEffect();
+        addOnHoverEffect();
+    }
+
+    protected void addOnClickEffect() {
+        addActionListener(actionEvent -> setActive());
     }
 
 
+    protected void addOnHoverEffect() {
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if(isEnabled()){
+                    setBackground(getActiveBackgroundColor());
+                    setForeground(getActiveTextColor());
+                }
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                if(isEnabled()) {
+                    setBackground(getDeactivatedBackgroundColor());
+                    setForeground(getDeactivatedTextColor());
+                }
+
+            }
+        });
+    }
 
 
 
@@ -45,10 +77,11 @@ public class CustomButton extends JButton {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(getBackground());
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.fillRoundRect(0, 0, getSize().width-1,getSize().height-1, 20, 20);
+        g2d.fillRoundRect(0, 0, getSize().width-1,getSize().height-1, borderRadius, borderRadius);
 
         super.paintComponent(g);
     }
+
 
 
 
@@ -72,6 +105,14 @@ public class CustomButton extends JButton {
         this.deactivatedBackgroundColor = deactivatedBackgroundColor;
     }
 
+
+    public int getBorderRadius() {
+        return borderRadius;
+    }
+
+    public void setBorderRadius(int borderRadius) {
+        this.borderRadius = borderRadius;
+    }
 
 
     public Color getActiveBackgroundColor() {

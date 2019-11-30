@@ -10,8 +10,8 @@ public class ButtonsPanel extends JPanel {
 
 
     private ArrayList<ConnectedButton> buttons;
-    private JButton exitButton;
-    private JPanel innerPanel;
+    private ExitButton exitButton;
+    private JPanel innerPanel, exitButtonPanel;
     private int currentSelected;
     private View parent;
 
@@ -28,6 +28,7 @@ public class ButtonsPanel extends JPanel {
         innerPanel = new JPanel();
         innerPanel.setLayout(new GridLayout(names.length + 1, 1));
         innerPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+        exitButtonPanel = new JPanel();
         add(innerPanel);
         currentSelected = 0;
         parent = view;
@@ -35,14 +36,14 @@ public class ButtonsPanel extends JPanel {
 
 
         setBackground(DEACTIVATED_COLOR);
-        exitButton = new JButton("Salir");
-
+        exitButton = new ExitButton("Salir", EXIT_COLOR, Color.WHITE, Color.WHITE, EXIT_COLOR);
+        exitButtonPanel.add(exitButton);
         buttons = new ArrayList<>();
         for(int i = 0 ; i < names.length; ++i){
             buttons.add(new ConnectedButton(names[i], DEACTIVATED_COLOR, ACTIVE_COLOR, DEACTIVATED_TEXT, ACTIVE_TEXT, this, i));
             innerPanel.add(buttons.get(i));
         }
-        innerPanel.add(exitButton);
+        innerPanel.add(exitButtonPanel);
     }
 
     public void init() {
@@ -60,13 +61,7 @@ public class ButtonsPanel extends JPanel {
 
         // init inner panel
         innerPanel.setBackground(DEACTIVATED_COLOR);
-
-        // init exit button
-        exitButton.setBackground(EXIT_COLOR);
-        exitButton.setForeground(Color.WHITE);
-        exitButton.setMaximumSize(new Dimension(50, -1));
-        exitButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 26));
-        exitButton.setFocusable(false);
+        exitButtonPanel.setBackground(DEACTIVATED_COLOR);
 
 
         // init buttons

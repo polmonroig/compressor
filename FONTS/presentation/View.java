@@ -59,7 +59,7 @@ public class View extends JFrame {
     private void initComponents() {
         // setup layout variables
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 500);
+        setSize(1000, 600);
         setLayout(layout);
 
         // init components
