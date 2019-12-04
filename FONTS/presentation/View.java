@@ -64,6 +64,7 @@ public class View extends JFrame {
 
         // init components
         buttonsPanel.init();
+        buttonsPanel.setEnabledButton(6, false);
         contentPanel.init();
         add(separator);
 

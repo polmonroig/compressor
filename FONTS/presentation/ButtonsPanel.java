@@ -73,4 +73,8 @@ public class ButtonsPanel extends JPanel {
         currentSelected = id;
         parent.selectView(id);
     }
+
+    public void setEnabledButton(int i, boolean b) {
+        buttons.get(i).setEnabled(b);
+    }
 }
