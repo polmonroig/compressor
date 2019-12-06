@@ -24,7 +24,7 @@ public class ConnectedButton extends CustomButton {
             if(!selected){
                 selected = true;
                 setActive();
-                parent.deactivateCurrent(id);
+                parent.disableCurrent(id);
             }
 
         });
