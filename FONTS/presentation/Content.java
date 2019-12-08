@@ -6,6 +6,9 @@ import java.awt.*;
 public class Content extends JPanel {
     protected GridLayout layout;
     protected JLabel mainText;
+    protected JLabel instructions;
+    protected JTextField pathLabel;
+    protected CustomButton fileSelectButton;
     protected JTextArea description;
     private int id;
 
