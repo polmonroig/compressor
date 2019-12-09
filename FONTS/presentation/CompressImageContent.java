@@ -3,23 +3,23 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
-public class CompressTextContent extends Content {
+public class CompressImageContent extends Content {
     private JComboBox<String> algorithms;
     private CustomButton compressButton;
     private JPanel chooserPanel;
     private JPanel algorithmPanel;
     private JPanel compressPanel;
 
-    public CompressTextContent(String title, String contentDescription, int i){
+    public CompressImageContent(String title, String contentDescription, int i){
         super(title, contentDescription, i);
-        String[] algs = {"auto", "lz78", "lzss", "lzw"};//obtener de la capa de domini para ser independiente
-        algorithms = new JComboBox(algs);
+        String[] quality = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};//obtener de la capa de domini para ser independiente
+        algorithms = new JComboBox(quality);
         instructions = new JLabel();
         pathLabel = new JTextField("Path del archivo a comprimir", 20);
         chooserPanel = new JPanel();
         algorithmPanel = new JPanel();
         compressPanel = new JPanel();
-        fileSelectButton = new CustomButton("Seleccionar archivo de texto", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        fileSelectButton = new CustomButton("Seleccionar archivo de imagen", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         compressButton = new CustomButton("Comprimir archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         fileSelectButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         compressButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
@@ -38,7 +38,7 @@ public class CompressTextContent extends Content {
         chooserPanel.add(Box.createHorizontalStrut(5));
         add(chooserPanel);
         algorithmPanel.setLayout(layout);
-        instructions.setText("Escoje el algoritmo que deseas usar:");
+        instructions.setText("Escoje la calidad que deseas:");
         algorithmPanel.add(instructions);
         algorithmPanel.add(algorithms);
         add(algorithmPanel);

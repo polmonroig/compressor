@@ -22,7 +22,7 @@ public class View extends JFrame {
     private static final int N_ROWS = 1;
     private static final String[] buttonNames = {"About", "Comprimir archivo de texto", "Comprimir imagen",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
-                                                 "Informacion de uso", "Estadisticas Globales"};
+                                                 "Estadisticas Globales", "Informacion de uso"};
 
 
 
@@ -38,7 +38,7 @@ public class View extends JFrame {
         ArrayList<Content> contents = new ArrayList<>();
         contents.add(new AboutContent("Bienvenidos a Master Compressor", "Contenido del compressor", 0));
         contents.add(new CompressTextContent("Comprimir archivo de texto", "Aqui puedes comprimir tus archivos de texto", 1));
-        contents.add(new Content("", "", 2));
+        contents.add(new CompressImageContent("Comprimir imagen", "Descripcion de la funcionalidad", 2));
         contents.add(new Content("", "", 3));
         contents.add(new Content("", "", 4));
         contents.add(new Content("", "", 5));
@@ -65,7 +65,7 @@ public class View extends JFrame {
     private void initComponents() {
         // setup layout variables
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 400);
+        setSize(1000, 425);
         setLayout(layout);
 
         // init components
