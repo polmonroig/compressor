@@ -23,8 +23,10 @@ public class ButtonsPanel extends JPanel {
     public ButtonsPanel(String[] names, View view){
         // init layout
         innerPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(names.length, 1));
-        innerPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+        GridLayout layout = new GridLayout(names.length, 1);
+        layout.setVgap(5);
+        innerPanel.setLayout(layout);
+        innerPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 50, 0));
         add(innerPanel);
         currentSelected = 0;
         parent = view;

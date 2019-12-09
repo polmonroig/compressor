@@ -34,11 +34,17 @@ public class ConnectedButton extends CustomButton {
     protected void addOnHoverEffect(){
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if(isEnabled() )setBackground(getActiveBackgroundColor());
+                if(isEnabled() ){
+                    setBackground(getActiveBackgroundColor());
+                    setForeground(getActiveTextColor());
+                }
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                if(isEnabled() && !selected) setBackground(getDeactivatedBackgroundColor());
+                if(isEnabled() && !selected){
+                    setBackground(getDeactivatedBackgroundColor());
+                    setForeground(getDeactivatedTextColor());
+                }
             }
         });
     }

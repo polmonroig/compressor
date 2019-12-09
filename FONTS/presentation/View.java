@@ -20,9 +20,9 @@ public class View extends JFrame {
     private GridLayout layout;
     private static final int N_COLS = 1;
     private static final int N_ROWS = 1;
-    private static final String[] buttonNames = {"About", "Comprimir archivo de texto", "Comprimir imagen",
+    private static final String[] buttonNames = {"About", "Comprimir texto", "Comprimir imagen",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
-                                                 "Estadisticas Globales", "Informacion de uso"};
+                                                 "Estadisticas", "Informacion"};
 
 
 
