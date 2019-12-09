@@ -90,7 +90,7 @@ public class DomainCtrl {
 
     public void compressFiles(File[] files) throws IOException {
         byte[] byteFile = autoCompressor.compressFiles(files);
-        dataCtrl.WriteFile(autoCompressor.getFileDir(files[0]) + "compression.mc" , byteFile);
+        dataCtrl.WriteFile(autoCompressor.getFileDir(files[0]) + "compression."  + currentID, byteFile);
     }
 
 
