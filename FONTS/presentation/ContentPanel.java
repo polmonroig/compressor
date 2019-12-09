@@ -17,7 +17,6 @@ public class ContentPanel extends JPanel {
     }
 
     public void init() {
-        setBackground(Color.WHITE);
         for (Content content : contents) {
             content.init();
             add(content);

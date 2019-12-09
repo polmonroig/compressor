@@ -79,6 +79,7 @@ public class DomainCtrl {
             }
         }
         else{
+            pFile.calculateId();
             pFile.decompress();
             dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
         }
@@ -94,7 +95,7 @@ public class DomainCtrl {
 
     }
 
-    public void recursiveCompressFiles(File[] files, ArrayList<PhysicalFile> physicalFiles, StringBuilder prefix){
+    private void recursiveCompressFiles(File[] files, ArrayList<PhysicalFile> physicalFiles, StringBuilder prefix){
 
         for(File f : files){
             if(f.isDirectory()){

@@ -21,9 +21,6 @@ public class Content extends JPanel {
         description.setEditable(false);
         setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
         setVisible(false);
-        setBackground(Color.WHITE);
-        description.setBackground(Color.WHITE);
-        mainText.setBackground(Color.WHITE);
     }
 
     public void init(){

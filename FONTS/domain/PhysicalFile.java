@@ -38,7 +38,6 @@ public class PhysicalFile {
     }
 
     public void decompress(){
-        calculateId();
         content = algorithm.compress(content);
     }
 
@@ -97,7 +96,7 @@ public class PhysicalFile {
     }
 
 
-    private void calculateId(){
+    public void calculateId(){
         for(int i = 0; i < algorithmsExtensions.length; ++i){
             if(fileExtension.equals(algorithmsExtensions[i])){
                 id = i;
