@@ -40,6 +40,10 @@ public class DataCtrl {
 
         FileOutputStream fs = null;
         try {
+            File parent = file.getParentFile();
+            if(!parent.exists() && !parent.mkdirs()){
+                throw new IllegalStateException("Exception when creating dir");
+            }
             boolean b = file.createNewFile();
             fs = new FileOutputStream(file);
             fs.write(text);
@@ -47,6 +51,10 @@ public class DataCtrl {
         catch (IOException e){
             System.out.println("Exception while writing file " + e);
         }
+    }
+
+    public void makeDir(File file){
+        file.mkdir();
     }
 
 

@@ -5,24 +5,23 @@ import data.controllers.DataCtrl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class DomainCtrl {
     private DataCtrl dataCtrl;
-    private Algorithm algorithm;
     private AutoCompressor autoCompressor;
     private GlobalStats globalStats;
-    private int currentID;
+    private int currentId;
 
     public DomainCtrl(){
         init();
     }
 
     private void init() {
-        currentID = 0;
+        currentId = 0;
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
-        algorithm = AlgorithmSet.getAlgorithm(0);
         autoCompressor = new AutoCompressor(this);
     }
 
@@ -52,12 +51,9 @@ public class DomainCtrl {
 
 
     public void selectAlgorithm(int id){
-        currentID = id;
-        algorithm = AlgorithmSet.getAlgorithm(id);
+        currentId = id;
     }
-    public void setAutoID(int id){
-        autoCompressor.setAlgorithm(id);
-    }
+
 
     public void setQuality(int quality){
         AlgorithmSet.setQuality(quality);
@@ -65,45 +61,57 @@ public class DomainCtrl {
 
     public void compressFile(File file){
         globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
-        byte[] byteFile = dataCtrl.ReadFile(file);
-        byteFile = algorithm.compress(byteFile);
-        dataCtrl.WriteFile(autoCompressor.getFileDir(file) + "compression." + currentID, byteFile);
+        PhysicalFile pFile = new PhysicalFile(file);
+        pFile.setContent(dataCtrl.ReadFile(file)); // read and save file
+        pFile.selectAlgorithm(currentId); // set compression algorithm
+        pFile.compress();
+        dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
     }
 
-    public void decompressFile(File file){
-        byte[] byteFile = dataCtrl.ReadFile(file);
-        int size = file.getPath().length();
-        int id = (int) file.getPath().charAt(size - 1);
-        if(id != AlgorithmSet.AUTO_ID){
-            selectAlgorithm(id);
-            byteFile = algorithm.decompress(byteFile);
-            String extension = ".txt";
-            if(currentID == AlgorithmSet.JPEG_ID)extension = ".ppm";
-            dataCtrl.WriteFile(autoCompressor.getFileDir(file) + autoCompressor.getFileName(file) + "." + extension,
-                    byteFile);
-        }
-        else {
-            autoCompressor.decompressFile(file);
-        }
 
+    public void decompressFile(File file){
+        PhysicalFile pFile = new PhysicalFile(file);
+        pFile.setContent(dataCtrl.ReadFile(file));
+        if(pFile.isAuto()){
+            ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
+            for(PhysicalFile f : physicalFiles){
+                dataCtrl.WriteFile(pFile.getRelativePath() + "." + pFile.getFileExtension(), f.getContent());
+            }
+        }
+        else{
+            pFile.decompress();
+            dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
+        }
     }
 
     public void compressFiles(File[] files) throws IOException {
-        byte[] byteFile = autoCompressor.compressFiles(files);
-        dataCtrl.WriteFile(autoCompressor.getFileDir(files[0]) + "compression."  + currentID, byteFile);
+
+        ArrayList<PhysicalFile> physicalFiles = new ArrayList<>();
+        recursiveCompressFiles(files, physicalFiles, new StringBuilder());
+        autoCompressor.setAlgorithm(currentId);
+        byte[] fileBytes = autoCompressor.compressFiles(physicalFiles);
+        dataCtrl.WriteFile(physicalFiles.get(0).getFileDir() + "compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
+
     }
 
+    public void recursiveCompressFiles(File[] files, ArrayList<PhysicalFile> physicalFiles, StringBuilder prefix){
 
+        for(File f : files){
+            if(f.isDirectory()){
+                prefix.append(f.getName()).append("/");
+                recursiveCompressFiles(f.listFiles(), physicalFiles, prefix);
+            }
+            else{
+                PhysicalFile pf = new PhysicalFile(f);
+                pf.setContent(dataCtrl.ReadFile(f));
+                pf.setRelativeDir(prefix.toString());
+                physicalFiles.add(pf);
+            }
+        }
 
-    public byte[] readFile(String file){
-        return dataCtrl.ReadFile(new File(file));
     }
 
-    public void WriteFile(String fileName, byte[] decompressedFile) {
-        dataCtrl.WriteFile(fileName, decompressedFile);
-    }
-
-
+/*
     public float getOriginalFileSize() {
         return algorithm.getOriginalSize();
     }
@@ -122,7 +130,7 @@ public class DomainCtrl {
 
     public float getCompressionSpeed() {
         return algorithm.getCompressionSpeed();
-    }
+    }*/
 
     public void setStats(float originalFileSize, float compressedFileSize, float compressionTime, float compressionDegree, float compressionSpeed) {
         globalStats.addOriginalSize(originalFileSize);

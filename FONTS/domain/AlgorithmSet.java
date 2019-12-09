@@ -12,6 +12,7 @@ public class AlgorithmSet {
     public static final int JPEG_ID = 3;
     public static final int AUTO_ID = 4;
 
+
     static{
         algorithms = new ArrayList<>();
         algorithms.add(new LZ78()); // id = 0

@@ -5,12 +5,12 @@ import domain.controllers.DomainCtrl;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class AutoCompressor {
 
     private DomainCtrl domainCtrl;
-    private Algorithm algorithm;
 
 
     private int currentID;
@@ -18,135 +18,82 @@ public class AutoCompressor {
     public AutoCompressor(DomainCtrl controller){
         domainCtrl = controller;
         currentID = AlgorithmSet.LZ78_ID;
-        algorithm = AlgorithmSet.getAlgorithm(currentID);
 
     }
 
-
-    private ByteArrayOutputStream recursiveCompressFile(File[] files, String prefix) throws IOException {
+    public byte[] compressFiles(ArrayList<PhysicalFile> files) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        for (File file : files) {
-            if(file.isDirectory()){
-                stream.writeBytes((prefix + file.getName() + "/" + "\n").getBytes());
-                ByteArrayOutputStream recursiveStream = recursiveCompressFile(Objects.requireNonNull(file.listFiles()), prefix + file.getName() + "/");
-                recursiveStream.writeTo(stream);
-            }
-            else{
-                byte[] fileBytes = domainCtrl.readFile(file.getPath());
 
-                int lastDotPos = file.getName().lastIndexOf('.');
+        for(PhysicalFile file : files) {
+            if (file.isImage()) {
+                file.selectAlgorithm(AlgorithmSet.JPEG_ID);
+                stream.write((file.getRelativePath() + "\n" + AlgorithmSet.JPEG_ID + "\n").getBytes());
 
-                String name = file.getName().substring(0, lastDotPos);
-                String type = file.getName().substring(lastDotPos);
-                if (type.equals(".txt")){
-                    stream.write((prefix + "/" + name + "\n" + currentID + "\n").getBytes());
-                    algorithm = AlgorithmSet.getAlgorithm(currentID);
-                    byte[] compression = algorithm.compress(fileBytes);
-                    stream.write((compression.length + "\n").getBytes());
-                    stream.write(compression);
-                }
-                else if(type.equals(".ppm")){
-                    stream.write((prefix + "/" + name + "\n" + AlgorithmSet.JPEG_ID + "\n").getBytes());
-                    algorithm = AlgorithmSet.getAlgorithm(AlgorithmSet.JPEG_ID);
-                    byte[] compression = algorithm.compress(fileBytes);
-                    stream.write((compression.length + "\n").getBytes());
-                    stream.write(compression);
-                }
-
+                file.compress();
+                stream.write(Integer.parseInt((ByteBuffer.allocate(4).putInt(file.getSize()) + "\n")));
+                stream.write(file.getContent());
+            } else if (file.isText()) {
+                file.selectAlgorithm(currentID);
+                stream.write((file.getRelativePath() + "\n" + currentID + "\n").getBytes());
+                file.compress();
+                // write file size to a 4 byte array
+                stream.write(Integer.parseInt((ByteBuffer.allocate(4).putInt(file.getSize()) + "\n")));
+                stream.write(file.getContent());
             }
         }
-        return stream;
-    }
 
-
-    public byte[] compressFiles(File[] files) throws IOException {
-        ByteArrayOutputStream stream = recursiveCompressFile(files, "");
         return stream.toByteArray();
     }
 
-    public void decompressFile(File file) {
-        byte[] fileBytes = domainCtrl.readFile(file.getPath());
-        int endLineCounter = 0;
-        int i = 0;
-        String fileName = "";
-        String compressionType = "";
-        int compressionSize = 0;
-        int indexLastSlash = file.getPath().lastIndexOf("/");
-        String prefix = file.getPath().substring(0, indexLastSlash);
-        while(i < fileBytes.length){
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            if(endLineCounter == 0){ // read file name
-                boolean isDir = false;
-                while(fileBytes[i] != '\n'){
-                    isDir = false;
-                    stream.write(fileBytes[i]);
-                    if(fileBytes[i] == '/'){ // if file is dir, create dir
-                        File dir = new File(prefix + "/" + stream.toString());
-                        if(!dir.exists())dir.mkdir();
-                        isDir = true;
-                    }
-                    ++i;
-                }
-                if(!isDir){
-                    endLineCounter += 1;
-                }
-                ++i;
-                fileName = stream.toString();
-                stream.reset();
-
-            }
-            else if(endLineCounter == 1){ // read compression type
-                while(fileBytes[i] != '\n'){
-                    stream.write(fileBytes[i]);
-                    ++i;
-                }
-                endLineCounter += 1;
-                ++i;
-                compressionType = stream.toString();
-                stream.reset();
-            }
-            else if(endLineCounter == 2){ // read compression size
-                while(fileBytes[i] != '\n'){
-                    stream.write(fileBytes[i]);
-                    ++i;
-                }
-                ++i;
-                endLineCounter += 1;
-                compressionSize = Integer.parseInt(stream.toString());
-                stream.reset();
-            }
-            else if(endLineCounter == 3){ // read compression
-                int size = i + compressionSize;
-                while(i < size){
-                    stream.write(fileBytes[i]);
-                    ++i;
-                }
-                endLineCounter = 0;
-                byte[] compressedFile = stream.toByteArray();
-                algorithm = AlgorithmSet.getAlgorithm(Integer.parseInt(compressionType));
-                byte[] decompressedFile = algorithm.decompress(compressedFile);
-                if(compressionType.equals("jpeg"))fileName += ".ppm";
-                else fileName += ".txt";
-                fileName = prefix  + "/" + fileName;
-                domainCtrl.WriteFile(fileName, decompressedFile);
-            }
+    private ByteArrayOutputStream readWhileNotEndLine(byte[] array, Integer i){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        while (array[i] != '\n'){
+            stream.write(array[i]);
+            ++i;
         }
+        ++i;
+        return stream;
+    }
+
+    private PhysicalFile readFileContent(byte[] array, Integer i, int compressionSize, String fileName){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        int size = i + compressionSize;
+        while(i < size){
+            stream.write(array[i]);
+            ++i;
+        }
+        PhysicalFile file = new PhysicalFile(new File(fileName));
+        file.setContent(stream.toByteArray());
+        return file;
     }
 
 
-    public String getFileDir(File file){
-        int indexLastSlash = file.getPath().lastIndexOf("/");
-        return file.getPath().substring(0, indexLastSlash) + "/";
+    public ArrayList<PhysicalFile> decompressFile(PhysicalFile file){
+        ArrayList<PhysicalFile> files = new ArrayList<>();
+        Integer i = 0;
+        String fileName = "";
+        int compressionType = 0;
+        int compressionSize = 0;
+        byte[] content = file.getContent();
+        while(i < content.length){
+
+            fileName = readWhileNotEndLine(content, i).toString(); // read file name
+            compressionType =  Integer.parseInt(readWhileNotEndLine(content, i).toString()); // read compression type
+            compressionSize = Integer.parseInt(readWhileNotEndLine(content, i).toString()); // read size
+
+            PhysicalFile newFile = readFileContent(content, i, compressionSize, fileName);
+            file.selectAlgorithm(compressionType);
+            files.add(newFile);
+
+        }
+
+        return files;
     }
 
-    public String getFileName(File file){
-        int indexLastSlash = file.getPath().lastIndexOf("/");
-        int indexLastDot = file.getPath().lastIndexOf(".");
-        return file.getPath().substring(indexLastSlash, indexLastDot);
-    }
 
     public void setAlgorithm(int id) {
-        algorithm = AlgorithmSet.getAlgorithm(id);
         currentID = id;
     }
+
+
 }
