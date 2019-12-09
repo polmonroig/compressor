@@ -5,6 +5,10 @@ public abstract class Algorithm {
 
 
     protected Stats localStats = new Stats();
+    public int ID;
+
+
+
 
     public float getOriginalSize(){
         return this.localStats.getOriginalFileSize();
@@ -19,6 +23,13 @@ public abstract class Algorithm {
     public abstract byte[] compress(byte[] binaryFile);
     public abstract byte[] decompress(byte[] binaryFile);
 
+    public int getID(){
+        return ID;
+    }
+
+    public void setID(int id){
+        ID = id;
+    }
 
     public float getCompressionTime(){
         return localStats.getCompressionTime();

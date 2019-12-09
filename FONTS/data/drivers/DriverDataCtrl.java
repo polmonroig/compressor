@@ -21,7 +21,7 @@ class DriverDataCtrl{
                 case "1":
                     System.out.print("Dirección del archivo a leer: ");
                     userInput = Input.nextLine();
-                    System.out.println(Arrays.toString(DataCtrl.ReadFileAsBytes(userInput)));
+                    System.out.println(Arrays.toString(DataCtrl.ReadFile(userInput)));
                     break;
                 case "2":
                     System.out.print("Texto a guardar: ");
@@ -29,7 +29,7 @@ class DriverDataCtrl{
                     byte[] texto = userInput.getBytes();
                     System.out.print("Dirección donde guardarlo: ");
                     userInput = Input.nextLine();
-                    DataCtrl.WriteBytesToFile(userInput, texto );
+                    DataCtrl.WriteFile(userInput, texto );
 
                     break;
                 case "3":
