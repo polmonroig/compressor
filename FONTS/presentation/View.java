@@ -40,7 +40,7 @@ public class View extends JFrame {
         contents.add(new CompressTextContent("Comprimir archivo de texto", "Aqui puedes comprimir tus archivos de texto", 1));
         contents.add(new CompressImageContent("Comprimir imagen", "Descripcion de la funcionalidad", 2));
         contents.add(new CompressFolderContent("Comprimir carpeta", "Descripcion de la funcionalidad", 3));
-        contents.add(new Content("Descomprimir", "Descripcion de la funcionalidad", 4));
+        contents.add(new DecompressContent("Descomprimir", "Descripcion de la funcionalidad", 4));
         contents.add(new Content("Comparar", "Descripcion de la funcionalidad", 5));
         contents.add(new Content("Estadisticas Globales", "Descripcion de la funcionalidad", 6));
         contents.add(new Content("Informacion de uso", "Descripcion de la funcionalidad", 7));
