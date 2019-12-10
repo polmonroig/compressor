@@ -79,14 +79,17 @@ public class DomainCtrl {
         if(pFile.isAuto()){
             ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
             for(PhysicalFile f : physicalFiles){
+                System.out.println("MultFile:" +pFile.getRelativePath() + "." + pFile.getFileExtension() );
                 dataCtrl.WriteFile(pFile.getRelativePath() + "." + pFile.getFileExtension(), f.getContent());
             }
         }
         else{
             pFile.calculateId();
             pFile.decompress();
-            dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
+            System.out.println("SingleFilePath:" + pFile.getCompletePath() + "." + pFile.getOriginalIdName());
+            dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getOriginalIdName(), pFile.getContent());
         }
+        System.out.println("Done");
     }
 
     public void compressFiles(File[] files) throws IOException {

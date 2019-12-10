@@ -38,7 +38,7 @@ public class PhysicalFile {
     }
 
     public void decompress(){
-        content = algorithm.compress(content);
+        content = algorithm.decompress(content);
     }
 
 
@@ -104,6 +104,16 @@ public class PhysicalFile {
 
     public String getIdName(){
         return algorithmsExtensions[id];
+    }
+
+    public String getOriginalIdName(){
+        if(isImage() || fileExtension.equals(JPEG_EXTENSION)){
+            return IMG_EXTENSION;
+        }
+        else{
+            return TXT_EXTENSION;
+        }
+
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 
 package presentation.controllers;
 
+import domain.AlgorithmSet;
 import domain.controllers.DomainCtrl;
 import presentation.MainView;
 import presentation.View;
@@ -53,5 +54,10 @@ public class PresentationCtrl {
 
     public void setAlgorithm(int index) {
         domainCtrl.selectAlgorithm(index);
+    }
+
+    public void compressImage() {
+        domainCtrl.selectAlgorithm(AlgorithmSet.JPEG_ID);
+        domainCtrl.compressFile(file);
     }
 }
