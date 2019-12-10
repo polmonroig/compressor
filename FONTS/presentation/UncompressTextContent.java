@@ -18,7 +18,12 @@ public class UncompressTextContent extends Content{
     }
 
     @Override
-    public void init(){
+    public void initEventListeners(){
+
+    }
+
+    @Override
+    protected void initComponents(){
         layout = new GridLayout(3, 1);
         setLayout(layout);
         add(mainText);

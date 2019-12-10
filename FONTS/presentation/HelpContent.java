@@ -13,12 +13,15 @@ public class HelpContent extends Content {
         helpcontent = new JFrame();
     }
 
+
     @Override
-    public void init(){
+    protected void initComponents(){
         layout = new GridLayout(5, 1);
         setLayout(layout);
         add(mainText);
         add(description);
-
     }
+
+    @Override
+    protected void initEventListeners(){}
 }

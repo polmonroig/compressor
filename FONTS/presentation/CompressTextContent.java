@@ -24,12 +24,7 @@ public class CompressTextContent extends Content {
     }
 
     @Override
-    public void init(){
-        initComponents();
-        initEventListeners();
-    }
-
-    private void initComponents(){
+    protected void initComponents(){
         // init
 
 
@@ -56,7 +51,8 @@ public class CompressTextContent extends Content {
         add(compressPanel);
     }
 
-    private void initEventListeners(){
+    @Override
+    protected void initEventListeners(){
 
         compressButton.addActionListener(actionEvent -> {
             parent.compressTextFile(algorithms.getSelectedIndex());

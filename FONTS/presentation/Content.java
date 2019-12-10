@@ -3,7 +3,7 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
-public class Content extends JPanel {
+public abstract class Content extends JPanel {
     protected GridLayout layout;
     protected JLabel mainText;
     protected JLabel instructions;
@@ -23,16 +23,16 @@ public class Content extends JPanel {
         setVisible(false);
     }
 
-    public void init(){
-        layout = new GridLayout(2, 1);
-        setLayout(layout);
-        add(mainText);
-        add(description);
-
-
+    public final void init(){
+        initComponents();
+        initEventListeners();
     }
+
+    protected abstract void initComponents();
+    protected abstract void initEventListeners();
 
 
     public void notifyParent() {
+        throw new UnsupportedOperationException("Operation not implemented on current derivation");
     }
 }

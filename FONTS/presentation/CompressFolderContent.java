@@ -28,12 +28,9 @@ public class CompressFolderContent extends Content {
         parent = pointer;
     }
 
-    public void init(){
-        initComponents();
-        initEventListeners();
-    }
 
-    private void initComponents(){
+    @Override
+    protected void initComponents(){
         layout = new GridLayout(8, 1);
         setLayout(layout);
 
@@ -61,7 +58,8 @@ public class CompressFolderContent extends Content {
         add(compressPanel);
     }
 
-    private void initEventListeners(){
+    @Override
+    protected void initEventListeners(){
         compressButton.addActionListener(actionEvent -> {
             try {
                 parent.compressFiles(qual.getSelectedIndex(), algorithms.getSelectedIndex());

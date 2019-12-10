@@ -43,9 +43,9 @@ public class View extends JFrame {
         contents.add(new CompressImageContent("Comprimir imagen", "Descripcion de la funcionalidad", 2));
         contents.add(new CompressFolderContent("Comprimir carpeta", "Descripcion de la funcionalidad", 3, this));
         contents.add(new DecompressContent("Descomprimir", "Descripcion de la funcionalidad", 4));
-        contents.add(new Content("Comparar", "Descripcion de la funcionalidad", 5));
-        contents.add(new Content("Estadisticas Globales", "Descripcion de la funcionalidad", 6));
-        contents.add(new Content("Informacion de uso", "Descripcion de la funcionalidad", 7));
+        contents.add(new AboutContent("Comparar", "Descripcion de la funcionalidad", 5));
+        contents.add(new AboutContent("Estadisticas Globales", "Descripcion de la funcionalidad", 6));
+        contents.add(new HelpContent("Informacion de uso", "Descripcion de la funcionalidad", 7));
         contentPanel = new ContentPanel(contents, this);
         // init separator
 
