@@ -52,7 +52,6 @@ public class CompressTextContent extends Content {
 
         // add compression button 6
         compressPanel.add(compressButton);
-        add(compressPanel);
         compressButton.setEnabled(false);
         add(compressPanel);
     }

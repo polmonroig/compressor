@@ -14,11 +14,15 @@ public class FileChooser extends JPanel {
     private File[] files;
     private Content parent;
     private String filePath;
+    private boolean folderSelection;
+    private int selectionMode;
 
     public FileChooser(String[] types, Content content){
         fileChooser = new JFileChooser();
         parent = content;
         fileTypes = types;
+        folderSelection = false;
+        selectionMode = JFileChooser.FILES_ONLY;
         label = new JTextField("Path del archivo a comprimir", 20);
         button = new CustomButton("Seleccionar archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
     }
@@ -43,11 +47,11 @@ public class FileChooser extends JPanel {
 
     private void initEventListeners() {
         button.addActionListener(actionEvent -> {
-            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setMultiSelectionEnabled(folderSelection);
             fileChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", fileTypes);
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("", fileTypes);
             fileChooser.addChoosableFileFilter(filter);
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileSelectionMode(selectionMode);
             int returnValue = fileChooser.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 setArguments();
@@ -56,6 +60,16 @@ public class FileChooser extends JPanel {
             }
         });
 
+    }
+
+    public void setFolderSelection(boolean value){
+        folderSelection = value;
+        if(folderSelection){
+            selectionMode = JFileChooser.FILES_AND_DIRECTORIES;
+        }
+        else{
+            selectionMode = JFileChooser.FILES_ONLY;
+        }
     }
 
     private void setArguments(){

@@ -46,4 +46,12 @@ public class PresentationCtrl {
     public void setFile(File selectedFile) {
         file = selectedFile;
     }
+
+    public void setQuality(int quality) {
+        domainCtrl.setQuality(quality);
+    }
+
+    public void setAlgorithm(int index) {
+        domainCtrl.selectAlgorithm(index);
+    }
 }
