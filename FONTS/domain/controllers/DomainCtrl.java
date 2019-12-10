@@ -6,6 +6,7 @@ import data.controllers.DataCtrl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class DomainCtrl {
@@ -94,8 +95,8 @@ public class DomainCtrl {
         recursiveCompressFiles(files, physicalFiles, new StringBuilder());
         autoCompressor.setAlgorithm(currentId);
         byte[] fileBytes = autoCompressor.compressFiles(physicalFiles);
-        System.out.println("File out: " + physicalFiles.get(0).getFileDir() + "compression." + PhysicalFile.AUTO_EXTENSION);
-        dataCtrl.WriteFile(physicalFiles.get(0).getFileDir() + "compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
+        System.out.println("File out: " + files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION);
+        dataCtrl.WriteFile(files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
         System.out.println("File compressed");
 
     }
@@ -105,7 +106,7 @@ public class DomainCtrl {
         for(File f : files){
             if(f.isDirectory()){
                 prefix.append(f.getName()).append("/");
-                recursiveCompressFiles(f.listFiles(), physicalFiles, prefix);
+                recursiveCompressFiles(Objects.requireNonNull(f.listFiles()), physicalFiles, prefix);
             }
             else{
                 PhysicalFile pf = new PhysicalFile(f);

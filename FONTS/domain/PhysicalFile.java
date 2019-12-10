@@ -50,9 +50,6 @@ public class PhysicalFile {
         relativeDir = dir;
     }
 
-    public File getFile(){
-        return file;
-    }
 
     public byte[] getContent(){
         return content;
@@ -133,4 +130,6 @@ public class PhysicalFile {
     public int getSize() {
         return content.length;
     }
+
+
 }
