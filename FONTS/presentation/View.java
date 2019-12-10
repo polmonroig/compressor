@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class View extends JFrame {
+    File file = new File("folder_icon.png");
+    String path = file.getAbsolutePath();
+    ImageIcon img = new ImageIcon(path);
 
     // set reference to the controller calling it
     private PresentationCtrl presentationCtrl;
@@ -31,7 +34,7 @@ public class View extends JFrame {
 
     public View(String title, PresentationCtrl controller){
         setTitle(title);
-
+        setIconImage(img.getImage());
         presentationCtrl = controller;
         layout = new GridLayout(N_ROWS, N_COLS);
         buttonsPanel = new ButtonsPanel(buttonNames, this);
