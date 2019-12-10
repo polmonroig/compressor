@@ -65,7 +65,10 @@ public class DomainCtrl {
         pFile.setContent(dataCtrl.ReadFile(file)); // read and save file
         pFile.selectAlgorithm(currentId); // set compression algorithm
         pFile.compress();
+        System.out.println("FileName:" + pFile.getFileName());
+        System.out.println("OutPath: " + pFile.getCompletePath() + "." + pFile.getIdName());
         dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
+        System.out.println("File compressed");
     }
 
 

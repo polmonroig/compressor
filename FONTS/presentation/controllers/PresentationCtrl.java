@@ -33,6 +33,12 @@ public class PresentationCtrl {
         domainCtrl.compressFiles(files);
     }
 
+
+    public void compressFile(int index){
+        domainCtrl.selectAlgorithm(index);
+        domainCtrl.compressFile(file);
+    }
+
     public void decompressFile() {
         domainCtrl.decompressFile(file);
     }

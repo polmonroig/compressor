@@ -15,13 +15,10 @@ public class CompressImageContent extends Content {
         String[] quality = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};//obtener de la capa de domini para ser independiente
         qual = new JComboBox(quality);
         instructions = new JLabel();
-        pathLabel = new JTextField("Path del archivo a comprimir", 20);
         chooserPanel = new JPanel();
         qualityPanel = new JPanel();
         compressPanel = new JPanel();
-        fileSelectButton = new CustomButton("Seleccionar archivo de imagen", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         compressButton = new CustomButton("Comprimir archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
-        fileSelectButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         compressButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
     }
 
@@ -33,8 +30,6 @@ public class CompressImageContent extends Content {
         add(description);
         layout = new GridLayout(2, 1);
         chooserPanel.setLayout(layout);
-        chooserPanel.add(pathLabel);
-        chooserPanel.add(fileSelectButton);
         chooserPanel.add(Box.createHorizontalStrut(5));
         add(chooserPanel);
         qualityPanel.setLayout(layout);

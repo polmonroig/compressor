@@ -21,14 +21,14 @@ public class CompressFolderContent extends Content {
         algorithms = new JComboBox(algs);
         instructions = new JLabel();
         instructions2 = new JLabel();
-        pathLabel = new JTextField("Path de la carpeta a comprimir", 20);
+
         chooserPanel = new JPanel();
         qualityPanel = new JPanel();
         algorithmsPanel = new JPanel();
         compressPanel = new JPanel();
-        fileSelectButton = new CustomButton("Seleccionar carpeta", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+
         compressButton = new CustomButton("Comprimir carpeta", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
-        fileSelectButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        //fileSelectButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         compressButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
     }
 
@@ -40,8 +40,6 @@ public class CompressFolderContent extends Content {
         add(description);
         layout = new GridLayout(2, 1);
         chooserPanel.setLayout(layout);
-        chooserPanel.add(pathLabel);
-        chooserPanel.add(fileSelectButton);
         chooserPanel.add(Box.createHorizontalStrut(5));
         add(chooserPanel);
         qualityPanel.setLayout(layout);

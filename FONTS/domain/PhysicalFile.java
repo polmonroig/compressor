@@ -84,7 +84,7 @@ public class PhysicalFile {
     }
 
     private  void setFileName(){
-        int indexLastSlash = file.getPath().lastIndexOf("/");
+        int indexLastSlash = file.getPath().lastIndexOf("/") + 1;
         int indexLastDot = file.getPath().lastIndexOf(".");
         fileName = file.getPath().substring(indexLastSlash, indexLastDot);
     }
@@ -92,7 +92,7 @@ public class PhysicalFile {
     private void setFileExtension() {
         int indexLastDot = file.getPath().lastIndexOf(".");
         int size = file.getPath().length();
-        fileName = file.getPath().substring(indexLastDot + 1, size);
+        fileExtension = file.getPath().substring(indexLastDot + 1, size);
     }
 
 

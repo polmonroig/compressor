@@ -29,5 +29,10 @@ public class Content extends JPanel {
         add(mainText);
         add(description);
 
+
+    }
+
+
+    public void notifyParent() {
     }
 }
