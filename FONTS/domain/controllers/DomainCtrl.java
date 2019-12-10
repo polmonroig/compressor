@@ -94,7 +94,9 @@ public class DomainCtrl {
         recursiveCompressFiles(files, physicalFiles, new StringBuilder());
         autoCompressor.setAlgorithm(currentId);
         byte[] fileBytes = autoCompressor.compressFiles(physicalFiles);
+        System.out.println("File out: " + physicalFiles.get(0).getFileDir() + "compression." + PhysicalFile.AUTO_EXTENSION);
         dataCtrl.WriteFile(physicalFiles.get(0).getFileDir() + "compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
+        System.out.println("File compressed");
 
     }
 

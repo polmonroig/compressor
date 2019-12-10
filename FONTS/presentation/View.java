@@ -5,6 +5,7 @@ import presentation.controllers.PresentationCtrl;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class View extends JFrame {
@@ -76,7 +77,7 @@ public class View extends JFrame {
         add(separator);
 
 
-
+        // set location at the middle of the screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
@@ -98,9 +99,10 @@ public class View extends JFrame {
         presentationCtrl.compressFile(selectedIndex);
     }
 
-    public void compressFiles(int quality, int selectedAlg){
+    public void compressFiles(int quality, int selectedAlg) throws IOException {
         presentationCtrl.setQuality(quality);
         presentationCtrl.setAlgorithm(selectedAlg);
+        presentationCtrl.compressFiles();
     }
 
     public void setFiles(File[] files) {

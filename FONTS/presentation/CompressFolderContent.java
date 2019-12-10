@@ -2,6 +2,7 @@ package presentation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class CompressFolderContent extends Content {
     private JComboBox<String> qual;
@@ -21,7 +22,7 @@ public class CompressFolderContent extends Content {
         instructions = new JLabel("Escoje el algoritmo que deseas usar para comprimir los archivos de texto:");
         instructions2 = new JLabel("Escoje la calidad deseada:");
         compressPanel = new JPanel();
-        fileChooser =  new FileChooser(new String[]{"txt", "jpeg"}, this);
+        fileChooser =  new FileChooser(new String[]{"txt", "ppm"}, this);
         compressButton = new CustomButton("Comprimir carpeta", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         compressButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         parent = pointer;
@@ -62,7 +63,11 @@ public class CompressFolderContent extends Content {
 
     private void initEventListeners(){
         compressButton.addActionListener(actionEvent -> {
-            parent.compressFiles(qual.getSelectedIndex(), algorithms.getSelectedIndex());
+            try {
+                parent.compressFiles(qual.getSelectedIndex(), algorithms.getSelectedIndex());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 

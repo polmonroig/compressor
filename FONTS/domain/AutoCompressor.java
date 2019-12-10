@@ -5,6 +5,7 @@ import domain.controllers.DomainCtrl;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class AutoCompressor {
 
 
     private int currentID;
+    private static final byte END_LINE = '\n';
 
     public AutoCompressor(DomainCtrl controller){
         domainCtrl = controller;
@@ -27,19 +29,16 @@ public class AutoCompressor {
         for(PhysicalFile file : files) {
             if (file.isImage()) {
                 file.selectAlgorithm(AlgorithmSet.JPEG_ID);
-                stream.write((file.getRelativePath() + "\n" + AlgorithmSet.JPEG_ID + "\n").getBytes());
-
-                file.compress();
-                stream.write(Integer.parseInt((ByteBuffer.allocate(4).putInt(file.getSize()) + "\n")));
-                stream.write(file.getContent());
+                stream.write((file.getRelativePath() + END_LINE + AlgorithmSet.JPEG_ID + END_LINE).getBytes());
             } else if (file.isText()) {
                 file.selectAlgorithm(currentID);
-                stream.write((file.getRelativePath() + "\n" + currentID + "\n").getBytes());
-                file.compress();
-                // write file size to a 4 byte array
-                stream.write(Integer.parseInt((ByteBuffer.allocate(4).putInt(file.getSize()) + "\n")));
-                stream.write(file.getContent());
+                stream.write((file.getRelativePath() + END_LINE + currentID + END_LINE).getBytes());
             }
+            file.compress();
+            // write file size to a 4 byte array
+            stream.write(BigInteger.valueOf(file.getSize()).toByteArray());
+            stream.write(END_LINE);
+            stream.write(file.getContent());
         }
 
         return stream.toByteArray();
@@ -47,7 +46,7 @@ public class AutoCompressor {
 
     private ByteArrayOutputStream readWhileNotEndLine(byte[] array, Integer i){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        while (array[i] != '\n'){
+        while (array[i] != END_LINE){
             stream.write(array[i]);
             ++i;
         }

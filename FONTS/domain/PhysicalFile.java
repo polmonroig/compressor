@@ -22,7 +22,7 @@ public class PhysicalFile {
     private static final String IMG_EXTENSION = "ppm";
 
 
-    private String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
+    private static String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
                                              LZW_EXTENSION, JPEG_EXTENSION, AUTO_EXTENSION};
 
     public PhysicalFile(File virtualFile){
@@ -75,7 +75,7 @@ public class PhysicalFile {
     }
 
     public String getRelativePath(){
-        return relativeDir + "/" + fileName;
+        return relativeDir + fileName;
     }
 
     private  void setFileDir(){
@@ -119,11 +119,11 @@ public class PhysicalFile {
     }
 
     public boolean isText(){
-        return fileExtension.equals(IMG_EXTENSION);
+        return fileExtension.equals(TXT_EXTENSION);
     }
 
     public boolean isImage(){
-        return fileExtension.equals(TXT_EXTENSION);
+        return fileExtension.equals(IMG_EXTENSION);
     }
 
     public boolean isAuto(){
