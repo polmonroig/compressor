@@ -2,6 +2,8 @@ package domain.controllers;
 
 import domain.*;
 import data.controllers.DataCtrl;
+import presentation.Content;
+import presentation.controllers.PresentationCtrl;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,11 +13,13 @@ import java.util.Objects;
 
 public class DomainCtrl {
     private DataCtrl dataCtrl;
+    private PresentationCtrl presentationCtrl;
     private AutoCompressor autoCompressor;
     private GlobalStats globalStats;
     private int currentId;
 
-    public DomainCtrl(){
+    public DomainCtrl(PresentationCtrl controller){
+        presentationCtrl = controller;
         init();
     }
 
@@ -63,44 +67,73 @@ public class DomainCtrl {
     public void compressFile(File file){
         globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
         PhysicalFile pFile = new PhysicalFile(file);
-        pFile.setContent(dataCtrl.ReadFile(file)); // read and save file
-        pFile.selectAlgorithm(currentId); // set compression algorithm
-        pFile.compress();
-        System.out.println("FileName:" + pFile.getFileName());
-        System.out.println("OutPath: " + pFile.getCompletePath() + "." + pFile.getIdName());
-        dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
-        System.out.println("File compressed");
+        byte[]content = readFile(file);
+        if(content != null){
+            pFile.setContent(content); // read and save file
+            pFile.selectAlgorithm(currentId); // set compression algorithm
+            pFile.compress();
+            setlocalStats(pFile.getLocalStats());
+            System.out.println("FileName:" + pFile.getFileName());
+            System.out.println("OutPath: " + pFile.getCompletePath() + "." + pFile.getIdName());
+            writeFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
+            System.out.println("File compressed");
+        }
+
     }
 
 
     public void decompressFile(File file){
         PhysicalFile pFile = new PhysicalFile(file);
-        pFile.setContent(dataCtrl.ReadFile(file));
-        if(pFile.isAuto()){
-            ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
-            for(PhysicalFile f : physicalFiles){
-                System.out.println("MultFile:" +pFile.getRelativePath() + "." + pFile.getFileExtension() );
-                dataCtrl.WriteFile(pFile.getRelativePath() + "." + pFile.getFileExtension(), f.getContent());
+        byte[]content = readFile(file);
+        if(content != null){
+            pFile.setContent(content);
+            if(pFile.isAuto()){
+                ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
+                for(PhysicalFile f : physicalFiles){
+                    System.out.println("MultFile:" +pFile.getRelativePath() + "." + pFile.getFileExtension() );
+                    writeFile(pFile.getRelativePath() + "." + pFile.getFileExtension(), f.getContent());
+                }
             }
+            else{
+                pFile.calculateId();
+                pFile.decompress();
+                System.out.println("SingleFilePath:" + pFile.getCompletePath() + "." + pFile.getOriginalIdName());
+                writeFile(pFile.getCompletePath() + "." + pFile.getOriginalIdName(), pFile.getContent());
+            }
+            System.out.println("Done");
         }
-        else{
-            pFile.calculateId();
-            pFile.decompress();
-            System.out.println("SingleFilePath:" + pFile.getCompletePath() + "." + pFile.getOriginalIdName());
-            dataCtrl.WriteFile(pFile.getCompletePath() + "." + pFile.getOriginalIdName(), pFile.getContent());
+
+    }
+
+    private void writeFile(String s, byte[] content) {
+        try{
+            dataCtrl.WriteFile(s, content);
+        } catch (IOException e) {
+            // MOSTRAR ERROR DE ESCRITURA
+            e.printStackTrace();
         }
-        System.out.println("Done");
     }
 
     public void compressFiles(File[] files) throws IOException {
 
+        byte[] fileBytes;
+
         ArrayList<PhysicalFile> physicalFiles = new ArrayList<>();
         recursiveCompressFiles(files, physicalFiles, new StringBuilder());
         autoCompressor.setAlgorithm(currentId);
-        byte[] fileBytes = autoCompressor.compressFiles(physicalFiles);
-        System.out.println("File out: " + files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION);
-        dataCtrl.WriteFile(files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
-        System.out.println("File compressed");
+        try{
+            fileBytes = autoCompressor.compressFiles(physicalFiles);
+            System.out.println("File out: " + files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION);
+            dataCtrl.WriteFile(files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
+            System.out.println("File compressed");
+        }
+        catch (IOException e) {
+            if(AutoCompressor.getFlag() == AutoCompressor.UNSUPPORTED_FILE) {
+                // MOSTRAR MENSAJE ERROR
+                e.printStackTrace();
+            }
+        }
+
 
     }
 
@@ -113,12 +146,26 @@ public class DomainCtrl {
             }
             else{
                 PhysicalFile pf = new PhysicalFile(f);
-                pf.setContent(dataCtrl.ReadFile(f));
-                pf.setRelativeDir(prefix.toString());
-                physicalFiles.add(pf);
+                byte[] content = readFile(f);
+
+                if(content != null) {
+                    pf.setContent(content);
+                    pf.setRelativeDir(prefix.toString());
+                    physicalFiles.add(pf);
+                }
             }
         }
 
+    }
+
+    private byte[] readFile(File f) {
+        try{
+            return dataCtrl.ReadFile(f);
+        } catch (IOException e) {
+            // MOSTARR MENSAJE Error por pantalla
+            e.printStackTrace();
+        }
+        return null;
     }
 
 /*
@@ -148,6 +195,10 @@ public class DomainCtrl {
         globalStats.addCompressionTime(compressionTime);
         globalStats.addCompressionDegree(compressionDegree);
         globalStats.addCompressionSpeed(compressionSpeed);
+    }
+
+    public void setlocalStats(Stats localStats){
+        presentationCtrl.setlocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(), localStats.getCompressionDegree(), localStats.getCompressionSpeed(), localStats.getOriginalFileSize());
     }
 
 

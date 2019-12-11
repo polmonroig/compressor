@@ -141,5 +141,5 @@ public class PhysicalFile {
         return content.length;
     }
 
-
+    public Stats getLocalStats(){return algorithm.localStats;}
 }

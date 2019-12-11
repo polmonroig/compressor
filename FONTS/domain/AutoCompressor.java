@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class AutoCompressor {
@@ -15,6 +14,9 @@ public class AutoCompressor {
 
 
     private int currentID;
+    private static final int NO_ERROR = 0;
+    public static final int UNSUPPORTED_FILE = 1;
+    private static int flag = NO_ERROR;
     private static final byte END_LINE = '\n';
 
     public AutoCompressor(DomainCtrl controller){
@@ -22,6 +24,8 @@ public class AutoCompressor {
         currentID = AlgorithmSet.LZ78_ID;
 
     }
+
+    public static int getFlag (){return flag;}
 
     public byte[] compressFiles(ArrayList<PhysicalFile> files) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -33,6 +37,10 @@ public class AutoCompressor {
             } else if (file.isText()) {
                 file.selectAlgorithm(currentID);
                 stream.write((file.getRelativePath() + END_LINE + currentID + END_LINE).getBytes());
+            }
+            else {
+                flag = UNSUPPORTED_FILE;
+                throw new IOException();
             }
             file.compress();
             // write file size to a 4 byte array

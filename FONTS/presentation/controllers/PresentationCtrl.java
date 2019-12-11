@@ -17,7 +17,7 @@ public class PresentationCtrl {
     private File file;
 
     public PresentationCtrl(){
-        domainCtrl = new DomainCtrl();
+        domainCtrl = new DomainCtrl(this);
         mainView = new View("MasterCompressor", this);
     }
 
@@ -59,5 +59,9 @@ public class PresentationCtrl {
     public void compressImage() {
         domainCtrl.selectAlgorithm(AlgorithmSet.JPEG_ID);
         domainCtrl.compressFile(file);
+    }
+
+    public void setlocalStats(float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
+        mainView.setLocalStats(compressedFileSize, compressionDegree, compressionSpeed, compressionTime, originalFileSize);
     }
 }

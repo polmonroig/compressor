@@ -12,6 +12,7 @@ public class View extends JFrame {
     File file = new File("folder_icon.png");
     String path = file.getAbsolutePath();
     ImageIcon img = new ImageIcon(path);
+    LocalStats localStats = new LocalStats();
 
     // set reference to the controller calling it
     private PresentationCtrl presentationCtrl;
@@ -119,5 +120,10 @@ public class View extends JFrame {
 
     public void descompressFile() {
         presentationCtrl.decompressFile();
+    }
+
+    public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
+        localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
+        localStats.setVisible(true);
     }
 }
