@@ -124,6 +124,7 @@ public class View extends JFrame {
 
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
         localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
+        localStats.init();
         localStats.setVisible(true);
     }
 }
