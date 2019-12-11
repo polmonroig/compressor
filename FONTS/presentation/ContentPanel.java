@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public class ContentPanel extends JPanel {
 
-    private ArrayList<Content> contents;
+    private ArrayList<ContentInterface> contents;
     private int selectedView;
     private View parent;
 
-    public ContentPanel(ArrayList<Content> contentPanels, View view){
+    public ContentPanel(ArrayList<ContentInterface> contentPanels, View view){
         parent = view;
         selectedView = 0;
         contents = contentPanels;
@@ -19,17 +19,21 @@ public class ContentPanel extends JPanel {
     }
 
     public void init() {
-        for (Content content : contents) {
+        for (ContentInterface content : contents) {
             content.init();
+            content.setVisibility(false);
             add(content);
         }
-        contents.get(selectedView).setVisible(true);
+        contents.get(selectedView).setVisibility(true);
     }
 
     public void selectView(int id) {
-        contents.get(selectedView).setVisible(false);
+        // every time we change of panel we must reset all values
+        parent.resetValues();
+        contents.get(selectedView).setVisibility(false);
+        contents.get(selectedView).resetValues();
         selectedView = id;
-        contents.get(id).setVisible(true);
+        contents.get(id).setVisibility(true);
     }
 
 }

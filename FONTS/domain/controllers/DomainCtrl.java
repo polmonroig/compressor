@@ -24,7 +24,7 @@ public class DomainCtrl {
     }
 
     private void init() {
-        currentId = 0;
+        currentId = AlgorithmSet.LZ78_ID;
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
         autoCompressor = new AutoCompressor(this);
@@ -114,17 +114,17 @@ public class DomainCtrl {
         }
     }
 
-    public void compressFiles(File[] files) throws IOException {
+    public void compressFiles(File file)  {
 
         byte[] fileBytes;
 
         ArrayList<PhysicalFile> physicalFiles = new ArrayList<>();
-        recursiveCompressFiles(files, physicalFiles, new StringBuilder());
+        recursiveCompressFiles(new File[]{file}, physicalFiles, new StringBuilder());
         autoCompressor.setAlgorithm(currentId);
         try{
             fileBytes = autoCompressor.compressFiles(physicalFiles);
-            System.out.println("File out: " + files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION);
-            dataCtrl.WriteFile(files[0].getParentFile().getPath() + "/compression." + PhysicalFile.AUTO_EXTENSION, fileBytes);
+            System.out.println("File out: " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
+            dataCtrl.WriteFile(file.getPath() + "." + PhysicalFile.AUTO_EXTENSION, fileBytes);
             System.out.println("File compressed");
         }
         catch (IOException e) {
@@ -202,4 +202,17 @@ public class DomainCtrl {
     }
 
 
+    public void compress(File file)  {
+        if(file.isDirectory()){
+            compressFiles(file);
+        }
+        else{
+            compressFile(file);
+        }
+    }
+
+    public void resetValues() {
+        AlgorithmSet.setQuality(0);
+        selectAlgorithm(AlgorithmSet.LZ78_ID);
+    }
 }

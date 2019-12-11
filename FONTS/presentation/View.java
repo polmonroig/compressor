@@ -24,8 +24,6 @@ public class View extends JFrame {
 
     // define the layout
     private GridLayout layout;
-    private static final int N_COLS = 1;
-    private static final int N_ROWS = 1;
     private static final String[] buttonNames = {"About", "Comprimir texto", "Comprimir imagen",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
                                                  "Estadisticas", "Informacion"};
@@ -37,20 +35,14 @@ public class View extends JFrame {
         setTitle(title);
         setIconImage(img.getImage());
         presentationCtrl = controller;
-        layout = new GridLayout(N_ROWS, N_COLS);
+        layout = new GridLayout(1, 1);
         buttonsPanel = new ButtonsPanel(buttonNames, this);
 
 
-        ArrayList<Content> contents = new ArrayList<>();
-        contents.add(new AboutContent("Bienvenidos a Master Compressor", "Contenido del compressor", 0));
-        contents.add(new CompressTextContent("Comprimir archivo de texto", "Aqui puedes comprimir tus archivos de texto", 1, this));
-        contents.add(new CompressImageContent("Comprimir imagen", "Descripcion de la funcionalidad", 2, this));
-        contents.add(new CompressFolderContent("Comprimir carpeta", "Descripcion de la funcionalidad", 3, this));
-        contents.add(new DecompressContent("Descomprimir", "Descripcion de la funcionalidad", 4, this));
-        contents.add(new AboutContent("Comparar", "Descripcion de la funcionalidad", 5));
-        contents.add(new AboutContent("Estadisticas Globales", "Descripcion de la funcionalidad", 6));
-        contents.add(new HelpContent("Informacion de uso", "Descripcion de la funcionalidad", 7));
-        contentPanel = new ContentPanel(contents, this);
+
+
+
+        contentPanel = new ContentPanel(setupContents(), this);
         // init separator
 
         separator = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -61,6 +53,64 @@ public class View extends JFrame {
         separator.setFocusable(false);
         // remove undesirable border
         separator.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+    }
+
+    private ArrayList<ContentInterface> setupContents() {
+        ArrayList<ContentInterface> contents = new ArrayList<>();
+        // about content
+        ContentInterface aboutContent = new Content("About", "Description de about");
+        contents.add(aboutContent);
+
+        // compress text content
+        ContentInterface compressText = new Content("Comprimir Texto",
+                "dexcirpcion de comprimir un text");
+        compressText = new OptionSelector(compressText, new String[]{"lz78", "lzss","lzw"},
+                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+        compressText = new FileChooser(compressText, new String[]{"txt"},
+                "Comprimir", this,
+                FileChooser.COMPRESSION_MODE, JFileChooser.FILES_ONLY);
+        contents.add(compressText);
+
+        // compress image content
+        ContentInterface compressImage = new Content("Comprimir imagen",
+                                     "desciprion imagen");
+        compressImage = new OptionSelector(compressImage, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
+                                     "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+        compressImage = new FileChooser(compressImage, new String[]{"ppm"},
+                                        "Comprimir", this,
+                                        FileChooser.COMPRESSION_MODE, JFileChooser.FILES_ONLY);
+        contents.add(compressImage);
+
+        // compress folder content
+        ContentInterface compressFolder = new Content("Comprimir carpeta","descripcion");
+        compressFolder = new OptionSelector(compressFolder, new String[]{"lz78", "lzss","lzw"},
+                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+        compressFolder = new OptionSelector(compressFolder, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
+                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+        compressImage = new FileChooser(compressImage, new String[]{"ppm"},
+                "Comprimir", this,
+                FileChooser.COMPRESSION_MODE, JFileChooser.DIRECTORIES_ONLY);
+        contents.add(compressFolder);
+
+        // decompress file
+        ContentInterface decompressFile = new Content("Descomprimir", "Descripcion");
+        decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
+                                         "Descomprimir", this,
+                                         FileChooser.DECOMPRESSION_MODE, JFileChooser.FILES_ONLY);
+        contents.add(decompressFile);
+
+        // compare files
+        ContentInterface compareFile = new Content("Comparar archivos", "Descripcion");
+        contents.add(compareFile);
+
+        // global stats
+        ContentInterface globalStats = new Content("Estadisticas Globales", "descriptcion");
+        contents.add(globalStats);
+
+        // Info
+        ContentInterface info = new Content("Informacion", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
+        contents.add(info);
+        return contents;
     }
 
 
@@ -93,38 +143,30 @@ public class View extends JFrame {
         contentPanel.selectView(id);
     }
 
-    public void setFile(File file) {
-        presentationCtrl.setFile(file);
-    }
-
-
-
-    public void compressTextFile(int selectedIndex) {
-        presentationCtrl.compressFile(selectedIndex);
-    }
-
-    public void compressFiles(int quality, int selectedAlg) throws IOException {
-        presentationCtrl.setQuality(quality);
-        presentationCtrl.setAlgorithm(selectedAlg);
-        presentationCtrl.compressFiles();
-    }
-
-    public void setFiles(File[] files) {
-        presentationCtrl.setFiles(files);
-    }
-
-    public void compressImage(int quality) {
-        presentationCtrl.setQuality(quality);
-        presentationCtrl.compressImage();
-    }
-
-    public void descompressFile() {
-        presentationCtrl.decompressFile();
-    }
 
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
         localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
         localStats.init();
         localStats.setVisible(true);
+    }
+
+    public void compress(File file) {
+        presentationCtrl.compress(file);
+    }
+
+    public void decompress(File file) {
+        presentationCtrl.decompress(file);
+    }
+
+    public void setAlgorithm(int selectedIndex) {
+        presentationCtrl.setAlgorithm(selectedIndex);
+    }
+
+    public void setQuality(int selectedIndex) {
+        presentationCtrl.setQuality(selectedIndex);
+    }
+
+    public void resetValues() {
+        presentationCtrl.resetValues();
     }
 }

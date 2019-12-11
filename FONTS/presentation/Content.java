@@ -3,34 +3,45 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Content extends JPanel {
-    protected GridLayout layout;
-    protected JLabel mainText;
-    protected JLabel instructions;
-    protected JTextArea description;
-    private int id;
+public class Content extends ContentInterface {
 
-    public Content(String title, String contentDescription, int i){
-        id = i;
-        mainText = new JLabel(title);
-        mainText.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
+    private JLabel title;
+    private JTextArea description;
+
+    public Content(String contentTitle, String contentDescription){
+        title = new JLabel(contentTitle);
         description = new JTextArea(contentDescription);
-        description.setBackground(new Color(238, 238, 238));
-        description.setEditable(false);
-        setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-        setVisible(false);
+        incrementRows();
+        incrementRows();
     }
 
-    public final void init(){
+
+    @Override
+    public void init(){
         initComponents();
-        initEventListeners();
     }
 
-    protected abstract void initComponents();
-    protected abstract void initEventListeners();
 
+    @Override
+    public void resetValues(){
 
-    public void notifyParent() {
-        throw new UnsupportedOperationException("Operation not implemented on current derivation");
+    }
+
+    @Override
+    public void setVisibility(boolean b){
+        setVisible(b);
+    }
+
+    private void initComponents() {
+        setLayout(new GridLayout(getRows(), 1));
+        title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
+
+        description.setEditable(false);
+        description.setBackground(new Color(238, 238, 238));
+        setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+
+        add(title);
+        add(description);
+
     }
 }

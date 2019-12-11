@@ -5,49 +5,77 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
-public class FileChooser extends JPanel {
+public class FileChooser extends ContentDecorator {
 
     private JFileChooser fileChooser;
-    private CustomButton button;
+    private CustomButton selectFileButton, functionButton;
     private JTextField label;
     private String[] fileTypes;
-    private File[] files;
-    private Content parent;
+    private File file;
     private String filePath;
-    private boolean folderSelection;
     private int selectionMode;
+    private int compressionMode;
+    private View view;
 
-    public FileChooser(String[] types, Content content){
+    public static final int COMPRESSION_MODE = 0;
+    public static final int DECOMPRESSION_MODE = 1;
+
+    public FileChooser(ContentInterface content, String[] types, String buttonFunction, View parentView, int mode, int fileMode){
+        super(content);
+        view = parentView;
+        compressionMode = mode;
         fileChooser = new JFileChooser();
-        parent = content;
         fileTypes = types;
-        folderSelection = false;
-        selectionMode = JFileChooser.FILES_ONLY;
-        label = new JTextField("Path del archivo a comprimir", 20);
-        button = new CustomButton("Seleccionar archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        selectionMode = fileMode;
+        label = new JTextField("Directorio del archivo", 20);
+        selectFileButton = new CustomButton("Seleccionar archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        functionButton = new CustomButton(buttonFunction, Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
     }
 
+    @Override
+    public void resetValues(){
+        getInnerContent().resetValues();
+        functionButton.setEnabled(false);
+        label.setText("Directiorio del archivo");
+    }
+
+    @Override
     public void init(){
         initComponents();
         initEventListeners();
     }
 
     private void initComponents(){
-        GridLayout layout = new GridLayout(1, 2);
-        setLayout(layout);
-        label.setEditable(false);
-        button.setBorderRadius(0);
-        button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-        add(label);
-        add(button);
+        // init super class
+        getInnerContent().init();
 
-        setVisible(true);
+        incrementRows();
+        // init decorator
+        GridLayout layout = new GridLayout(3, 1);
+        setLayout(layout);
+        add(getInnerContent());
+        JPanel upperPanel = new JPanel();
+        JPanel lowerPanel = new JPanel();
+        upperPanel.setLayout(new GridLayout(1, 2));
+        JPanel upperInner = new JPanel();
+        upperPanel.add(upperInner);
+        upperInner.add(label);
+        upperInner.add(selectFileButton);
+
+        label.setEditable(false);
+        selectFileButton.setBorderRadius(0);
+        selectFileButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+
+        lowerPanel.add(functionButton);
+        add(upperPanel);
+        add(lowerPanel);
+        functionButton.setEnabled(false);
+
     }
 
 
     private void initEventListeners() {
-        button.addActionListener(actionEvent -> {
-            fileChooser.setMultiSelectionEnabled(folderSelection);
+        selectFileButton.addActionListener(actionEvent -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("", fileTypes);
             fileChooser.addChoosableFileFilter(filter);
@@ -56,35 +84,26 @@ public class FileChooser extends JPanel {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 setArguments();
                 label.setText(filePath);
-                parent.notifyParent();
+                functionButton.setEnabled(true);
             }
+        });
+
+        functionButton.addActionListener(actionEvent -> {
+            if(compressionMode == COMPRESSION_MODE) view.compress(file);
+            else if(compressionMode == DECOMPRESSION_MODE)view.decompress(file);
+            functionButton.resetColor();
+            functionButton.setEnabled(false);
+
         });
 
     }
 
-    public void setFolderSelection(boolean value){
-        folderSelection = value;
-        if(folderSelection){
-            selectionMode = JFileChooser.FILES_AND_DIRECTORIES;
-        }
-        else{
-            selectionMode = JFileChooser.FILES_ONLY;
-        }
-    }
+
 
     private void setArguments(){
-        files = fileChooser.getSelectedFiles();
-        if(files.length == 0){
-            files = new File[]{fileChooser.getSelectedFile()};
-            filePath = files[0].getAbsolutePath();
-        }
-        else{
-            filePath = files[0].getParentFile().getAbsolutePath();
-        }
+        file = fileChooser.getSelectedFile();
+        filePath = file.getAbsolutePath();
     }
 
-    public File[] getFiles(){
-        return files;
-    }
 
 }

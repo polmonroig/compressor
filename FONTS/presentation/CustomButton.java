@@ -138,4 +138,9 @@ public  class CustomButton extends JButton {
     public void setActiveTextColor(Color activeTextColor) {
         this.activeTextColor = activeTextColor;
     }
+
+    public void resetColor() {
+        setBackground(activeBackgroundColor);
+        setForeground(activeTextColor);
+    }
 }
