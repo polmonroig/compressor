@@ -78,9 +78,9 @@ public class AutoCompressor {
     public ArrayList<PhysicalFile> decompressFile(PhysicalFile file){
         ArrayList<PhysicalFile> files = new ArrayList<>();
         Integer i = 0;
-        String fileName = "";
-        int compressionType = 0;
-        int compressionSize = 0;
+        String fileName;
+        int compressionType;
+        int compressionSize;
         byte[] content = file.getContent();
         while(i < content.length){
 
