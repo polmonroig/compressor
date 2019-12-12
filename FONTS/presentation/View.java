@@ -68,7 +68,7 @@ public class View extends JFrame {
                 "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
         compressText = new FileChooser(compressText, new String[]{"txt"},
                 "Comprimir", this,
-                FileChooser.COMPRESSION_MODE, JFileChooser.FILES_ONLY);
+                FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
         contents.add(compressText);
 
         // compress image content
@@ -78,7 +78,7 @@ public class View extends JFrame {
                                      "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
         compressImage = new FileChooser(compressImage, new String[]{"ppm"},
                                         "Comprimir", this,
-                                        FileChooser.COMPRESSION_MODE, JFileChooser.FILES_ONLY);
+                                        FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
         contents.add(compressImage);
 
         // compress folder content
@@ -89,14 +89,14 @@ public class View extends JFrame {
                 "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
         compressImage = new FileChooser(compressImage, new String[]{"ppm"},
                 "Comprimir", this,
-                FileChooser.COMPRESSION_MODE, JFileChooser.DIRECTORIES_ONLY);
+                FileChooser.COMPRESSION_MODE, FileChooser.DIRECTORIES_ONLY);
         contents.add(compressFolder);
 
         // decompress file
         ContentInterface decompressFile = new Content("Descomprimir", "Descripcion");
         decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
                                          "Descomprimir", this,
-                                         FileChooser.DECOMPRESSION_MODE, JFileChooser.FILES_ONLY);
+                                         FileChooser.DECOMPRESSION_MODE, FileChooser.FILES_ONLY);
         contents.add(decompressFile);
 
         // compare files
