@@ -38,15 +38,19 @@ public class OptionSelector extends ContentDecorator {
 
     private void initComponents(){
         getInnerContent().init();
-        incrementRows();
-        setLayout(new GridLayout(3, 1));
-        add(getInnerContent());
-        JPanel innerLabel = new JPanel();
-        JPanel innerOptions = new JPanel();
-        innerLabel.add(label);
-        innerOptions.add(options);
-        add(innerLabel);
-        add(innerOptions);
+        setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.insets = new Insets(10, 0, 0, 0);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        add(getInnerContent(), constraints);
+        constraints.gridy = 1;
+        add(label, constraints);
+        constraints.gridy = 2;
+        add(options, constraints);
+
     }
 
     private void initEventListeners(){

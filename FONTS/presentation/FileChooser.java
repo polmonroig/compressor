@@ -131,27 +131,41 @@ public class FileChooser extends ContentDecorator {
         // init super class
         getInnerContent().init();
 
-        incrementRows();
         // init decorator
-        GridLayout layout = new GridLayout(3, 1);
+        GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
-        add(getInnerContent());
-        JPanel upperPanel = new JPanel();
-        JPanel lowerPanel = new JPanel();
-        upperPanel.setLayout(new GridLayout(1, 2));
-        JPanel upperInner = new JPanel();
-        upperPanel.add(upperInner);
-        upperInner.add(label);
-        upperInner.add(selectFileButton);
+        GridBagConstraints constraints = new GridBagConstraints();
 
         label.setEditable(false);
+        label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
+
         selectFileButton.setBorderRadius(0);
+        functionButton.setEnabled(false);
+        functionButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
         selectFileButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 
-        lowerPanel.add(functionButton);
-        add(upperPanel);
-        add(lowerPanel);
-        functionButton.setEnabled(false);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.insets = new Insets(10, 0, 0, 0);
+        add(getInnerContent(), constraints);
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.gridwidth = 1;
+        constraints.gridy = 1;
+        add(label, constraints);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        add(selectFileButton, constraints);
+        constraints.gridwidth = 2;
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(30, 0, 0, 0);
+        functionButton.setPreferredSize(new Dimension(15 * functionButton.getText().length(), 50));
+        add(functionButton, constraints);
+
+
 
     }
 

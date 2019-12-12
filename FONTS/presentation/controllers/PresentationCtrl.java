@@ -1,13 +1,11 @@
 
 package presentation.controllers;
 
-import domain.AlgorithmSet;
 import domain.controllers.DomainCtrl;
-import presentation.MainView;
 import presentation.View;
 
 import java.io.File;
-import java.io.IOException;
+
 
 
 public class PresentationCtrl {
@@ -49,5 +47,9 @@ public class PresentationCtrl {
 
     public void resetValues() {
         domainCtrl.resetValues();
+    }
+
+    public void displayError(String s) {
+        mainView.displayError(s);
     }
 }

@@ -14,10 +14,8 @@ public class AutoCompressor {
 
 
     private int currentID;
-    private static final int NO_ERROR = 0;
-    public static final int UNSUPPORTED_FILE = 1;
-    private static int flag = NO_ERROR;
     private static final byte END_LINE = '\n';
+    private static String unsupportedFile;
 
     public AutoCompressor(DomainCtrl controller){
         domainCtrl = controller;
@@ -25,7 +23,7 @@ public class AutoCompressor {
 
     }
 
-    public static int getFlag (){return flag;}
+    public static String getUnsupportedFile(){return unsupportedFile;}
 
     public byte[] compressFiles(ArrayList<PhysicalFile> files) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -39,7 +37,7 @@ public class AutoCompressor {
                 stream.write((file.getRelativePath() + END_LINE + currentID + END_LINE).getBytes());
             }
             else {
-                flag = UNSUPPORTED_FILE;
+                unsupportedFile = file.getCompletePath() + "." + file.getFileExtension();
                 throw new IOException();
             }
             file.compress();

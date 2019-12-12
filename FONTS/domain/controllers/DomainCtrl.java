@@ -70,7 +70,12 @@ public class DomainCtrl {
         byte[]content = readFile(file);
         if(content != null){
             pFile.setContent(content); // read and save file
-            pFile.selectAlgorithm(currentId); // set compression algorithm
+            if(pFile.isImage()){
+                pFile.selectAlgorithm(AlgorithmSet.JPEG_ID);
+            }else{
+                pFile.selectAlgorithm(currentId); // set compression algorithm
+            }
+
             pFile.compress();
             setlocalStats(pFile.getLocalStats());
             System.out.println("FileName:" + pFile.getFileName());
@@ -109,8 +114,7 @@ public class DomainCtrl {
         try{
             dataCtrl.WriteFile(s, content);
         } catch (IOException e) {
-            // MOSTRAR ERROR DE ESCRITURA
-            e.printStackTrace();
+            presentationCtrl.displayError("Error al escribir el archivo: " + s);
         }
     }
 
@@ -128,10 +132,7 @@ public class DomainCtrl {
             System.out.println("File compressed");
         }
         catch (IOException e) {
-            if(AutoCompressor.getFlag() == AutoCompressor.UNSUPPORTED_FILE) {
-                // MOSTRAR MENSAJE ERROR
-                e.printStackTrace();
-            }
+            presentationCtrl.displayError("Archivo no soportado: " + AutoCompressor.getUnsupportedFile());
         }
 
 
@@ -162,8 +163,7 @@ public class DomainCtrl {
         try{
             return dataCtrl.ReadFile(f);
         } catch (IOException e) {
-            // MOSTARR MENSAJE Error por pantalla
-            e.printStackTrace();
+            presentationCtrl.displayError("Error al leer el archivo: " + f.getAbsolutePath());
         }
         return null;
     }
