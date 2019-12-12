@@ -10,7 +10,6 @@ import java.util.ArrayList;
  
 public class AutoCompressor {
 
-    private DomainCtrl domainCtrl;
 
 
     private int currentID;
@@ -18,8 +17,7 @@ public class AutoCompressor {
     private static String unsupportedFile;
     private Stats stats;
 
-    public AutoCompressor(DomainCtrl controller){
-        domainCtrl = controller;
+    public AutoCompressor(){
         currentID = AlgorithmSet.LZ78_ID;
         stats = new GlobalStats();
     }

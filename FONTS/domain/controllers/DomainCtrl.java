@@ -29,7 +29,7 @@ public class DomainCtrl {
         currentId = AlgorithmSet.LZ78_ID;
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
-        autoCompressor = new AutoCompressor(this);
+        autoCompressor = new AutoCompressor();
     }
 
     public float getMeanOriginalFileSize(){
