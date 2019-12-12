@@ -3,6 +3,13 @@ package domain;
 
 import java.util.ArrayList;
 
+/**
+ * AlgorithmSet is a global point to access the different
+ * algorithms available, by accesing the algorithms using
+ * this reference the instances are instiated only once
+ * and thus they become Singleton instances
+ *
+ * */
 public class AlgorithmSet {
     private static ArrayList<Algorithm> algorithms;
 

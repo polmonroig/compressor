@@ -7,7 +7,6 @@ import java.awt.*;
  * Content is the base content for the ContentInterface and
  * its decorators, is it a simple interface with a title and a description
  *
- * @author Pol Monroig Company
  * */
 public class Content extends ContentInterface {
 

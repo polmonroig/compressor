@@ -8,7 +8,6 @@ package presentation;
  * because they need to activate a function implemented in it and return
  * a value to the user
  *
- * @author Pol Monroig Company
  * */
 public class ContentDecorator extends ContentInterface {
 

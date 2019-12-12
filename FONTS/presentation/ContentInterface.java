@@ -11,7 +11,6 @@ import javax.swing.*;
  * can be joined.
  * This class is the base class for the Decorator pattern
  *
- * @author Pol Monroig Company
  */
 public abstract class ContentInterface extends JPanel  {
 

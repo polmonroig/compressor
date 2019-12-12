@@ -11,7 +11,6 @@ import java.io.File;
  * directory and executing a desired action with
  * the selected file
  *
- * @author Pol Monroig Company
  *
  * */
 public class FileChooser extends ContentDecorator {
