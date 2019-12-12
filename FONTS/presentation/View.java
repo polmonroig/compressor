@@ -22,6 +22,9 @@ public class View extends JFrame {
     private ButtonsPanel buttonsPanel;
     private ContentPanel contentPanel;
 
+    // Error message panel
+    private ContentInterface errorContent;
+
     // define the layout
     private GridLayout layout;
     private static final String[] buttonNames = {"About", "Comprimir texto", "Comprimir imagen",
@@ -40,19 +43,12 @@ public class View extends JFrame {
 
 
 
-
-
         contentPanel = new ContentPanel(setupContents(), this);
         // init separator
 
         separator = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 buttonsPanel, contentPanel);
-        separator.setDividerLocation(350);
-        separator.setEnabled(false);
-        separator.setDividerSize(0);
-        separator.setFocusable(false);
-        // remove undesirable border
-        separator.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
     }
 
     private ArrayList<ContentInterface> setupContents() {
@@ -87,7 +83,7 @@ public class View extends JFrame {
                 "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
         compressFolder = new OptionSelector(compressFolder, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
                 "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
-        compressImage = new FileChooser(compressImage, new String[]{"ppm"},
+        compressFolder = new FileChooser(compressFolder, new String[]{"ppm", "txt"},
                 "Comprimir", this,
                 FileChooser.COMPRESSION_MODE, FileChooser.DIRECTORIES_ONLY);
         contents.add(compressFolder);
@@ -113,6 +109,18 @@ public class View extends JFrame {
         return contents;
     }
 
+    public void displayError(String message){
+        JFrame errorFrame = new JFrame();
+        errorFrame.setSize(new Dimension(200, 200));
+        errorFrame.setVisible(true);
+        errorContent = new Content("Error", message);
+        errorContent = new ExitButton(errorContent, "Aceptar");
+        errorContent.setVisibility(true);
+        errorFrame.add(errorContent);
+
+
+    }
+
 
     public void init(){
         initComponents();
@@ -134,6 +142,13 @@ public class View extends JFrame {
         // set location at the middle of the screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+
+        separator.setDividerLocation(350);
+        separator.setEnabled(false);
+        separator.setDividerSize(0);
+        separator.setFocusable(false);
+        // remove undesirable border
+        separator.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         // finally set view to visible
         setVisible(true);
