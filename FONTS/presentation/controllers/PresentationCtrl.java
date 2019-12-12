@@ -49,7 +49,7 @@ public class PresentationCtrl {
         domainCtrl.resetValues();
     }
 
-    public void displayError(String s) {
-        mainView.displayError(s);
+    public void displayMessage(String title, String message) {
+        mainView.displayMessage(title, message);
     }
 }

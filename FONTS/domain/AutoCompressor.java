@@ -16,11 +16,12 @@ public class AutoCompressor {
     private int currentID;
     private static final byte END_LINE = '\n';
     private static String unsupportedFile;
+    private Stats stats;
 
     public AutoCompressor(DomainCtrl controller){
         domainCtrl = controller;
         currentID = AlgorithmSet.LZ78_ID;
-
+        stats = new GlobalStats();
     }
 
     public static String getUnsupportedFile(){return unsupportedFile;}
@@ -41,6 +42,7 @@ public class AutoCompressor {
                 throw new IOException();
             }
             file.compress();
+            ((GlobalStats)stats).setStats(file.getLocalStats());
             // write file size to a 4 byte array
             stream.write(BigInteger.valueOf(file.getSize()).toByteArray());
             stream.write(END_LINE);
@@ -101,4 +103,7 @@ public class AutoCompressor {
     }
 
 
+    public Stats getLocalStats() {
+        return stats;
+    }
 }

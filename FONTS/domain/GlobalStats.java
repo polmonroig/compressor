@@ -3,6 +3,13 @@ package domain;
 public class GlobalStats extends Stats {
     private float nFiles = 0;
 
+    public void setStats(Stats stats){
+        setCompressionSpeed(stats.getCompressionSpeed());
+        setCompressionDegree(stats.getCompressionDegree());
+        setCompressedFileSize(stats.getOriginalFileSize());
+        setCompressionTime(stats.getCompressionTime());
+        setOriginalFileSize(stats.getOriginalFileSize());
+    }
 
     public float getNumberFiles() {
         return nFiles;

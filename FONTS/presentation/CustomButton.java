@@ -2,6 +2,8 @@ package presentation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public  class CustomButton extends JButton {
 
@@ -39,8 +41,7 @@ public  class CustomButton extends JButton {
         // set attributes
         setFocusable(false);
         setContentAreaFilled(false);
-        setBackground(deactivatedBackgroundColor);
-        setForeground(deactivatedTextColor);
+        setInactive();
         setBorderPainted(false);
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
         addOnClickEffect();
@@ -48,7 +49,7 @@ public  class CustomButton extends JButton {
     }
 
     protected void addOnClickEffect() {
-        addActionListener(actionEvent -> setActive());
+        addActionListener(actionEvent -> { setInactive(); });
     }
 
 
@@ -139,8 +140,4 @@ public  class CustomButton extends JButton {
         this.activeTextColor = activeTextColor;
     }
 
-    public void resetColor() {
-        setBackground(activeBackgroundColor);
-        setForeground(activeTextColor);
-    }
 }

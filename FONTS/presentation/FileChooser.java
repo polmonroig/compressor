@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.nio.channels.Selector;
+import java.util.ArrayList;
 
 /**
  * FileChooser is a ContentDecorator that adds the
@@ -14,41 +16,12 @@ import java.io.File;
  *
  * */
 public class FileChooser extends ContentDecorator {
- 
-    /**
-     * This is the component that enables the file browsing
-     * */
-    private JFileChooser fileChooser;
-    /**
-     * This button opens the file browser
-     * */
-    private CustomButton selectFileButton;
+
     /**
      * This button executes the specified action
      * */
     private CustomButton functionButton;
-    /**
-     * This label cotains the path to the selected file
-     * */
-    private JTextField label;
-    /**
-     * This container has the list of file extensions
-     * permitted during the file browsing.
-     * */
-    private String[] fileTypes;
-    /**
-     * This is the selected file
-     * */
-    private File file;
-    /**
-     * This is the path to the selected file
-     * */
-    private String filePath;
-    /**
-     * This defines what type of selection is available
-     * currently only FILES_ONLY and DIRECTORIES_ONLY are supported
-     * */
-    private int selectionMode;
+
     /**
      * The compression mode defines the functionality of the function button
      * currently only COMPRESSION_MODE and DECOMPRESSION_MODE are supported
@@ -70,6 +43,8 @@ public class FileChooser extends ContentDecorator {
      * */
     public static final int DECOMPRESSION_MODE = 1;
 
+    public static final int COMPARISON_MODE = 2;
+
     /**
      * This mode limits the selection of the file browsing only to files
      * */
@@ -80,6 +55,10 @@ public class FileChooser extends ContentDecorator {
      * */
     public static final int DIRECTORIES_ONLY = 1;
 
+    private int filesSelected;
+
+
+    private ArrayList<FileSelector> selectors;
 
     /**
      * <p>Base FileChooser constructor</p>
@@ -93,12 +72,14 @@ public class FileChooser extends ContentDecorator {
     public FileChooser(ContentInterface content, String[] types, String buttonFunction, View parentView, int functionMode, int fileMode){
         super(content);
         view = parentView;
+        filesSelected = 0;
         compressionMode = functionMode;
-        fileChooser = new JFileChooser();
-        fileTypes = types;
-        selectionMode = fileMode;
-        label = new JTextField("Directorio del archivo", 20);
-        selectFileButton = new CustomButton("Seleccionar archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        int nSelectors = 1;
+        if(COMPARISON_MODE  == functionMode)nSelectors = 2;
+        selectors = new ArrayList<>();
+        for(int i = 0; i < nSelectors; ++i){
+            selectors.add(new FileSelector(types, fileMode, this));
+        }
         functionButton = new CustomButton(buttonFunction, Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
     }
 
@@ -110,7 +91,10 @@ public class FileChooser extends ContentDecorator {
     public void resetValues(){
         getInnerContent().resetValues();
         functionButton.setEnabled(false);
-        label.setText("Directiorio del archivo");
+        for(FileSelector selector : selectors){
+            selector.resetValues();
+        }
+        filesSelected = 0;
     }
 
     /**
@@ -136,27 +120,30 @@ public class FileChooser extends ContentDecorator {
         setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        label.setEditable(false);
-        label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
 
-        selectFileButton.setBorderRadius(0);
-        functionButton.setEnabled(false);
-        functionButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
-        selectFileButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 
+
+
+        // add parent Content
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 2;
         constraints.insets = new Insets(10, 0, 0, 0);
         add(getInnerContent(), constraints);
+
+        // Add FileSelectors
+        int currentIndex = 1;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.gridwidth = 1;
-        constraints.gridy = 1;
-        add(label, constraints);
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        add(selectFileButton, constraints);
+        for(FileSelector selector : selectors){
+            constraints.gridy = currentIndex;
+            currentIndex += 1;
+            selector.init();
+            add(selector, constraints);
+        }
+
+        // add function button
+        functionButton.setEnabled(false);
+        functionButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
         constraints.gridwidth = 2;
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -169,41 +156,32 @@ public class FileChooser extends ContentDecorator {
 
     }
 
+    public void notifySelection(){
+        filesSelected += 1;
+        if(filesSelected == selectors.size()){
+            functionButton.setEnabled(true);
+        }
+    }
+
     /**
      * <p>Initializes the event listeners of the components</p>
      * */
     private void initEventListeners() {
-        selectFileButton.addActionListener(actionEvent -> {
-            fileChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("", fileTypes);
-            fileChooser.addChoosableFileFilter(filter);
-            fileChooser.setFileSelectionMode(selectionMode);
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                setArguments();
-                label.setText(filePath);
-                functionButton.setEnabled(true);
-            }
-        });
 
         functionButton.addActionListener(actionEvent -> {
-            if(compressionMode == COMPRESSION_MODE) view.compress(file);
-            else if(compressionMode == DECOMPRESSION_MODE)view.decompress(file);
-            functionButton.resetColor();
+            if(compressionMode == COMPRESSION_MODE) view.compress(selectors.get(0).getFile());
+            else if(compressionMode == DECOMPRESSION_MODE)view.decompress(selectors.get(0).getFile());
+            else if(compressionMode == COMPARISON_MODE){
+                view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
+            }
             functionButton.setEnabled(false);
+            filesSelected = 0;
 
         });
 
     }
 
 
-    /**
-     * <p>Sets up the filePath and selected path of the user</p>
-     * */
-    private void setArguments(){
-        file = fileChooser.getSelectedFile();
-        filePath = file.getAbsolutePath();
-    }
 
 
 }

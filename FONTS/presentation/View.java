@@ -77,23 +77,7 @@ public class View extends JFrame {
         return contents;
     }
 
-    public void displayError(String message){
-        JFrame errorFrame = new JFrame();
 
-        errorFrame.setTitle("Error message");
-        // set location at the middle of the screen
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        errorFrame.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        errorFrame.setSize(new Dimension(400, 200));
-
-        ContentInterface errorContent = new Content("Error", message);
-        errorContent = new ExitButton(errorContent, "Aceptar", errorFrame);
-        errorContent.init();
-        errorContent.setVisibility(true);
-        errorFrame.add(errorContent);
-        errorFrame.setVisible(true);
-
-    }
 
 
     public void init(){
@@ -114,8 +98,7 @@ public class View extends JFrame {
 
 
         // set location at the middle of the screen
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        setInitLocation(this);
 
         separator.setDividerLocation(350);
         separator.setEnabled(false);
@@ -126,6 +109,11 @@ public class View extends JFrame {
 
         // finally set view to visible
         setVisible(true);
+    }
+
+    private static void setInitLocation(JFrame frame){
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
     }
 
     public void selectView(int id) {
@@ -188,6 +176,8 @@ public class View extends JFrame {
 
     private ContentInterface setupCompareContent(){
         ContentInterface compareFile = new Content("Comparar archivos", "Descripcion");
+        compareFile = new FileChooser(compareFile, new String[]{"ppm"}, "Comparar",
+                                      this, FileChooser.COMPARISON_MODE, FileChooser.FILES_ONLY);
         return compareFile;
     }
 
@@ -220,5 +210,29 @@ public class View extends JFrame {
 
     public void resetValues() {
         presentationCtrl.resetValues();
+    }
+
+    public void displayImages(File file, File file1) {
+        JFrame imagesFrame = new JFrame();
+        imagesFrame.setSize(1000, 1000);
+        setInitLocation(imagesFrame);
+        imagesFrame.setVisible(true);
+    }
+
+    public void displayMessage(String title, String message) {
+        JFrame errorFrame = new JFrame();
+
+        errorFrame.setTitle(title);
+        // set location at the middle of the screen
+        errorFrame.setSize(new Dimension(400, 200));
+        setInitLocation(errorFrame);
+
+
+        ContentInterface errorContent = new Content(title, message);
+        errorContent = new ExitButton(errorContent, "Aceptar", errorFrame);
+        errorContent.init();
+        errorContent.setVisibility(true);
+        errorFrame.add(errorContent);
+        errorFrame.setVisible(true);
     }
 }
