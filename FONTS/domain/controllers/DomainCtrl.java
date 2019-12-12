@@ -4,6 +4,7 @@ import domain.*;
 import data.controllers.DataCtrl;
 import presentation.controllers.PresentationCtrl;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,29 +33,6 @@ public class DomainCtrl {
         autoCompressor = new AutoCompressor();
     }
 
-    public float getMeanOriginalFileSize(){
-        return globalStats.getOriginalFileSize();
-    }
-
-    public float getMeanCompressedFileSize(){
-        return globalStats.getCompressedFileSize();
-    }
-
-    public float getMeanCompressionDegree(){
-        return globalStats.getCompressionDegree();
-    }
-
-    public float getMeanCompressionSpeed(){
-        return globalStats.getCompressionSpeed();
-    }
-
-    public float getMeanCompressionTime(){
-        return globalStats.getCompressionTime();
-    }
-
-    public float getMeanFiles(){
-        return globalStats.getNumberFiles();
-    }
 
 
     public void selectAlgorithm(int id){
@@ -82,7 +60,7 @@ public class DomainCtrl {
             setLocalStats(pFile.getLocalStats());
             int errorInt = writeFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
             if(errorInt == NO_ERROR){
-                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en" + pFile.getCompletePath() + "." + pFile.getIdName());
+                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + pFile.getCompletePath() + "." + pFile.getIdName());
             }
         }
 
@@ -106,7 +84,7 @@ public class DomainCtrl {
                 pFile.decompress();
                 int errorInt = writeFile(pFile.getCompletePath() + "." + pFile.getOriginalIdName(), pFile.getContent());
                 if(errorInt == NO_ERROR){
-                    presentationCtrl.displayMessage("Descompresion completada", "El archivo a sido guardado en" + pFile.getCompletePath() + "." + pFile.getOriginalIdName());
+                    presentationCtrl.displayMessage("Descompresion completada", "El archivo a sido guardado en " + pFile.getCompletePath() + "." + pFile.getOriginalIdName());
                 }
             }
         }
@@ -136,7 +114,7 @@ public class DomainCtrl {
             setLocalStats(autoCompressor.getLocalStats());
             int errorInt = writeFile(file.getPath() + "." + PhysicalFile.AUTO_EXTENSION, fileBytes);
             if(errorInt == NO_ERROR){
-                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en" + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
+                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
             }
         }
         catch (IOException e) {
@@ -176,28 +154,10 @@ public class DomainCtrl {
         return null;
     }
 
-/*
-    public float getOriginalFileSize() {
-        return algorithm.getOriginalSize();
-    }
 
-    public float getCompressedSize() {
-        return algorithm.getCompressedSize();
-    }
 
-    public float getCompressionRatio() {
-        return algorithm.getCompressionRatio();
-    }
-
-    public float getCompressionTime() {
-        return algorithm.getCompressionTime();
-    }
-
-    public float getCompressionSpeed() {
-        return algorithm.getCompressionSpeed();
-    }*/
-
-    public void setStats(float originalFileSize, float compressedFileSize, float compressionTime, float compressionDegree, float compressionSpeed) {
+    public void setStats(float originalFileSize, float compressedFileSize,
+                         float compressionTime, float compressionDegree, float compressionSpeed) {
         globalStats.addOriginalSize(originalFileSize);
         globalStats.addCompressedSize(compressedFileSize);
         globalStats.addCompressionTime(compressionTime);
@@ -206,7 +166,9 @@ public class DomainCtrl {
     }
 
     public void setLocalStats(Stats localStats){
-        presentationCtrl.setlocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(), localStats.getCompressionDegree(), localStats.getCompressionSpeed(), localStats.getOriginalFileSize());
+        presentationCtrl.setLocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(),
+                                       localStats.getCompressionDegree(), localStats.getCompressionSpeed(),
+                                       localStats.getOriginalFileSize());
     }
 
 
@@ -223,4 +185,5 @@ public class DomainCtrl {
         AlgorithmSet.setQuality(0);
         selectAlgorithm(AlgorithmSet.LZ78_ID);
     }
+
 }

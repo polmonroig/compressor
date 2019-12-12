@@ -212,7 +212,8 @@ public class View extends JFrame {
         presentationCtrl.resetValues();
     }
 
-    public void displayImages(File file, File file1) {
+
+    public void displayImages(File fileA, File fileB) {
         JFrame imagesFrame = new JFrame();
         imagesFrame.setSize(1000, 1000);
         setInitLocation(imagesFrame);

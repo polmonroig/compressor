@@ -2,6 +2,8 @@ package data.controllers;
 
 import domain.controllers.DomainCtrl;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.*;
 
 
@@ -33,6 +35,5 @@ public class DataCtrl {
     public void makeDir(File file){
         file.mkdir();
     }
-
 
 }

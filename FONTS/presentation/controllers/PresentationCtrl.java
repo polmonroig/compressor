@@ -4,6 +4,7 @@ package presentation.controllers;
 import domain.controllers.DomainCtrl;
 import presentation.View;
 
+import java.awt.*;
 import java.io.File;
 
 
@@ -33,7 +34,7 @@ public class PresentationCtrl {
 
 
 
-    public void setlocalStats(float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
+    public void setLocalStats(float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
         mainView.setLocalStats(compressedFileSize, compressionDegree, compressionSpeed, compressionTime, originalFileSize);
     }
 
@@ -52,4 +53,6 @@ public class PresentationCtrl {
     public void displayMessage(String title, String message) {
         mainView.displayMessage(title, message);
     }
+
+
 }
