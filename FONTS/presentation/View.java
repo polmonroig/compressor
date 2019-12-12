@@ -51,61 +51,26 @@ public class View extends JFrame {
 
     }
 
+
+
     private ArrayList<ContentInterface> setupContents() {
         ArrayList<ContentInterface> contents = new ArrayList<>();
         // about content
-        ContentInterface aboutContent = new Content("About", "Description de about");
-        contents.add(aboutContent);
-
+        contents.add(setupAboutContent());
         // compress text content
-        ContentInterface compressText = new Content("Comprimir Texto",
-                "dexcirpcion de comprimir un text");
-        compressText = new OptionSelector(compressText, new String[]{"lz78", "lzss","lzw"},
-                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
-        compressText = new FileChooser(compressText, new String[]{"txt"},
-                "Comprimir", this,
-                FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
-        contents.add(compressText);
-
+        contents.add(setupCompressTextContent());
         // compress image content
-        ContentInterface compressImage = new Content("Comprimir imagen",
-                                     "desciprion imagen");
-        compressImage = new OptionSelector(compressImage, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
-                                     "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
-        compressImage = new FileChooser(compressImage, new String[]{"ppm"},
-                                        "Comprimir", this,
-                                        FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
-        contents.add(compressImage);
-
+        contents.add(setupCompressImageContent());
         // compress folder content
-        ContentInterface compressFolder = new Content("Comprimir carpeta","descripcion");
-        compressFolder = new OptionSelector(compressFolder, new String[]{"lz78", "lzss","lzw"},
-                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
-        compressFolder = new OptionSelector(compressFolder, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
-                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
-        compressFolder = new FileChooser(compressFolder, new String[]{"ppm", "txt"},
-                "Comprimir", this,
-                FileChooser.COMPRESSION_MODE, FileChooser.DIRECTORIES_ONLY);
-        contents.add(compressFolder);
-
+        contents.add(setupFolderContent());
         // decompress file
-        ContentInterface decompressFile = new Content("Descomprimir", "Descripcion");
-        decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
-                                         "Descomprimir", this,
-                                         FileChooser.DECOMPRESSION_MODE, FileChooser.FILES_ONLY);
-        contents.add(decompressFile);
-
+        contents.add(setupDecompressContent());
         // compare files
-        ContentInterface compareFile = new Content("Comparar archivos", "Descripcion");
-        contents.add(compareFile);
-
+        contents.add(setupCompareContent());
         // global stats
-        ContentInterface globalStats = new Content("Estadisticas Globales", "descriptcion");
-        contents.add(globalStats);
-
+        contents.add(setupGlobalStatsContent());
         // Info
-        ContentInterface info = new Content("Informacion", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
-        contents.add(info);
+        contents.add(setupInfoContent());
         return contents;
     }
 
@@ -163,6 +128,69 @@ public class View extends JFrame {
         localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
         localStats.init();
         localStats.setVisible(true);
+    }
+
+    private ContentInterface setupAboutContent(){
+        ContentInterface aboutContent = new Content("About", "Description de about");
+        return aboutContent;
+    }
+
+    private ContentInterface setupCompressTextContent(){
+        ContentInterface compressText = new Content("Comprimir Texto",
+                "dexcirpcion de comprimir un text");
+        compressText = new OptionSelector(compressText, new String[]{"lz78", "lzss","lzw"},
+                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+        compressText = new FileChooser(compressText, new String[]{"txt"},
+                "Comprimir", this,
+                FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
+        return compressText;
+    }
+
+    private ContentInterface setupCompressImageContent(){
+        ContentInterface compressImage = new Content("Comprimir imagen",
+                "desciprion imagen");
+        compressImage = new OptionSelector(compressImage, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
+                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+        compressImage = new FileChooser(compressImage, new String[]{"ppm"},
+                "Comprimir", this,
+                FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
+        return compressImage;
+    }
+
+    private ContentInterface setupFolderContent(){
+        ContentInterface compressFolder = new Content("Comprimir carpeta","descripcion");
+        compressFolder = new OptionSelector(compressFolder, new String[]{"lz78", "lzss","lzw"},
+                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+        compressFolder = new OptionSelector(compressFolder, new String[]{"0", "1", "2", "3", "4", "5", "6", "7"},
+                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+        compressFolder = new FileChooser(compressFolder, new String[]{"ppm", "txt"},
+                "Comprimir", this,
+                FileChooser.COMPRESSION_MODE, FileChooser.DIRECTORIES_ONLY);
+        return compressFolder;
+    }
+
+    private ContentInterface setupDecompressContent(){
+        ContentInterface decompressFile = new Content("Descomprimir", "Descripcion");
+        decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
+                "Descomprimir", this,
+                FileChooser.DECOMPRESSION_MODE, FileChooser.FILES_ONLY);
+        return decompressFile;
+    }
+
+    private ContentInterface setupCompareContent(){
+        ContentInterface compareFile = new Content("Comparar archivos", "Descripcion");
+        return compareFile;
+    }
+
+
+    private ContentInterface setupGlobalStatsContent(){
+        ContentInterface globalStats = new Content("Estadisticas Globales", "descriptcion");
+        return globalStats;
+    }
+
+    private ContentInterface setupInfoContent(){
+        ContentInterface info = new Content("Informacion", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
+        return info;
     }
 
     public void compress(File file) {

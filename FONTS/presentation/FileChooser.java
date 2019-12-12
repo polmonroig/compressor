@@ -123,6 +123,10 @@ public class FileChooser extends ContentDecorator {
         initEventListeners();
     }
 
+    /**
+     * <p>Initializes the components and setups their values
+     *    it also initializes the parent components</p>
+     * */
     private void initComponents(){
         // init super class
         getInnerContent().init();
@@ -151,7 +155,9 @@ public class FileChooser extends ContentDecorator {
 
     }
 
-
+    /**
+     * <p>Initializes the event listeners of the components</p>
+     * */
     private void initEventListeners() {
         selectFileButton.addActionListener(actionEvent -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
@@ -177,7 +183,9 @@ public class FileChooser extends ContentDecorator {
     }
 
 
-
+    /**
+     * <p>Sets up the filePath and selected path of the user</p>
+     * */
     private void setArguments(){
         file = fileChooser.getSelectedFile();
         filePath = file.getAbsolutePath();
