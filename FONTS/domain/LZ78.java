@@ -65,6 +65,11 @@ public class LZ78 extends Algorithm {
         return compression;
     }
 
+    /**
+     * <p>The decompression method takes a compressed file and returns the original text</>
+     * @param binaryFile the text to decompress
+     * @return the decompressed text
+     */
     @Override
     public byte[] decompress(byte[] binaryFile) {
         if(binaryFile.length == 0)return binaryFile; // empty file
