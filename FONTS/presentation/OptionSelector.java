@@ -23,7 +23,7 @@ public class OptionSelector extends ContentDecorator {
         this.type = type;
         view = parentView;
     }
-
+ 
     @Override
     public void resetValues(){
         getInnerContent().resetValues();

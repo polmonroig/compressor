@@ -19,7 +19,7 @@ public class LocalStats extends JFrame {
         add(mainText);
         add(new JLabel("Visualizacion de las estadisticas de la compresion realizada"));
     }
-
+ 
     private JLabel compressionTime = new JLabel();
     private JLabel compressionDegree = new JLabel();
     private JLabel compressionSpeed = new JLabel();

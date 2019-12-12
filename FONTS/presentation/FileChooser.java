@@ -14,7 +14,7 @@ import java.io.File;
  *
  * */
 public class FileChooser extends ContentDecorator {
-
+ 
     /**
      * This is the component that enables the file browsing
      * */

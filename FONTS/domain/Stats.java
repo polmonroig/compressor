@@ -10,7 +10,7 @@ public class Stats {
     public Stats(){
         reset();
     }
-
+ 
     public void reset(){
         originalFileSize = 0;
         compressedFileSize = 0;

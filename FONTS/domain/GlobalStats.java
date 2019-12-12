@@ -8,7 +8,7 @@ public class GlobalStats extends Stats {
         return nFiles;
     }
 
-
+ 
     public void setNumberFiles(float nFiles) {
         this.nFiles = nFiles;
     }

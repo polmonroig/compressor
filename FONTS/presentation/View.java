@@ -21,7 +21,7 @@ public class View extends JFrame {
     private JSplitPane separator;
     private ButtonsPanel buttonsPanel;
     private ContentPanel contentPanel;
-
+ 
 
     // define the layout
     private GridLayout layout;

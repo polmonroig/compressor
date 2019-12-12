@@ -2,7 +2,7 @@ package domain;
 
 public abstract class Algorithm {
 
-
+ 
 
     protected Stats localStats = new Stats();
     public int ID;
@@ -39,4 +39,3 @@ public abstract class Algorithm {
         return localStats.getCompressionSpeed();
     }
 }
-

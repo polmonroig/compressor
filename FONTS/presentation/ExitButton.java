@@ -18,7 +18,7 @@ public class ExitButton extends ContentDecorator {
     public void init(){
         initComponents();
         initEventListeners();
-    }
+    } 
 
     private void initComponents() {
         // init super class

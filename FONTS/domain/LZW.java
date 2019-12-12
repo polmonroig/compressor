@@ -10,7 +10,7 @@ public class LZW extends Algorithm {
         String charChain = new String(binaryFile); // convertir l'array de bytes en un String
         StringBuilder s = new StringBuilder();
 
-
+ 
         int dictSize = 256;
         for (int i = 0; i < 256; i++) {
             dict.put("" + (char)i, i);
@@ -39,11 +39,11 @@ public class LZW extends Algorithm {
         }
         s.append(to16bit(dict.get(w)));
 
-        
+
 
         byte[] ret = Utils.toByteArray(s.toString());
-        
-        
+
+
         // Stats
         long endTime = System.nanoTime();
         this.localStats.setOriginalFileSize(binaryFile.length);
@@ -118,5 +118,3 @@ public class LZW extends Algorithm {
 
 
 }
-
-

@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-
+ 
 public class AutoCompressor {
 
     private DomainCtrl domainCtrl;

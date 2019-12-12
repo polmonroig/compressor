@@ -10,7 +10,7 @@ public class Utils {
         }
         return result.toString();
     }
-
+ 
     /**
      * <p>Transforms a given compression into a binary string</>
      * @param coding text to transform into binary

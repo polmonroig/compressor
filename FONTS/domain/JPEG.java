@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
-
+ 
  @author Adrián Álvarez
  JPEG COMPRESSION ALGORTIHM
 
@@ -106,7 +106,7 @@ public class JPEG extends Algorithm {
             {1,1,1,2,3,3,3,3},{1,1,1,2,3,3,3,3},{1,1,2,3,3,3,3,3},{2,2,3,3,3,3,3,3},{3,3,3,3,3,3,3,3},{3,3,3,3,3,3,3,3},{3,3,3,3,3,3,3,3},{3,3,3,3,3,3,3,3},
         }
     };
-    
+
     @Override
     public byte[] decompress(byte [] imagen){
 

@@ -2,7 +2,7 @@ package domain;
 
 
 import java.util.ArrayList;
-
+ 
 /**
  * AlgorithmSet is a global point to access the different
  * algorithms available, by accessing the algorithms using

@@ -16,7 +16,7 @@ public class ContentPanel extends JPanel {
         selectedView = 0;
         contents = contentPanels;
 
-    }
+    } 
 
     public void init() {
         for (ContentInterface content : contents) {

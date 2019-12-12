@@ -15,7 +15,7 @@ public class ContentDecorator extends ContentInterface {
      * This is a reference to the previous Content
      * */
     private ContentInterface innerContent;
-
+ 
 
     /**
      * <p>Base constructor</p>

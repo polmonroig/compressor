@@ -8,7 +8,7 @@ import java.util.*;
  * @author David Santos Plana
  *
  */
-
+ 
 public class LZSS extends Algorithm {
 
     private static final short RING_SIZE = 4096;
@@ -44,7 +44,7 @@ public class LZSS extends Algorithm {
         rightSon=new short[RING_SIZE+257];
     }
 
-    
+
     /**
      * <p>El metodo de comprimir hace una compresion del texto introducido, con la codificación para LZSS</>
      * @param binaryFile el texto a comprimir
@@ -158,7 +158,7 @@ public class LZSS extends Algorithm {
         this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
         this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
         this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
-        
+
         return ret;
     }
 
@@ -220,8 +220,8 @@ public class LZSS extends Algorithm {
 
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     //añado al final del output #texto.length para saber la medida
     private byte[] putTextSize(byte[] text, int extra){
@@ -235,8 +235,8 @@ public class LZSS extends Algorithm {
 
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     private int getTextSize(byte[] text){
         int t = 0, i = text.length-1, j = -1;
@@ -252,19 +252,19 @@ public class LZSS extends Algorithm {
 
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     private void initTree() {
         Arrays.fill(dad, 0, dad.length, NOT_USED);
         Arrays.fill(leftSon, 0, leftSon.length, NOT_USED);
         Arrays.fill(rightSon, 0, rightSon.length, NOT_USED);
     }
-    
+
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     //Busca para el nuevo caracter todas las coincidencias y se queda con la mas grande
     private void insertNode(short pos) {
@@ -336,11 +336,11 @@ public class LZSS extends Algorithm {
         // Remove "p"
         dad[p] = NOT_USED;
     }
-    
+
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     //Borra el arbol creado para encontrar las coincidencias, porque ya se ha usado
     private void deleteNode(short node) {
@@ -387,8 +387,8 @@ public class LZSS extends Algorithm {
 
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     private int readXBytes(byte[] text, int offset, int x){
         int j = 0;
@@ -402,8 +402,8 @@ public class LZSS extends Algorithm {
 
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     private int readDecoding(byte[] text, byte[] chars, int x){
         int j = 0;
@@ -414,11 +414,11 @@ public class LZSS extends Algorithm {
         if(j == 0) return -1;
         else return j;
     }
-    
+
     /**
      * <p></>
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
     private void readXBytes(byte[] code, int x){
         for (int i = 0; i < x && writePoint < out.length; ++i){

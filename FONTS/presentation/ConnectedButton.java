@@ -15,7 +15,7 @@ public class ConnectedButton extends CustomButton {
         parent = panel;
         id = i;
         selected = false;
-
+ 
     }
 
     @Override

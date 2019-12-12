@@ -13,7 +13,7 @@ import javax.swing.*;
  *
  */
 public abstract class ContentInterface extends JPanel  {
-
+ 
 
     /**
      * <p>This method initializes the Content inner components and each

@@ -16,7 +16,7 @@ public class PresentationCtrl {
         domainCtrl = new DomainCtrl(this);
         mainView = new View("MasterCompressor", this);
     }
-
+ 
 
     public void init() {
 

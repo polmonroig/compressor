@@ -10,7 +10,7 @@ import java.lang.Math;
  * @author Pol Monroig Company
  *
  */
-
+ 
 public class LZ78 extends Algorithm {
 
 

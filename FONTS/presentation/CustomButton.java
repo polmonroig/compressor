@@ -15,7 +15,7 @@ public  class CustomButton extends JButton {
 
 
     private Color activeTextColor;
-
+ 
 
     private int borderRadius;
     private static final int DEFAULT_RADIUS = 15;

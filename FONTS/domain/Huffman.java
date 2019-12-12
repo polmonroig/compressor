@@ -9,7 +9,7 @@ public class Huffman {
     public Map<Integer, Integer> getFrequencies(){
         return this.frequencies;
     }
-
+ 
     public void setFrequencies(Map<Integer, Integer> Freq){
         this.frequencies = Freq;
     }

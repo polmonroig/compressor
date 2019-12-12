@@ -12,7 +12,7 @@ public class ButtonsPanel extends JPanel {
     private int currentSelected;
     private View parent;
 
-
+ 
     // define color constants
     private static final Color DISABLED_COLOR = new Color(53, 71, 120);
     private static final Color ACTIVE_COLOR = new Color(79, 131, 249);

@@ -18,7 +18,7 @@ public class Content extends ContentInterface {
      * The description of the desired content
      * */
     private JTextArea description;
-
+ 
     /**
      * <p>Base constructor of the base content</p>
      * @param contentTitle the text desired to be set as title
