@@ -5,6 +5,7 @@ import data.controllers.DataCtrl;
 import presentation.controllers.PresentationCtrl;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -186,4 +187,8 @@ public class DomainCtrl {
         selectAlgorithm(AlgorithmSet.LZ78_ID);
     }
 
+    public BufferedImage getPPM(File fileA) throws IOException {
+            byte [] aux = dataCtrl.ReadFile(fileA);
+            return JPEG.makePPM(aux);
+    }
 }

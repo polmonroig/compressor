@@ -5,8 +5,9 @@ import domain.controllers.DomainCtrl;
 import presentation.View;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
-
+import java.io.IOException;
 
 
 public class PresentationCtrl {
@@ -55,4 +56,12 @@ public class PresentationCtrl {
     }
 
 
+    public BufferedImage getPPM(File fileA) throws IOException {
+        try {
+            return domainCtrl.getPPM(fileA);
+        } catch (IOException e) {
+            displayMessage("Error","Error al leer el archivo: " + fileA.getAbsolutePath());
+        }
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package domain;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.Math;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class JPEG extends Algorithm {
 
     private int quality = 0;
+
 
     public void setQuality(int quality){
         this.quality = quality;
@@ -817,6 +819,46 @@ public class JPEG extends Algorithm {
         RGB[2] = Math.round(B);
 
         return RGB;
+    }
+
+
+    public static BufferedImage makePPM(byte[] aux) {
+        int w = 0,h = 0;
+        boolean fin = true;
+
+        char [] iaux = new char[aux.length];
+        for (int j = 0; j < aux.length; j++) {
+            iaux[j] = (char) (aux[j] & 0xFF);
+        }
+
+        for (int i = 3; iaux[i] != '\n'; ++i) {
+            if (iaux[i] == ' ') fin = false;
+            else {
+                if (fin) {
+                    int a = Character.getNumericValue(iaux[i]);
+                    w *= 10;
+                    w += a;
+                } else {
+                    int a = Character.getNumericValue(iaux[i]);
+                    h *= 10;
+                    h += a;
+                }
+            }
+        }
+
+        BufferedImage image = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+        int r,g,b,k = 0,pixel;
+        for(int y=0;y<h;y++){
+            for(int x=0;(x<w)&&((k+3)<aux.length);x++){
+                r=aux[k++] & 0xFF;
+                g=aux[k++] & 0xFF;
+                b=aux[k++] & 0xFF;
+                pixel=0xFF000000+(r<<16)+(g<<8)+b;
+                image.setRGB(x,y,pixel);
+            }
+        }
+
+        return image;
     }
 
 }

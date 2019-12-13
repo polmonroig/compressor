@@ -1,10 +1,12 @@
 package presentation;
 
+import javafx.embed.swing.SwingFXUtils;
 import presentation.controllers.PresentationCtrl;
 
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -16,8 +18,8 @@ public class View extends JFrame {
     private static final ImageIcon img = new ImageIcon(path);
     private LocalStats localStats = new LocalStats();
 
-    private Image Icompare1;
-    private Image Icompare2;
+    private BufferedImage Icompare1;
+    private BufferedImage Icompare2;
 
     // set reference to the controller calling it
     private PresentationCtrl presentationCtrl;
@@ -218,12 +220,12 @@ public class View extends JFrame {
     }
 
 
-    public void displayImages(File fileA, File fileB) {
+    public void displayImages(File fileA, File fileB) throws IOException {
         JFrame imagesFrame = new JFrame();
         imagesFrame.setSize(1000, 1000);
         setInitLocation(imagesFrame);
-        Icompare1 = new ImageIcon(fileA.getAbsolutePath()).getImage();
-        Icompare2 = new ImageIcon(fileB.getAbsolutePath()).getImage();
+        Icompare1 = presentationCtrl.getPPM(fileA);
+        Icompare2 = presentationCtrl.getPPM(fileB);
         Graphics g = Icompare1.getGraphics();
         g.drawImage(Icompare1, 50, 50, this);
         imagesFrame.setVisible(true);

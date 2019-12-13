@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.nio.channels.Selector;
 import java.util.ArrayList;
 
@@ -172,7 +173,11 @@ public class FileChooser extends ContentDecorator {
             if(compressionMode == COMPRESSION_MODE) view.compress(selectors.get(0).getFile());
             else if(compressionMode == DECOMPRESSION_MODE)view.decompress(selectors.get(0).getFile());
             else if(compressionMode == COMPARISON_MODE){
-                view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
+                try {
+                    view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             functionButton.setEnabled(false);
             filesSelected = 0;
