@@ -216,11 +216,12 @@ public class View extends JFrame {
     }
 
 
-    public void displayImages(File fileA, File fileB)  {
+
+    public void displayImages(File fileA, File fileB) {
 
         Image imageA = presentationCtrl.getPPM(fileA);
         Image imageB = presentationCtrl.getPPM(fileB);
-        if(imageA != null && imageB != null){
+        if (imageA != null && imageB != null) {
             int maxSize = 100;
             JFrame imagesFrame = new JFrame();
             imagesFrame.setSize(maxSize * 2, maxSize * 2);
@@ -234,10 +235,7 @@ public class View extends JFrame {
             imagesFrame.add(b);
             imagesFrame.setVisible(true);
         }
-
     }
-
-
 
     public void displayMessage(String title, String message) {
         JFrame errorFrame = new JFrame();
