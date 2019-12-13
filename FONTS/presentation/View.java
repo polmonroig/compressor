@@ -226,9 +226,14 @@ public class View extends JFrame {
         setInitLocation(imagesFrame);
         Icompare1 = presentationCtrl.getPPM(fileA);
         Icompare2 = presentationCtrl.getPPM(fileB);
-        Graphics g = Icompare1.getGraphics();
-        g.drawImage(Icompare1, 50, 50, this);
-        imagesFrame.setVisible(true);
+        int w,h;
+        w = Icompare1.getWidth(null);
+        h = Icompare1.getHeight(null);
+            BufferedImage bi2 = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+            Graphics big = bi2.getGraphics();
+            big.drawImage(Icompare1, 0, 0, null);
+            Icompare1 = bi2;
+            imagesFrame.setVisible(true);
     }
 
 
