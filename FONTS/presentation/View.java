@@ -2,10 +2,12 @@ package presentation;
 
 import presentation.controllers.PresentationCtrl;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class View extends JFrame {
@@ -13,6 +15,9 @@ public class View extends JFrame {
     private static final String path = file.getAbsolutePath();
     private static final ImageIcon img = new ImageIcon(path);
     private LocalStats localStats = new LocalStats();
+
+    private Image Icompare1;
+    private Image Icompare2;
 
     // set reference to the controller calling it
     private PresentationCtrl presentationCtrl;
@@ -217,8 +222,13 @@ public class View extends JFrame {
         JFrame imagesFrame = new JFrame();
         imagesFrame.setSize(1000, 1000);
         setInitLocation(imagesFrame);
+        Icompare1 = new ImageIcon(this.getClass().getResource(fileA.getAbsolutePath())).getImage();
+        Icompare2 = new ImageIcon(this.getClass().getResource(fileB.getAbsolutePath())).getImage();
+        Graphics g = Icompare1.getGraphics();
+        g.drawImage(Icompare1, 50, 50, this);
         imagesFrame.setVisible(true);
     }
+
 
     public void displayMessage(String title, String message) {
         JFrame errorFrame = new JFrame();
