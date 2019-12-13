@@ -13,9 +13,10 @@ public class AutoCompressor {
 
 
     private int currentID;
-    private static final byte END_LINE = '\n';
+    private static final char END_LINE = '\n';
     private static String unsupportedFile;
     private Stats stats;
+    private int iterator;
 
     public AutoCompressor(){
         currentID = AlgorithmSet.LZ78_ID;
@@ -42,7 +43,9 @@ public class AutoCompressor {
             file.compress();
             ((GlobalStats)stats).setStats(file.getLocalStats());
             // write file size to a 4 byte array
-            stream.write(BigInteger.valueOf(file.getSize()).toByteArray());
+            BigInteger bigInt = BigInteger.valueOf(file.getSize());
+            byte[] array = bigInt.toByteArray();
+            stream.write(array);
             stream.write(END_LINE);
             stream.write(file.getContent());
         }
@@ -50,44 +53,56 @@ public class AutoCompressor {
         return stream.toByteArray();
     }
 
-    private ByteArrayOutputStream readWhileNotEndLine(byte[] array, Integer i){
+
+    private ByteArrayOutputStream readWhileNotEndLine(byte[] array){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        while (array[i] != END_LINE){
-            stream.write(array[i]);
-            ++i;
+        while (array[iterator] != END_LINE){
+            stream.write(array[iterator]);
+            ++iterator;
         }
-        ++i;
+        ++iterator;
         return stream;
     }
 
-    private PhysicalFile readFileContent(byte[] array, Integer i, int compressionSize, String fileName){
+    private PhysicalFile readFileContent(byte[] array, int compressionType, int compressionSize, String fileName){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        int size = i + compressionSize;
-        while(i < size){
-            stream.write(array[i]);
-            ++i;
+        int size = iterator + compressionSize;
+        while(iterator < size){
+            stream.write(array[iterator]);
+            ++iterator;
         }
-        PhysicalFile file = new PhysicalFile(new File(fileName));
+        String extension = ".txt";
+        if(compressionType == AlgorithmSet.JPEG_ID)extension = ".ppm";
+        PhysicalFile file = new PhysicalFile(new File(fileName + extension));
         file.setContent(stream.toByteArray());
         return file;
+    }
+
+    private int byteToInt(byte[] bytes){
+        int sum = 0;
+        for(byte b : bytes){
+            sum = sum * 256 + (b & 0xFF);
+        }
+        return sum;
     }
 
 
     public ArrayList<PhysicalFile> decompressFile(PhysicalFile file){
         ArrayList<PhysicalFile> files = new ArrayList<>();
-        Integer i = 0;
+        iterator = 0;
         String fileName;
         int compressionType;
         int compressionSize;
         byte[] content = file.getContent();
-        while(i < content.length){
+        while(iterator < content.length){
 
-            fileName = readWhileNotEndLine(content, i).toString(); // read file name
-            compressionType =  Integer.parseInt(readWhileNotEndLine(content, i).toString()); // read compression type
-            compressionSize = Integer.parseInt(readWhileNotEndLine(content, i).toString()); // read size
+            fileName = readWhileNotEndLine(content).toString(); // read file name
+            compressionType =  Integer.parseInt(readWhileNotEndLine(content).toString()); // read compression type
+            compressionSize = byteToInt(readWhileNotEndLine(content).toByteArray()); // read size
 
-            PhysicalFile newFile = readFileContent(content, i, compressionSize, fileName);
-            file.selectAlgorithm(compressionType);
+            PhysicalFile newFile = readFileContent(content, compressionType, compressionSize, fileName);
+            newFile.selectAlgorithm(compressionType);
+            newFile.decompress();
             files.add(newFile);
 
         }

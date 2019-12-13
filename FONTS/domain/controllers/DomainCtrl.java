@@ -76,7 +76,7 @@ public class DomainCtrl {
             if(pFile.isAuto()){
                 ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
                 for(PhysicalFile f : physicalFiles){
-                    writeFile(pFile.getRelativePath() + "." + pFile.getFileExtension(), f.getContent());
+                    writeFile(pFile.getFileDir() + f.getCompletePath() + "." + f.getFileExtension(), f.getContent());
                 }
                 presentationCtrl.displayMessage("Descompresion completada", "");
             }
@@ -108,7 +108,7 @@ public class DomainCtrl {
         byte[] fileBytes;
 
         ArrayList<PhysicalFile> physicalFiles = new ArrayList<>();
-        recursiveCompressFiles(new File[]{file}, physicalFiles, new StringBuilder());
+        recursiveCompressFiles(new File[]{file}, physicalFiles,"");
         autoCompressor.setAlgorithm(currentId);
         try{
             fileBytes = autoCompressor.compressFiles(physicalFiles);
@@ -125,12 +125,11 @@ public class DomainCtrl {
 
     }
 
-    private void recursiveCompressFiles(File[] files, ArrayList<PhysicalFile> physicalFiles, StringBuilder prefix){
+    private void recursiveCompressFiles(File[] files, ArrayList<PhysicalFile> physicalFiles, String prefix){
 
         for(File f : files){
             if(f.isDirectory()){
-                prefix.append(f.getName()).append("/");
-                recursiveCompressFiles(Objects.requireNonNull(f.listFiles()), physicalFiles, prefix);
+                recursiveCompressFiles(Objects.requireNonNull(f.listFiles()), physicalFiles, prefix + f.getName() + "/");
             }
             else{
                 PhysicalFile pf = new PhysicalFile(f);
