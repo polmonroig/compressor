@@ -1,15 +1,13 @@
 package presentation;
 
-import javafx.embed.swing.SwingFXUtils;
+
 import presentation.controllers.PresentationCtrl;
 
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class View extends JFrame {
@@ -18,8 +16,6 @@ public class View extends JFrame {
     private static final ImageIcon img = new ImageIcon(path);
     private LocalStats localStats = new LocalStats();
 
-    private BufferedImage Icompare1;
-    private BufferedImage Icompare2;
 
     // set reference to the controller calling it
     private PresentationCtrl presentationCtrl;
@@ -220,15 +216,25 @@ public class View extends JFrame {
     }
 
 
-    public void displayImages(File fileA, File fileB) throws IOException {
-        JFrame imagesFrame = new JFrame();
-        imagesFrame.setSize(1000, 1000);
-        setInitLocation(imagesFrame);
-        Icompare1 = presentationCtrl.getPPM(fileA);
-        Icompare2 = presentationCtrl.getPPM(fileB);
-        Graphics g = Icompare1.getGraphics();
-        g.drawImage(Icompare1, 50, 50, this);
-        imagesFrame.setVisible(true);
+    public void displayImages(File fileA, File fileB)  {
+
+        Image imageA = presentationCtrl.getPPM(fileA);
+        Image imageB = presentationCtrl.getPPM(fileB);
+        if(imageA != null && imageB != null){
+            int maxSize = 100;
+            JFrame imagesFrame = new JFrame();
+            imagesFrame.setSize(maxSize * 2, maxSize * 2);
+            setInitLocation(imagesFrame);
+            imagesFrame.setLayout(new GridLayout(1, 2));
+            ImagePanel a = new ImagePanel(imageA, maxSize);
+            a.init();
+            ImagePanel b = new ImagePanel(imageB, maxSize);
+            b.init();
+            imagesFrame.add(a);
+            imagesFrame.add(b);
+            imagesFrame.setVisible(true);
+        }
+
     }
 
 

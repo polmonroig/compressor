@@ -56,12 +56,7 @@ public class PresentationCtrl {
     }
 
 
-    public BufferedImage getPPM(File fileA) throws IOException {
-        try {
-            return domainCtrl.getPPM(fileA);
-        } catch (IOException e) {
-            displayMessage("Error","Error al leer el archivo: " + fileA.getAbsolutePath());
-        }
-        return null;
+    public BufferedImage getPPM(File fileA)  {
+        return domainCtrl.getPPM(fileA);
     }
 }

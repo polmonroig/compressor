@@ -187,8 +187,9 @@ public class DomainCtrl {
         selectAlgorithm(AlgorithmSet.LZ78_ID);
     }
 
-    public BufferedImage getPPM(File fileA) throws IOException {
-            byte [] aux = dataCtrl.ReadFile(fileA);
-            return JPEG.makePPM(aux);
+    public BufferedImage getPPM(File fileA) {
+            byte [] aux = readFile(fileA);
+            if(aux != null) return JPEG.makePPM(aux);
+            return null;
     }
 }

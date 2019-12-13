@@ -172,13 +172,8 @@ public class FileChooser extends ContentDecorator {
         functionButton.addActionListener(actionEvent -> {
             if(compressionMode == COMPRESSION_MODE) view.compress(selectors.get(0).getFile());
             else if(compressionMode == DECOMPRESSION_MODE)view.decompress(selectors.get(0).getFile());
-            else if(compressionMode == COMPARISON_MODE){
-                try {
-                    view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            else if(compressionMode == COMPARISON_MODE) view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
+
             functionButton.setEnabled(false);
             filesSelected = 0;
 
