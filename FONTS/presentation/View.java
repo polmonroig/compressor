@@ -222,8 +222,9 @@ public class View extends JFrame {
         Image imageA = presentationCtrl.getPPM(fileA);
         Image imageB = presentationCtrl.getPPM(fileB);
         if (imageA != null && imageB != null) {
-            int maxSize = 100;
+            int maxSize = 500;
             JFrame imagesFrame = new JFrame();
+            imagesFrame.setTitle("Comparador");
             imagesFrame.setSize(maxSize * 2, maxSize * 2);
             setInitLocation(imagesFrame);
             imagesFrame.setLayout(new GridLayout(1, 2));

@@ -34,10 +34,14 @@ public class ImagePanel extends JPanel {
         System.out.println("Image width: " +  width);
         System.out.println("Image height: " + height);
         if(width > maxSize){
-            image = image.getScaledInstance(maxSize, (height / width) * maxSize, Image.SCALE_DEFAULT);
+            System.out.println("New width:" +maxSize );
+            System.out.println("New height: " + (int)(((float)height / (float)width) * maxSize));
+            image = image.getScaledInstance(maxSize, (int)(((float)height / (float)width) * maxSize), Image.SCALE_DEFAULT);
         }
         else if(height > maxSize){
-            image = image.getScaledInstance((width / height) * maxSize, maxSize, Image.SCALE_DEFAULT);
+            System.out.println("New width:" + (int)(((float)width / (float)height) * maxSize) );
+            System.out.println("New height: " + maxSize);
+            image = image.getScaledInstance((int)(((float)width / (float)height) * maxSize), maxSize, Image.SCALE_DEFAULT);
         }
 
     }
