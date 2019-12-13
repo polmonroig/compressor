@@ -222,12 +222,13 @@ public class View extends JFrame {
         JFrame imagesFrame = new JFrame();
         imagesFrame.setSize(1000, 1000);
         setInitLocation(imagesFrame);
-        Icompare1 = new ImageIcon(this.getClass().getResource(fileA.getAbsolutePath())).getImage();
-        Icompare2 = new ImageIcon(this.getClass().getResource(fileB.getAbsolutePath())).getImage();
+        Icompare1 = new ImageIcon(fileA.getAbsolutePath()).getImage();
+        Icompare2 = new ImageIcon(fileB.getAbsolutePath()).getImage();
         Graphics g = Icompare1.getGraphics();
         g.drawImage(Icompare1, 50, 50, this);
         imagesFrame.setVisible(true);
     }
+
 
 
     public void displayMessage(String title, String message) {
