@@ -42,7 +42,7 @@ public class ExitButton extends ContentDecorator {
         getInnerContent().resetValues();
     }
 
-    public void initEventListeners(){
+    private void initEventListeners(){
         button.addActionListener(actionEvent -> {
             frame.dispose();
         });

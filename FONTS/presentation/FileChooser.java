@@ -25,9 +25,10 @@ public class FileChooser extends ContentDecorator {
 
     /**
      * The compression mode defines the functionality of the function button
-     * currently only COMPRESSION_MODE and DECOMPRESSION_MODE are supported
+     * currently only COMPRESSION_MODE and DECOMPRESSION_MODE
+     * and COMPARISON_MODE are supported
      * */
-    private int compressionMode;
+    private int mode;
     /**
      * This is a reference to the main view since we need to tell it
      * when the function button has been activated in order to activate the desired functionality
@@ -74,7 +75,7 @@ public class FileChooser extends ContentDecorator {
         super(content);
         view = parentView;
         filesSelected = 0;
-        compressionMode = functionMode;
+        mode = functionMode;
         int nSelectors = 1;
         if(COMPARISON_MODE  == functionMode)nSelectors = 2;
         selectors = new ArrayList<>();
@@ -170,9 +171,9 @@ public class FileChooser extends ContentDecorator {
     private void initEventListeners() {
 
         functionButton.addActionListener(actionEvent -> {
-            if(compressionMode == COMPRESSION_MODE) view.compress(selectors.get(0).getFile());
-            else if(compressionMode == DECOMPRESSION_MODE)view.decompress(selectors.get(0).getFile());
-            else if(compressionMode == COMPARISON_MODE) view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
+            if(mode == COMPRESSION_MODE) view.compress(selectors.get(0).getFile());
+            else if(mode == DECOMPRESSION_MODE)view.decompress(selectors.get(0).getFile());
+            else if(mode == COMPARISON_MODE) view.displayImages(selectors.get(0).getFile(), selectors.get(1).getFile());
 
             functionButton.setEnabled(false);
             filesSelected = 0;

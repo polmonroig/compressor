@@ -1,16 +1,12 @@
 package data.controllers;
 
-import domain.controllers.DomainCtrl;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.*;
 
 
 public class DataCtrl {
 
 
-    public byte[] ReadFile(File file) throws IOException{
+    public byte[] read(File file) throws IOException{
         FileInputStream fs = null;
         fs = new FileInputStream(file);
         byte [] content = new byte[(int)file.length()];
@@ -18,7 +14,7 @@ public class DataCtrl {
         fs.close();
         return content;
     }
-    public void WriteFile(String fileDir, byte [] text) throws IOException{
+    public void write(String fileDir, byte [] text) throws IOException{
         File file = new File(fileDir);
 
         FileOutputStream fs = null;

@@ -93,7 +93,7 @@ public class DomainCtrl {
 
     private int writeFile(String s, byte[] content) {
         try{
-            dataCtrl.WriteFile(s, content);
+            dataCtrl.write(s, content);
             return NO_ERROR;
         } catch (IOException e) {
             presentationCtrl.displayMessage("Error", "Error al escribir el archivo: " + s);
@@ -146,23 +146,13 @@ public class DomainCtrl {
 
     private byte[] readFile(File f) {
         try{
-            return dataCtrl.ReadFile(f);
+            return dataCtrl.read(f);
         } catch (IOException e) {
             presentationCtrl.displayMessage("Error","Error al leer el archivo: " + f.getAbsolutePath());
         }
         return null;
     }
 
-
-
-    public void setStats(float originalFileSize, float compressedFileSize,
-                         float compressionTime, float compressionDegree, float compressionSpeed) {
-        globalStats.addOriginalSize(originalFileSize);
-        globalStats.addCompressedSize(compressedFileSize);
-        globalStats.addCompressionTime(compressionTime);
-        globalStats.addCompressionDegree(compressionDegree);
-        globalStats.addCompressionSpeed(compressionSpeed);
-    }
 
     public void setLocalStats(Stats localStats){
         presentationCtrl.setLocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(),

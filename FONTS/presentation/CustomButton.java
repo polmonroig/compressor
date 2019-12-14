@@ -2,20 +2,15 @@ package presentation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public  class CustomButton extends JButton {
 
 
 
 
-    private Color deactivatedBackgroundColor;
+    private Color disabledBackgroundColor;
     private Color activeBackgroundColor;
-    private Color deactivatedTextColor;
-
-
-
+    private Color disabledTextColor;
     private Color activeTextColor;
  
 
@@ -32,9 +27,9 @@ public  class CustomButton extends JButton {
         super(text);
         // save variables
 
-        deactivatedBackgroundColor = colorBD;
+        disabledBackgroundColor = colorBD;
         activeBackgroundColor = colorBA;
-        deactivatedTextColor = colorFD;
+        disabledTextColor = colorFD;
         activeTextColor = colorFA;
         borderRadius = DEFAULT_RADIUS;
 
@@ -64,8 +59,8 @@ public  class CustomButton extends JButton {
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if(isEnabled()) {
-                    setBackground(getDeactivatedBackgroundColor());
-                    setForeground(getDeactivatedTextColor());
+                    setBackground(getDisabledBackgroundColor());
+                    setForeground(getDisabledTextColor());
                 }
 
             }
@@ -93,23 +88,15 @@ public  class CustomButton extends JButton {
     }
 
     public void setInactive() {
-        setBackground(deactivatedBackgroundColor);
-        setForeground(deactivatedTextColor);
+        setBackground(disabledBackgroundColor);
+        setForeground(disabledTextColor);
     }
 
 
-    public Color getDeactivatedBackgroundColor() {
-        return deactivatedBackgroundColor;
+    public Color getDisabledBackgroundColor() {
+        return disabledBackgroundColor;
     }
 
-    public void setDeactivatedBackgroundColor(Color deactivatedBackgroundColor) {
-        this.deactivatedBackgroundColor = deactivatedBackgroundColor;
-    }
-
-
-    public int getBorderRadius() {
-        return borderRadius;
-    }
 
     public void setBorderRadius(int borderRadius) {
         this.borderRadius = borderRadius;
@@ -120,24 +107,16 @@ public  class CustomButton extends JButton {
         return activeBackgroundColor;
     }
 
-    public void setActiveBackgroundColor(Color activeBackgroundColor) {
-        this.activeBackgroundColor = activeBackgroundColor;
+
+
+    public Color getDisabledTextColor() {
+        return disabledTextColor;
     }
 
-    public Color getDeactivatedTextColor() {
-        return deactivatedTextColor;
-    }
-
-    public void setDeactivatedTextColor(Color deactivatedTextColor) {
-        this.deactivatedTextColor = deactivatedTextColor;
-    }
 
     public Color getActiveTextColor() {
         return activeTextColor;
     }
 
-    public void setActiveTextColor(Color activeTextColor) {
-        this.activeTextColor = activeTextColor;
-    }
 
 }

@@ -18,7 +18,6 @@ public class ButtonsPanel extends JPanel {
     private static final Color ACTIVE_COLOR = new Color(79, 131, 249);
     private static final Color ACTIVE_TEXT = new Color(255, 255, 255);
     private static final Color DISABLED_TEXT = new Color(150, 178, 221);
-    private static final Color EXIT_COLOR = new Color(242, 143, 104);
 
     public ButtonsPanel(String[] names, View view){
         // init layout

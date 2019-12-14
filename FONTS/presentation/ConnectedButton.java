@@ -42,8 +42,8 @@ public class ConnectedButton extends CustomButton {
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if(isEnabled() && !selected){
-                    setBackground(getDeactivatedBackgroundColor());
-                    setForeground(getDeactivatedTextColor());
+                    setBackground(getDisabledBackgroundColor());
+                    setForeground(getDisabledTextColor());
                 }
             }
         });

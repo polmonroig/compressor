@@ -5,7 +5,6 @@ import java.awt.*;
 
 
 public class LocalStats extends JFrame {
-    private JPanel contentpanel = new JPanel();
 
     public LocalStats(){
         setSize(new Dimension(500, 300));

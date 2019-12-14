@@ -7,14 +7,10 @@ import presentation.controllers.PresentationCtrl;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class View extends JFrame {
-    private static final File file = new File("folder_icon.png");
-    private static final String path = file.getAbsolutePath();
-    private static final ImageIcon img = new ImageIcon(path);
-    private LocalStats localStats = new LocalStats();
+    private LocalStats localStats;
 
 
     // set reference to the controller calling it
@@ -42,10 +38,10 @@ public class View extends JFrame {
 
     public View(String title, PresentationCtrl controller){
         setTitle(title);
-        setIconImage(img.getImage());
         presentationCtrl = controller;
         layout = new GridLayout(1, 1);
         buttonsPanel = new ButtonsPanel(buttonNames, this);
+        localStats = new LocalStats();
 
 
 
@@ -97,6 +93,7 @@ public class View extends JFrame {
         buttonsPanel.init();
         buttonsPanel.setEnabledButton(6, false);
         contentPanel.init();
+        localStats.init();
         add(separator);
 
 
@@ -126,7 +123,6 @@ public class View extends JFrame {
 
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
         localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
-        localStats.init();
         localStats.setVisible(true);
     }
 
