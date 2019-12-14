@@ -19,7 +19,7 @@ public class FileSelector extends JPanel {
     public FileSelector(String[] types, int mode, FileChooser fileSelector){
         chooser = fileSelector;
         selectionMode = mode;
-        label = new JTextField("Directorio del archivo", 20);
+        label = new JTextField("Directori del archivo", 20);
         button = new CustomButton("Seleccionar archivo", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         fileChooser = new JFileChooser();
         fileTypes = types;
