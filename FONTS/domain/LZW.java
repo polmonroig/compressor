@@ -5,7 +5,6 @@ public class LZW extends Algorithm {
 
     @Override
     public byte[] compress(byte[] binaryFile) {
-        long startTime = System.nanoTime(); // empezar contador de tiempo
         Map<String, Integer> dict = new HashMap<String, Integer>(); //map per guardar el diccionari
         String charChain = new String(binaryFile); // convertir l'array de bytes en un String
         StringBuilder s = new StringBuilder();
@@ -39,20 +38,7 @@ public class LZW extends Algorithm {
         }
         s.append(to16bit(dict.get(w)));
 
-
-
-        byte[] ret = Utils.toByteArray(s.toString());
-
-
-        // Stats
-        long endTime = System.nanoTime();
-        this.localStats.setOriginalFileSize(binaryFile.length);
-        this.localStats.setCompressedFileSize(ret.length);
-        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
-
-        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
-        return ret;
+        return Utils.toByteArray(s.toString());
     }
 
 

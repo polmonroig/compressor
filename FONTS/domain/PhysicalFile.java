@@ -91,6 +91,9 @@ public class PhysicalFile {
     private static String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
                                              LZW_EXTENSION, JPEG_EXTENSION, AUTO_EXTENSION};
 
+
+    private Stats localStats;
+
     /**
      * <p>Base constructor</p>
      * @param virtualFile the virtualFile that needs to be casted
@@ -102,6 +105,7 @@ public class PhysicalFile {
         setFileExtension(virtualFile);
         algorithm = AlgorithmSet.getAlgorithm(AlgorithmSet.LZ78_ID);
         id = AlgorithmSet.LZ78_ID;
+        localStats = new Stats();
     }
 
     /**
@@ -109,7 +113,15 @@ public class PhysicalFile {
      *    and recalculate the extension</p>
      * */
     public void compress(){
+
+        long timeInit = System.nanoTime();
+        localStats.setOriginalFileSize(content.length);
         content = algorithm.compress(content);
+        long timeEnd = System.nanoTime();
+        localStats.setCompressionTime((float)((timeEnd - timeInit) / 1000000.0));
+        localStats.setCompressedFileSize(content.length);
+        localStats.setCompressionSpeed(localStats.getOriginalFileSize() / localStats.getCompressionTime());
+        localStats.setCompressionDegree((localStats.getCompressedFileSize() / (float)localStats.getOriginalFileSize()) * 100);
         // recalculate extension
         fileExtension = algorithmsExtensions[id];
     }
@@ -239,5 +251,5 @@ public class PhysicalFile {
         return content.length;
     }
 
-    public Stats getLocalStats(){return algorithm.localStats;}
+    public Stats getLocalStats(){return localStats;}
 }

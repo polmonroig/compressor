@@ -52,7 +52,6 @@ public class LZSS extends Algorithm {
      */
     @Override
     public byte[] compress(byte[] binaryFile){
-        long startTime = System.nanoTime(); // empezar contador de tiempo
         out = new byte[binaryFile.length];
         lecturePoint = 0;
         writePoint = 0;
@@ -150,14 +149,6 @@ public class LZSS extends Algorithm {
         byte[] aux = putTextSize(binaryFile, bytesTamFchr);
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
-
-        // Calculo estadisticas
-        long endTime = System.nanoTime();
-        this.localStats.setOriginalFileSize(binaryFile.length);
-        this.localStats.setCompressedFileSize(ret.length);
-        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
-        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
 
         return ret;
     }

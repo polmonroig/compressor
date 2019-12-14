@@ -8,16 +8,13 @@ public class Stats {
     private float compressedFileSize;
 
     public Stats(){
-        reset();
-    }
- 
-    public void reset(){
-        originalFileSize = 0;
-        compressedFileSize = 0;
-        compressionSpeed = 0;
-        compressionTime = 0;
         compressionDegree = 0;
-    };
+        compressionTime = 0;
+        compressionSpeed = 0;
+        compressedFileSize = 0;
+        originalFileSize = 0;
+    }
+
 
     public float getOriginalFileSize() {
         return originalFileSize;

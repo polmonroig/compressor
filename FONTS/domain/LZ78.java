@@ -22,8 +22,6 @@ public class LZ78 extends Algorithm {
      */
     @Override
     public byte[] compress(byte[] binaryFile) {
-        this.localStats.reset(); // reset stats
-        long startTime = System.nanoTime(); // empezar contador de tiempo
         if(binaryFile.length == 0)return binaryFile; // empty file
         String text = new String(binaryFile, StandardCharsets.UTF_8);
         SortedMap< String, Integer> dict = new TreeMap<>();
@@ -50,19 +48,7 @@ public class LZ78 extends Algorithm {
         if(inDict) coding.append(lastWordPos);
         String binary_string = Utils.toBinaryString(coding.toString());
 
-
-
-        byte[] compression = Utils.toByteArray(binary_string);
-
-        // Calculo estadisticas
-        long endTime = System.nanoTime();
-        this.localStats.setOriginalFileSize(binaryFile.length);
-        this.localStats.setCompressedFileSize((int)Math.ceil(binary_string.length() / 8.0) + 1);
-        this.localStats.setCompressionDegree(((float)this.getCompressedSize() / (float)this.getOriginalSize()) * 100);
-
-        this.localStats.setCompressionTime((float)((endTime - startTime) / 1000000.0)); // miliseconds
-        this.localStats.setCompressionSpeed(binaryFile.length / this.localStats.getCompressionTime());
-        return compression;
+        return Utils.toByteArray(binary_string);
     }
 
     /**
