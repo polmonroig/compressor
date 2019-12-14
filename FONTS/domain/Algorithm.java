@@ -1,8 +1,8 @@
 package domain;
 
-public abstract class Algorithm {
+public interface Algorithm {
 
-    public abstract byte[] compress(byte[] binaryFile);
-    public abstract byte[] decompress(byte[] binaryFile);
+    byte[] compress(byte[] binaryFile);
+    byte[] decompress(byte[] binaryFile);
 
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 
  */
 
-public class JPEG extends Algorithm {
+public class JPEG implements Algorithm {
 
     private int quality = 0;
 

@@ -11,7 +11,7 @@ import java.lang.Math;
  *
  */
  
-public class LZ78 extends Algorithm {
+public class LZ78 implements Algorithm {
 
 
 

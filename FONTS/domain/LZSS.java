@@ -9,7 +9,7 @@ import java.util.*;
  *
  */
  
-public class LZSS extends Algorithm {
+public class LZSS implements Algorithm {
 
     private static final short RING_SIZE = 4096;
 

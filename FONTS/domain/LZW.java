@@ -1,7 +1,7 @@
 package domain;
 import java.util.*;
 
-public class LZW extends Algorithm {
+public class LZW implements Algorithm {
 
     @Override
     public byte[] compress(byte[] binaryFile) {
