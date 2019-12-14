@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
  
 
@@ -23,16 +24,28 @@ public class DomainCtrl {
 
     public DomainCtrl(PresentationCtrl controller){
         presentationCtrl = controller;
-        init();
     }
 
-    private void init() {
+    public void init() {
         currentId = AlgorithmSet.LZ78_ID;
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
         autoAlgorithm = new AutoAlgorithm();
+        readGlobalStats();
     }
 
+    private void readGlobalStats() {
+        byte[] stats = readFile(new File("FONTS/data/GlobalStatesSave.txt"));
+        if(stats != null){
+            globalStats.setFileStats(new String(stats));
+            presentationCtrl.setGlobalStats(
+                globalStats.getCompressionTime(), globalStats.getCompressedFileSize(),
+                    globalStats.getCompressionDegree(), globalStats.getCompressionSpeed(),
+                    globalStats.getOriginalFileSize()
+            );
+        }
+
+    }
 
 
     public void selectAlgorithm(int id){
@@ -45,7 +58,7 @@ public class DomainCtrl {
     }
 
     public void compressFile(File file){
-        globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
+
         PhysicalFile pFile = new PhysicalFile(file);
         byte[]content = readFile(file);
         if(content != null){
@@ -57,11 +70,13 @@ public class DomainCtrl {
             }
 
             pFile.compress();
-            setLocalStats(pFile.getLocalStats());
             int errorInt = writeFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
             if(errorInt == NO_ERROR){
                 presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + pFile.getCompletePath() + "." + pFile.getIdName());
+                globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
+                setLocalStats(pFile.getLocalStats());
             }
+
         }
 
     }
@@ -111,10 +126,12 @@ public class DomainCtrl {
         autoAlgorithm.setAlgorithm(currentId);
         try{
             fileBytes = autoAlgorithm.compressFiles(physicalFiles);
-            setLocalStats(autoAlgorithm.getLocalStats());
+
             int errorInt = writeFile(file.getPath() + "." + PhysicalFile.AUTO_EXTENSION, fileBytes);
             if(errorInt == NO_ERROR){
                 presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
+                globalStats.setNumberFiles(globalStats.getNumberFiles() + physicalFiles.size());
+                setLocalStats(autoAlgorithm.getLocalStats());
             }
         }
         catch (IOException e) {
@@ -154,7 +171,13 @@ public class DomainCtrl {
     }
 
 
-    public void setLocalStats(Stats localStats){
+    private void setLocalStats(Stats localStats){
+        globalStats.setStats(localStats);
+        presentationCtrl.setGlobalStats(
+                globalStats.getCompressionTime(), globalStats.getCompressedFileSize(),
+                globalStats.getCompressionDegree(), globalStats.getCompressionSpeed(),
+                globalStats.getOriginalFileSize()
+        );
         presentationCtrl.setLocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(),
                                        localStats.getCompressionDegree(), localStats.getCompressionSpeed(),
                                        localStats.getOriginalFileSize());

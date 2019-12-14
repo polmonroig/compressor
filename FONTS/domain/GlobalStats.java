@@ -47,30 +47,31 @@ public class GlobalStats extends Stats {
 
     public String getAllStats(){
         String data = "";
-        data += Float.toString(getNumberFiles()) + "\n";
-        data += Float.toString(getOriginalFileSize()) + "\n";
-        data += Float.toString(getCompressionTime()) + "\n";
-        data += Float.toString(getCompressedFileSize()) + "\n";
-        data += Float.toString(getCompressionDegree()) + "\n";
-        data += Float.toString(getCompressionSpeed()) + "\n";
+        data += getNumberFiles() + "\n";
+        data += getOriginalFileSize() + "\n";
+        data += getCompressionTime() + "\n";
+        data += getCompressedFileSize() + "\n";
+        data += getCompressionDegree() + "\n";
+        data += getCompressionSpeed() + "\n";
         return data;
     }
 
-    public void setAllStats(String data){
-        boolean finish = false;
+    public void setFileStats(String data){
         int j = 0;
-        for(int i = 0; !finish; ++i){
-            String number = "";
-            for(; data.charAt(j) != '\n'; ++j){
-                number += data.charAt(j);
+        int nStats = 5;
+        for(int i = 0; i <= nStats; ++i){
+            StringBuilder number = new StringBuilder();
+            while(data.charAt(j) != '\n'){
+                number.append(data.charAt(j));
+                ++j;
             }
-            if(i == 0)  setNumberFiles(Float.parseFloat(number));
-            else if (i == 1)    setOriginalFileSize(Float.parseFloat(number));
-            else if (i == 2)    setCompressionTime(Float.parseFloat(number));
-            else if (i == 3)    setCompressedFileSize(Float.parseFloat(number));
-            else if (i == 4)    setCompressionDegree(Float.parseFloat(number));
-            else if (i == 5)    setCompressionSpeed(Float.parseFloat(number));
-            else finish = true;
+            ++j;
+            if(i == 0)  setNumberFiles(Float.parseFloat(number.toString()));
+            else if (i == 1)    setOriginalFileSize(Float.parseFloat(number.toString()));
+            else if (i == 2)    setCompressionTime(Float.parseFloat(number.toString()));
+            else if (i == 3)    setCompressedFileSize(Float.parseFloat(number.toString()));
+            else if (i == 4)    setCompressionDegree(Float.parseFloat(number.toString()));
+            else if (i == 5)    setCompressionSpeed(Float.parseFloat(number.toString()));
         }
     }
 

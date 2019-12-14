@@ -23,6 +23,7 @@ public class PresentationCtrl {
     public void init() {
 
         mainView.init(); // setup and start gui
+        domainCtrl.init();
     }
 
     public void setQuality(int quality) {
@@ -58,5 +59,8 @@ public class PresentationCtrl {
 
     public BufferedImage getPPM(File fileA)  {
         return domainCtrl.getPPM(fileA);
+    }
+
+    public void setGlobalStats(float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
     }
 }
