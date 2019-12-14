@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Huffman {
 
-    Map<Integer, Integer> frequencies = new HashMap<>();
+    private Map<Integer, Integer> frequencies = new HashMap<>();
 
     public Map<Integer, Integer> getFrequencies(){
         return this.frequencies;

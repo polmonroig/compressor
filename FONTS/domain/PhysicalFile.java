@@ -88,7 +88,7 @@ public class PhysicalFile {
     /**
      * List of the possible extensions for compression files
      * */
-    private static String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
+    private final static String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
                                              LZW_EXTENSION, JPEG_EXTENSION, AUTO_EXTENSION};
 
 

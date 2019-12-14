@@ -1,6 +1,5 @@
 package domain;
 
-import domain.controllers.DomainCtrl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,7 +7,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
  
-public class AutoCompressor {
+public class AutoAlgorithm {
 
 
 
@@ -18,7 +17,7 @@ public class AutoCompressor {
     private Stats stats;
     private int iterator;
 
-    public AutoCompressor(){
+    public AutoAlgorithm(){
         currentID = AlgorithmSet.LZ78_ID;
         stats = new GlobalStats();
     }

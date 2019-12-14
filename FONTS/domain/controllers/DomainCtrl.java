@@ -4,7 +4,6 @@ import domain.*;
 import data.controllers.DataCtrl;
 import presentation.controllers.PresentationCtrl;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.util.Objects;
 public class DomainCtrl {
     private DataCtrl dataCtrl;
     private PresentationCtrl presentationCtrl;
-    private AutoCompressor autoCompressor;
+    private AutoAlgorithm autoAlgorithm;
     private GlobalStats globalStats;
     private int currentId;
 
@@ -31,7 +30,7 @@ public class DomainCtrl {
         currentId = AlgorithmSet.LZ78_ID;
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
-        autoCompressor = new AutoCompressor();
+        autoAlgorithm = new AutoAlgorithm();
     }
 
 
@@ -74,7 +73,7 @@ public class DomainCtrl {
         if(content != null){
             pFile.setContent(content);
             if(pFile.isAuto()){
-                ArrayList<PhysicalFile> physicalFiles = autoCompressor.decompressFile(pFile);
+                ArrayList<PhysicalFile> physicalFiles = autoAlgorithm.decompressFile(pFile);
                 for(PhysicalFile f : physicalFiles){
                     writeFile(pFile.getFileDir() + f.getCompletePath() + "." + f.getFileExtension(), f.getContent());
                 }
@@ -109,17 +108,17 @@ public class DomainCtrl {
 
         ArrayList<PhysicalFile> physicalFiles = new ArrayList<>();
         recursiveCompressFiles(new File[]{file}, physicalFiles,"");
-        autoCompressor.setAlgorithm(currentId);
+        autoAlgorithm.setAlgorithm(currentId);
         try{
-            fileBytes = autoCompressor.compressFiles(physicalFiles);
-            setLocalStats(autoCompressor.getLocalStats());
+            fileBytes = autoAlgorithm.compressFiles(physicalFiles);
+            setLocalStats(autoAlgorithm.getLocalStats());
             int errorInt = writeFile(file.getPath() + "." + PhysicalFile.AUTO_EXTENSION, fileBytes);
             if(errorInt == NO_ERROR){
                 presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
             }
         }
         catch (IOException e) {
-            presentationCtrl.displayMessage("Error", "Archivo no soportado: " + AutoCompressor.getUnsupportedFile());
+            presentationCtrl.displayMessage("Error", "Archivo no soportado: " + AutoAlgorithm.getUnsupportedFile());
         }
 
 
