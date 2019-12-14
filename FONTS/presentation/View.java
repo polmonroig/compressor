@@ -24,9 +24,9 @@ public class View extends JFrame {
 
     // define the layout
     private GridLayout layout;
-    private static final String[] buttonNames = {"About", "Comprimir texto", "Comprimir imagen",
+    private static final String[] buttonNames = {"About", "Comprimir text", "Comprimir imatge",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
-                                                 "Estadisticas", "Informacion"};
+                                                 "Estadístiques", "Informació"};
 
 
     private static final String[] qualityOptions = {"0", "1", "2", "3", "4", "5", "6",
@@ -132,10 +132,10 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupCompressTextContent(){
-        ContentInterface compressText = new Content("Comprimir Texto",
+        ContentInterface compressText = new Content("Comprimir Text",
                 "dexcirpcion de comprimir un text");
         compressText = new OptionSelector(compressText, algorithmOptions,
-                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+                "Selecciona el algorisme de compressió desitjat", OptionSelector.ALGORITHM_SELECTOR, this);
         compressText = new FileChooser(compressText, new String[]{"txt"},
                 "Comprimir", this,
                 FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
@@ -143,10 +143,10 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupCompressImageContent(){
-        ContentInterface compressImage = new Content("Comprimir imagen",
+        ContentInterface compressImage = new Content("Comprimir imatge",
                 "desciprion imagen");
         compressImage = new OptionSelector(compressImage, qualityOptions,
-                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+                "Selecciona la qualitat de compressió", OptionSelector.QUALITY_SELECTOR, this);
         compressImage = new FileChooser(compressImage, new String[]{"ppm"},
                 "Comprimir", this,
                 FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
@@ -156,9 +156,9 @@ public class View extends JFrame {
     private ContentInterface setupFolderContent(){
         ContentInterface compressFolder = new Content("Comprimir carpeta","descripcion");
         compressFolder = new OptionSelector(compressFolder, algorithmOptions,
-                "Selecciona el algoritmo de compresion deseado", OptionSelector.ALGORITHM_SELECTOR, this);
+                "Selecciona el algorisme de compressió desitjat", OptionSelector.ALGORITHM_SELECTOR, this);
         compressFolder = new OptionSelector(compressFolder, qualityOptions,
-                "Selecciona la calidad de compresion", OptionSelector.QUALITY_SELECTOR, this);
+                "Selecciona la qualitat de compressió", OptionSelector.QUALITY_SELECTOR, this);
         compressFolder = new FileChooser(compressFolder, new String[]{"ppm", "txt"},
                 "Comprimir", this,
                 FileChooser.COMPRESSION_MODE, FileChooser.DIRECTORIES_ONLY);
@@ -182,12 +182,12 @@ public class View extends JFrame {
 
 
     private ContentInterface setupGlobalStatsContent(){
-        ContentInterface globalStats = new Content("Estadisticas Globales", "descriptcion");
+        ContentInterface globalStats = new Content("Estadístiques Globals", "descriptcion");
         return globalStats;
     }
 
     private ContentInterface setupInfoContent(){
-        ContentInterface info = new Content("Informacion", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
+        ContentInterface info = new Content("Informació", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
         return info;
     }
 
