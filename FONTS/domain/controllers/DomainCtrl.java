@@ -147,7 +147,7 @@ public class DomainCtrl {
 
         for(File f : files){
             if(f.isDirectory()){
-                recursiveCompressFiles(Objects.requireNonNull(f.listFiles()), physicalFiles, prefix + f.getName() + "/");
+                recursiveCompressFiles(Objects.requireNonNull(f.listFiles()), physicalFiles, prefix + f.getName() + File.separator);
             }
             else{
                 PhysicalFile pf = new PhysicalFile(f);

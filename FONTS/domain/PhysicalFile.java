@@ -197,12 +197,12 @@ public class PhysicalFile {
     }
 
     private  void setFileDir(File file){
-        int indexLastSlash = file.getPath().lastIndexOf("/");
-        fileDir = file.getPath().substring(0, indexLastSlash) + "/";
+        int indexLastSlash = file.getPath().lastIndexOf(File.separator);
+        fileDir = file.getPath().substring(0, indexLastSlash) + File.separator;
     }
 
     private  void setFileName(File file){
-        int indexLastSlash = file.getPath().lastIndexOf("/") + 1;
+        int indexLastSlash = file.getPath().lastIndexOf(File.separator) + 1;
         int indexLastDot = file.getPath().lastIndexOf(".");
         fileName = file.getPath().substring(indexLastSlash, indexLastDot);
     }
