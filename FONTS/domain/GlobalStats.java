@@ -39,7 +39,7 @@ public class GlobalStats extends Stats {
     }
 
     public void addCompressedSize(float compressedFileSize) {
-        setCompressedFileSize(updateValue(getOriginalFileSize(), compressedFileSize));
+        setCompressedFileSize(updateValue(getCompressedFileSize(), compressedFileSize));
     }
 
     public void addCompressionDegree(float compressionDegree) {

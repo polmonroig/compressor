@@ -2,6 +2,8 @@ package domain;
 
 import java.util.*;
 
+import static domain.Tree.*;
+
 /**
  * LZSS ASCII compression algorithm
  *
@@ -11,40 +13,17 @@ import java.util.*;
  
 public class LZSS implements Algorithm {
 
-    private static final short RING_SIZE = 4096;
-
-    private static final short RING_WRAP = RING_SIZE - 1;
-
-    private static final int MAX_STORE_LENGTH=18;
-
-    private static final int THRESHOLD=3;
-
-    private static final short NOT_USED=RING_SIZE;
-
-    private byte[] ringBuffer;//buffer para encontrar coincidencias
-
-    private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
-    private short matchLength;//numero de coincidencias consecutivas en ringBuffer
-
     private int lecturePoint;
     private int writePoint;
 
-    private short[] dad;
-    private short[] leftSon;
-    private short[] rightSon;
-
+    private Tree binTree;
 
     private byte[] out;
 
 
     public LZSS(){
-        ringBuffer=new byte[RING_SIZE+MAX_STORE_LENGTH-1];//4096+17 bytes para encontrar coincidencias
-        dad=new short[RING_SIZE+1];
-        leftSon=new short[RING_SIZE+1];
-        rightSon=new short[RING_SIZE+257];
+        binTree = new Tree();
     }
-
-
     /**
      * <p>El metodo de comprimir hace una compresion del texto introducido, con la codificación para LZSS</>
      * @param binaryFile el texto a comprimir
@@ -67,7 +46,7 @@ public class LZSS implements Algorithm {
         byte mask; // mete los 1 a codeBuff[0] cuando no hay coincidencia
         byte c; // character read from string
 
-        initTree();
+        binTree.initTree();
 
         codeBuff[0] = 0;//1 si es una letra no codificada, 0 si viene un pair<posicion,length>
         codeBufPos = 1;
@@ -76,27 +55,27 @@ public class LZSS implements Algorithm {
         s = 0;
         r = RING_SIZE - MAX_STORE_LENGTH;
 
-        Arrays.fill(ringBuffer, 0, r, (byte) ' ');
+        Arrays.fill(binTree.ringBuffer, 0, r, (byte) ' ');
 
         int x = readXBytes(binaryFile, r, MAX_STORE_LENGTH);
         if(x <= 0) return binaryFile;
         len = (short) x;
 
-        for (i=1; i<=MAX_STORE_LENGTH; i++) insertNode((short) (r-i));
+        for (i=1; i<=MAX_STORE_LENGTH; i++) binTree.insertNode((short) (r-i));
 
-        insertNode(r);
+        binTree.insertNode(r);
 
         do {
-            if (matchLength > len) matchLength = len;
+            if (binTree.matchLength > len) binTree.matchLength = len;
 
-            if (matchLength < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
-                matchLength = 1;
+            if (binTree.matchLength < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
+                binTree.matchLength = 1;
                 codeBuff[0] |= mask;
-                codeBuff[codeBufPos++] = ringBuffer[r];
+                codeBuff[codeBufPos++] = binTree.ringBuffer[r];
             }
             else{
-                codeBuff[codeBufPos++] = (byte) matchPosition;
-                codeBuff[codeBufPos++] = (byte) (((matchPosition >> 4) & 0xF0) | (matchLength - THRESHOLD));
+                codeBuff[codeBufPos++] = (byte) binTree.matchPosition;
+                codeBuff[codeBufPos++] = (byte) (((binTree.matchPosition >> 4) & 0xF0) | (binTree.matchLength - THRESHOLD));
                 //2Bytes guardo los 12 primeros bits la posicion de match y la longitud de match en los otros 4
             }
             mask <<= 1;
@@ -108,7 +87,7 @@ public class LZSS implements Algorithm {
                 mask = 1;
             }
 
-            lastMatchLength = matchLength;
+            lastMatchLength = binTree.matchLength;
 
             for (i = 0; i < lastMatchLength; ++i) {
                 byte[] aux = new byte[1];
@@ -116,24 +95,24 @@ public class LZSS implements Algorithm {
                 if (x == -1) break;
                 c = aux[0];
 
-                deleteNode(s);
+                binTree.deleteNode(s);
                 //duplico el principio y el final del buffer
-                ringBuffer[s] = c;
-                if (s < MAX_STORE_LENGTH - 1) ringBuffer[s + RING_SIZE] = c;
+                binTree.ringBuffer[s] = c;
+                if (s < MAX_STORE_LENGTH - 1) binTree.ringBuffer[s + RING_SIZE] = c;
                 //incremento la posicion y reinicio si ya estoy al final del taanom
                 s = (short) ((s + 1) & RING_WRAP);
                 r = (short) ((r + 1) & RING_WRAP);
                 //nueva string
-                insertNode(r);
+                binTree.insertNode(r);
             }
             //podriamos haber salido porque no quedaban caracteres, entonces acabamos el trabajo que nos queedaba
             while (i++ < lastMatchLength){
-                deleteNode(s);
+                binTree.deleteNode(s);
 
                 s = (short) ((s + 1) & RING_WRAP);
                 r = (short) ((r + 1) & RING_WRAP);
 
-                if (--len != 0) insertNode(r);
+                if (--len != 0) binTree.insertNode(r);
             }
         } while (len > 0);//hasta que no queden caracteres por comprimir
 
@@ -167,7 +146,7 @@ public class LZSS implements Algorithm {
         writePoint = 0;
 
         int r = RING_SIZE - MAX_STORE_LENGTH;
-        Arrays.fill(ringBuffer, 0, r, (byte) ' ');
+        Arrays.fill(binTree.ringBuffer, 0, r, (byte) ' ');
         flags = 0;
         int flagCount = 0;
 
@@ -189,7 +168,7 @@ public class LZSS implements Algorithm {
                 if (readDecoding(binaryFile, c, 1) != 1) break;
                 readXBytes(c, 1);
 
-                ringBuffer[r] = c[0];
+                binTree.ringBuffer[r] = c[0];
                 r = (short) ((r + 1) & RING_WRAP);
             }
             else {//viene un pair de posicion(12 bits) y longitud (4 bits)
@@ -199,8 +178,8 @@ public class LZSS implements Algorithm {
                 short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
 
                 for (int k = 0; k < len; k++) {
-                    c[k] = ringBuffer[(pos + k) & RING_WRAP];
-                    ringBuffer[r] = c[k];
+                    c[k] = binTree.ringBuffer[(pos + k) & RING_WRAP];
+                    binTree.ringBuffer[r] = c[k];
                     r = (r + 1) & RING_WRAP;
                 }
                 readXBytes(c, len);
@@ -229,152 +208,18 @@ public class LZSS implements Algorithm {
      * @param
      * @return
      */
-    private int getTextSize(byte[] text){
-        int t = 0, i = text.length-1, j = -1;
-        while(text[i] != '#' && i >= 0) {
+    private int getTextSize(byte[] text) {
+        int t = 0, i = text.length - 1, j = -1;
+        while (text[i] != '#' && i >= 0) {
             --i;
             ++j;
         }
-        for (;i < text.length-1; ++i, --j){
-            t += ((text[i+1] & 0xFF) << j*8);
+        for (; i < text.length - 1; ++i, --j) {
+            t += ((text[i + 1] & 0xFF) << j * 8);
         }
         return t;
     }
 
-    /**
-     * <p></>
-     * @param
-     * @return
-     */
-    private void initTree() {
-        Arrays.fill(dad, 0, dad.length, NOT_USED);
-        Arrays.fill(leftSon, 0, leftSon.length, NOT_USED);
-        Arrays.fill(rightSon, 0, rightSon.length, NOT_USED);
-    }
-
-    /**
-     * <p></>
-     * @param
-     * @return
-     */
-    //Busca para el nuevo caracter todas las coincidencias y se queda con la mas grande
-    private void insertNode(short pos) {
-        assert pos >= 0 && pos < RING_SIZE;
-
-        int cmp = 1;
-        short key = pos;
-
-        short p = (short) (RING_SIZE + 1 + (ringBuffer[key] & 0xFF));
-        assert p > RING_SIZE;
-
-        leftSon[pos] = NOT_USED;
-        rightSon[pos] = NOT_USED;
-
-
-        matchLength = 0;
-
-        while (true) {
-            if (cmp >= 0) {
-                if (rightSon[p] != NOT_USED) {
-                    p = rightSon[p];
-                } else {
-                    rightSon[p] = pos;
-                    dad[pos] = p;
-                    return;
-                }
-            } else {
-                if (leftSon[p] != NOT_USED) {
-                    p = leftSon[p];
-                } else {
-                    leftSon[p] = pos;
-                    dad[pos] = p;
-                    return;
-                }
-            }
-
-            short i;
-            for (i = 1; i < MAX_STORE_LENGTH; i++) {
-                cmp = (ringBuffer[key + i] & 0xFF) - (ringBuffer[p + i] & 0xFF);
-                if (cmp != 0) {
-                    break;
-                }
-            }
-
-            if (i > matchLength) {
-                matchPosition = p;
-                matchLength = i;
-
-                if (i >= MAX_STORE_LENGTH) {
-                    break;
-                }
-            }
-        }
-
-        dad[pos] = dad[p];
-        leftSon[pos] = leftSon[p];
-        rightSon[pos] = rightSon[p];
-
-        dad[leftSon[p]] = pos;
-        dad[rightSon[p]] = pos;
-
-        if (rightSon[dad[p]] == p) {
-            rightSon[dad[p]] = pos;
-        }
-        else {
-            leftSon[dad[p]] = pos;
-        }
-
-        // Remove "p"
-        dad[p] = NOT_USED;
-    }
-
-    /**
-     * <p></>
-     * @param
-     * @return
-     */
-    //Borra el arbol creado para encontrar las coincidencias, porque ya se ha usado
-    private void deleteNode(short node) {
-        assert node >= 0 && node < (RING_SIZE + 1);
-
-        short q;
-
-        if (dad[node] == NOT_USED) {
-            // not in tree, nothing to do
-            return;
-        }
-
-        if (rightSon[node] == NOT_USED) {
-            q = leftSon[node];
-        } else if (leftSon[node] == NOT_USED) {
-            q = rightSon[node];
-        } else {
-            q = leftSon[node];
-            if (rightSon[q] != NOT_USED) {
-                do {
-                    q = rightSon[q];
-                } while (rightSon[q] != NOT_USED);
-
-                rightSon[dad[q]] = leftSon[q];
-                dad[leftSon[q]] = dad[q];
-                leftSon[q] = leftSon[node];
-                dad[leftSon[node]] = q;
-            }
-
-            rightSon[q] = rightSon[node];
-            dad[rightSon[node]] = q;
-        }
-
-        dad[q] = dad[node];
-
-        if (rightSon[dad[node]] == node) {
-            rightSon[dad[node]] = q;
-        } else {
-            leftSon[dad[node]] = q;
-        }
-
-        dad[node] = NOT_USED;
-    }
 
     /**
      * <p></>
@@ -384,7 +229,7 @@ public class LZSS implements Algorithm {
     private int readXBytes(byte[] text, int offset, int x){
         int j = 0;
         for (int i = 0; i < x && lecturePoint < text.length; ++i,++j){
-            ringBuffer[offset+i] = text[lecturePoint];
+            binTree.ringBuffer[offset+i] = text[lecturePoint];
             ++lecturePoint;
         }
         if(j == 0) return -1;
