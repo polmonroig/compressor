@@ -25,6 +25,10 @@ public class ContentPanel extends JPanel {
         contents.get(selectedView).setVisibility(true);
     }
 
+    public ContentInterface getContent(int id){
+        return contents.get(id);
+    }
+
     public void selectView(int id) {
         // every time we change of panel we must reset all values
         parent.resetValues();

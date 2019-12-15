@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class View extends JFrame {
-    private LocalStats localStats;
+
 
 
     // set reference to the controller calling it
@@ -32,8 +32,18 @@ public class View extends JFrame {
     private static final String[] qualityOptions = {"0", "1", "2", "3", "4", "5", "6",
                                                     "7", "8", "9", "10", "11", "12"};
 
-    private static final String[] algorithmOptions = {"lz78", "lzss","lzw"};
+    private static final String[] algorithmOptions = {"lz78", "lzss","lzw", "auto"};
 
+    private static final int AUTO_ALGORITHM_INDEX = 1;
+
+
+    // save global stats ids
+    private int nFilesId;
+    private int compressionTimeId;
+    private int compressionDegreeId;
+    private  int compressionSpeedId;
+    private int originalFileSizeId;
+    private int compressedFileSizeId;
 
 
     public View(String title, PresentationCtrl controller){
@@ -41,7 +51,6 @@ public class View extends JFrame {
         presentationCtrl = controller;
         layout = new GridLayout(1, 1);
         buttonsPanel = new ButtonsPanel(buttonNames, this);
-        localStats = new LocalStats();
 
 
 
@@ -93,7 +102,6 @@ public class View extends JFrame {
         buttonsPanel.init();
         buttonsPanel.setEnabledButton(6, false);
         contentPanel.init();
-        localStats.init();
         add(separator);
 
 
@@ -122,8 +130,27 @@ public class View extends JFrame {
 
 
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
-        localStats.setLocalStats(compressedFileSize,compressionDegree, compressionSpeed, compressionTime, originalFileSize);
-        localStats.setVisible(true);
+        JFrame statsFrame = new JFrame();
+
+        statsFrame.setTitle("Estadistiques");
+        // set location at the middle of the screen
+        statsFrame.setSize(new Dimension(500, 300));
+        setInitLocation(statsFrame);
+        ContentInterface content = new Content("Estadisticas", "Visualizacion de las estadisticas de la compresion realizada");
+        content = new VariableLabel(content);
+        int id = ((VariableLabel)content).addLabel();
+        ((VariableLabel) content).setLabel(id, "Tamaño inicial: " + originalFileSize + " bytes");
+        id = ((VariableLabel)content).addLabel();
+        ((VariableLabel) content).setLabel(id, "Tamaño comprimido: " + compressedFileSize + " bytes");
+        id = ((VariableLabel)content).addLabel();
+        ((VariableLabel) content).setLabel(id, "Grado de compresion: " + compressionDegree);
+        id = ((VariableLabel)content).addLabel();
+        ((VariableLabel) content).setLabel(id, "Velocidad de compresion: " + compressionSpeed + " bytes/ms");
+        id = ((VariableLabel)content).addLabel();
+        ((VariableLabel) content).setLabel(id, "Tiempo de compresion: " + compressionTime + " ms");
+        content.init();
+        statsFrame.add(content);
+        statsFrame.setVisible(true);
     }
 
     private ContentInterface setupAboutContent(){
@@ -183,6 +210,13 @@ public class View extends JFrame {
 
     private ContentInterface setupGlobalStatsContent(){
         ContentInterface globalStats = new Content("Estadístiques Globals", "descriptcion");
+        globalStats = new VariableLabel(globalStats);
+        nFilesId = ((VariableLabel) globalStats).addLabel();
+        compressionTimeId = ((VariableLabel) globalStats).addLabel();
+        compressionDegreeId = ((VariableLabel) globalStats).addLabel();
+        compressionSpeedId = ((VariableLabel) globalStats).addLabel();
+        originalFileSizeId = ((VariableLabel) globalStats).addLabel();
+        compressedFileSizeId = ((VariableLabel) globalStats).addLabel();
         return globalStats;
     }
 
@@ -200,6 +234,9 @@ public class View extends JFrame {
     }
 
     public void setAlgorithm(int selectedIndex) {
+        if(selectedIndex == algorithmOptions.length - 1){
+            selectedIndex = AUTO_ALGORITHM_INDEX;
+        }
         presentationCtrl.setAlgorithm(selectedIndex);
     }
 
@@ -241,13 +278,26 @@ public class View extends JFrame {
         // set location at the middle of the screen
         errorFrame.setSize(new Dimension(400, 200));
         setInitLocation(errorFrame);
-
-
         ContentInterface errorContent = new Content(title, message);
         errorContent = new ExitButton(errorContent, "Aceptar", errorFrame);
         errorContent.init();
         errorContent.setVisibility(true);
         errorFrame.add(errorContent);
         errorFrame.setVisible(true);
+    }
+
+    public void setGlobalStats(float nFiles, float compressionTime, float compressedFileSize,
+                               float compressionDegree, float compressionSpeed, float originalFileSize) {
+
+        if(nFiles > 0){
+            VariableLabel content = (VariableLabel)contentPanel.getContent(6);
+            buttonsPanel.setEnabledButton(6, true);
+            content.setLabel(nFilesId, "Numero de archivos: " + nFiles);
+            content.setLabel(compressionTimeId, "Tiempo medio de compresion: " + compressionTime + " ms");
+            content.setLabel(compressedFileSizeId, "Tamaño medio del archivo compromido: " + compressedFileSize + " bytes");
+            content.setLabel(compressionDegreeId, "Grado medio de compresion: " + compressionDegree);
+            content.setLabel(compressionSpeedId, "Velocidad media de compresion: " + compressionSpeed + " bytes/ms");
+            content.setLabel(originalFileSizeId, "Tamaño medio del archivo original: " + originalFileSize + "bytes");
+        }
     }
 }

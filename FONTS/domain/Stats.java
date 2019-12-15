@@ -8,11 +8,7 @@ public class Stats {
     private float compressedFileSize;
 
     public Stats(){
-        compressionDegree = 0;
-        compressionTime = 0;
-        compressionSpeed = 0;
-        compressedFileSize = 0;
-        originalFileSize = 0;
+        reset();
     }
 
 
@@ -55,6 +51,14 @@ public class Stats {
 
     public void setCompressionSpeed(float compressionSpeed) {
         this.compressionSpeed = compressionSpeed;
+    }
+
+    protected void reset(){
+        compressionDegree = 0;
+        compressionTime = 0;
+        compressionSpeed = 0;
+        compressedFileSize = 0;
+        originalFileSize = 0;
     }
 
 

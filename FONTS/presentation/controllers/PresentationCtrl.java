@@ -61,6 +61,8 @@ public class PresentationCtrl {
         return domainCtrl.getPPM(fileA);
     }
 
-    public void setGlobalStats(float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
+    public void setGlobalStats(float nFiles, float compressionTime, float compressedFileSize, float compressionDegree, float compressionSpeed, float originalFileSize) {
+        mainView.setGlobalStats(nFiles, compressionTime, compressedFileSize, compressionDegree,
+                                compressionSpeed, originalFileSize);
     }
 }

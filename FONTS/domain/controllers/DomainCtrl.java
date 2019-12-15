@@ -18,6 +18,7 @@ public class DomainCtrl {
     private AutoAlgorithm autoAlgorithm;
     private GlobalStats globalStats;
     private int currentId;
+    private String globalStatsFilePath;
 
     private static final int NO_ERROR = 0;
     private static final int ERROR = 1;
@@ -31,20 +32,21 @@ public class DomainCtrl {
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
         autoAlgorithm = new AutoAlgorithm();
+        globalStatsFilePath = "FONTS/data/GlobalStatesSave.txt";
         readGlobalStats();
     }
 
     private void readGlobalStats() {
-        byte[] stats = readFile(new File("FONTS/data/GlobalStatesSave.txt"));
-        if(stats != null){
+        byte[] stats = readFile(new File(globalStatsFilePath));
+        if(stats != null) {
             globalStats.setFileStats(new String(stats));
-            presentationCtrl.setGlobalStats(
-                globalStats.getCompressionTime(), globalStats.getCompressedFileSize(),
-                    globalStats.getCompressionDegree(), globalStats.getCompressionSpeed(),
-                    globalStats.getOriginalFileSize()
-            );
         }
-
+        presentationCtrl.setGlobalStats(
+                globalStats.getNumberFiles(),
+                globalStats.getCompressionTime(), globalStats.getCompressedFileSize(),
+                globalStats.getCompressionDegree(), globalStats.getCompressionSpeed(),
+                globalStats.getOriginalFileSize()
+        );
     }
 
 
@@ -57,7 +59,7 @@ public class DomainCtrl {
         AlgorithmSet.setQuality(quality);
     }
 
-    public void compressFile(File file){
+    private void compressFile(File file){
 
         PhysicalFile pFile = new PhysicalFile(file);
         byte[]content = readFile(file);
@@ -117,7 +119,7 @@ public class DomainCtrl {
 
     }
 
-    public void compressFolder(File file)  {
+    private void compressFolder(File file)  {
 
         byte[] fileBytes;
 
@@ -174,6 +176,7 @@ public class DomainCtrl {
     private void setLocalStats(Stats localStats){
         globalStats.setStats(localStats);
         presentationCtrl.setGlobalStats(
+                globalStats.getNumberFiles(),
                 globalStats.getCompressionTime(), globalStats.getCompressedFileSize(),
                 globalStats.getCompressionDegree(), globalStats.getCompressionSpeed(),
                 globalStats.getOriginalFileSize()
@@ -181,6 +184,8 @@ public class DomainCtrl {
         presentationCtrl.setLocalStats(localStats.getCompressionTime(), localStats.getCompressedFileSize(),
                                        localStats.getCompressionDegree(), localStats.getCompressionSpeed(),
                                        localStats.getOriginalFileSize());
+        String data = globalStats.getAllStats();
+        writeFile(globalStatsFilePath, data.getBytes());
     }
 
 
