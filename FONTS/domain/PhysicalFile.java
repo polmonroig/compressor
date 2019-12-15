@@ -91,7 +91,10 @@ public class PhysicalFile {
     private final static String[] algorithmsExtensions = {LZ78_EXTENSION, LZSS_EXTENSION,
                                              LZW_EXTENSION, JPEG_EXTENSION, AUTO_EXTENSION};
 
-
+    /**
+     * This are the stats that are saved when a compression is made
+     * if no compression is made it contains empty stats
+     * */
     private Stats localStats;
 
     /**
@@ -165,10 +168,18 @@ public class PhysicalFile {
         return content;
     }
 
+    /**
+     * <p>Gets the name of the file without extension</p>
+     * @return the name of the file
+     * */
     public String getFileName(){
         return fileName;
     }
 
+    /**
+     * <p>Gets the absolute path to the dir without the file name</p>
+     * @return absolute path 
+     * */
     public String getFileDir(){
         return fileDir;
     }

@@ -9,50 +9,113 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
+
+/**
+ * A View is the main window of the application,
+ * its job is to connect all the components of the application
+ * to enable their interaction and update all the necessary attributes.
+ *
+ * The view of the application is mainly composed of two things,
+ * a ButtonsPanel and a ContentPanel. The buttons panel is  at the left
+ * side of the window and its made of a series of buttons, only one
+ * button can be activated at a time, and each button corresponds to a
+ * specific Content. The ContentPanel is where the user mainly interacts
+ * its at the right side of the window and it is made of a series of Contents
+ * each content is associated with a button from the buttons panel, it is
+ * required that the number of buttons is equal to the number of contents
+ * otherwise there would be a mismatch.
+ *
+ * The View has also the ability to create a new Frame with a
+ * an arbitrary message, it is also responsible of creating an
+ * image comparison Frame. It is required that the view keeps track
+ * of the global stats. Finally the View is required to keep track of
+ * the relationship between every button-content pair.
+ *
+ * */
 public class View extends JFrame {
 
 
 
-    // set reference to the controller calling it
+    /**
+     * This is a reference to the presentation controller
+     * */
     private PresentationCtrl presentationCtrl;
 
-    // a view is made of a buttons panel and a content panel
+    /**
+     * The separator is just a component that
+     * separates the buttonsPanel from the contentPanel
+     * */
     private JSplitPane separator;
+    /**
+     * The buttonsPanel is at the left side of the window and
+     * it contains information of every button.
+     * */
     private ButtonsPanel buttonsPanel;
+    /**
+     * The contentPanel is at the right side of the window
+     * and contains information of every panel.
+     * */
     private ContentPanel contentPanel;
- 
-
-    // define the layout
+    /**
+     * This defines the layout of the view
+     * */
     private GridLayout layout;
+    /**
+     * This contains the names of each button
+     * */
     private static final String[] buttonNames = {"About", "Comprimir text", "Comprimir imatge",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
                                                  "Estadístiques", "Informació"};
-
-
+    /**
+     * This contains the quality options selections required by the JPEG algorithm
+     * */
     private static final String[] qualityOptions = {"0", "1", "2", "3", "4", "5", "6",
                                                     "7", "8", "9", "10", "11", "12"};
-
+    /**
+     * This contains the algorithm options for text compression
+     * */
     private static final String[] algorithmOptions = {"lz78", "lzss","lzw", "auto"};
-
+    /**
+     * This is the index of the automatic algorithm referenced at algorithmOptions
+     * */
     private static final int AUTO_ALGORITHM_INDEX = 1;
-
-
-    // save global stats ids
+    /**
+     * This is the id of the number of files label,
+     * it is used to determine the order of the
+     * labels in the global stats panel
+     * */
     private int nFilesId;
+    /**
+     * This is the id of the compression time
+     * */
     private int compressionTimeId;
+    /**
+     * This is the id of the compression degree
+     * */
     private int compressionDegreeId;
+    /**
+     * This is the id of the compression speed
+     * */
     private  int compressionSpeedId;
+    /**
+     * This is the id for the size of the original file
+     * */
     private int originalFileSizeId;
+    /**
+     * This is the id for the size of the compressed file
+     * */
     private int compressedFileSizeId;
 
-
+    /**
+     * <p>Basic constructor</p>
+     * @param title is the title of the window
+     * @param controller is a reference to the caller
+     * */
     public View(String title, PresentationCtrl controller){
         setTitle(title);
         presentationCtrl = controller;
         layout = new GridLayout(1, 1);
         buttonsPanel = new ButtonsPanel(buttonNames, this);
-
-
 
         contentPanel = new ContentPanel(setupContents(), this);
         // init separator
@@ -63,7 +126,10 @@ public class View extends JFrame {
     }
 
 
-
+    /**
+     * <p>setupContents configures each of the components</p>
+     * @return a list of configured components
+     * */
     private ArrayList<ContentInterface> setupContents() {
         ArrayList<ContentInterface> contents = new ArrayList<>();
         // about content
@@ -86,12 +152,18 @@ public class View extends JFrame {
     }
 
 
-
-
+    /**
+     * <p>This initialized every component in the window
+     *    its function is critical and required for the
+     *    correct functionality of the program</p>
+     * */
     public void init(){
         initComponents();
     }
 
+    /**
+     * <p>This initialized every component of the view</p>
+     * */
     private void initComponents() {
         // setup layout variables
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,16 +191,31 @@ public class View extends JFrame {
         setVisible(true);
     }
 
+
+    /**
+     * <p>Given a frame it sets it in the center of the screen</p>
+     * */
     private static void setInitLocation(JFrame frame){
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
     }
 
+    /**
+     * <p>Displays the given content</p>
+     * @param id is the id of the content to be displayed
+     * */
     public void selectView(int id) {
         contentPanel.selectView(id);
     }
 
-
+    /**
+     *<p>Sets and visualizes the local stats in a new window</p>
+     * @param compressedFileSize is
+     * @param compressionDegree is
+     * @param compressionSpeed is
+     * @param compressionTime is
+     * @param originalFileSize is
+     * */
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
         JFrame statsFrame = new JFrame();
 
@@ -153,6 +240,10 @@ public class View extends JFrame {
         statsFrame.setVisible(true);
     }
 
+    /**
+     * <p>This sets up the about content</p>
+     * @return a content with about characteristics
+     * */
     private ContentInterface setupAboutContent(){
         ContentInterface aboutContent = new Content("About", "Description de about");
         return aboutContent;
