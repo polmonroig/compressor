@@ -13,6 +13,7 @@ public class OptionSelector extends ContentDecorator {
     private int type;
     private View view;
 
+
     public static final int ALGORITHM_SELECTOR = 0;
     public static final int QUALITY_SELECTOR = 1;
 
@@ -64,5 +65,9 @@ public class OptionSelector extends ContentDecorator {
         });
     }
 
+
+    public void setDefaultIndex(int i){
+        options.setSelectedIndex(i);
+    }
 
 }

@@ -254,6 +254,7 @@ public class View extends JFrame {
                 "dexcirpcion de comprimir un text");
         compressText = new OptionSelector(compressText, algorithmOptions,
                 "Selecciona el algorisme de compressió desitjat", OptionSelector.ALGORITHM_SELECTOR, this);
+        ((OptionSelector) compressText).setDefaultIndex(algorithmOptions.length-1);//auto (la ultima) por defecto
         compressText = new FileChooser(compressText, new String[]{"txt"},
                 "Comprimir", this,
                 FileChooser.COMPRESSION_MODE, FileChooser.FILES_ONLY);
@@ -367,7 +368,7 @@ public class View extends JFrame {
 
         errorFrame.setTitle(title);
         // set location at the middle of the screen
-        errorFrame.setSize(new Dimension(400, 200));
+        errorFrame.setSize(new Dimension(500, 200));
         setInitLocation(errorFrame);
         ContentInterface errorContent = new Content(title, message);
         errorContent = new ExitButton(errorContent, "Aceptar", errorFrame);
@@ -385,10 +386,10 @@ public class View extends JFrame {
             buttonsPanel.setEnabledButton(6, true);
             content.setLabel(nFilesId, "Numero de archivos: " + nFiles);
             content.setLabel(compressionTimeId, "Tiempo medio de compresion: " + compressionTime + " ms");
-            content.setLabel(compressedFileSizeId, "Tamaño medio del archivo compromido: " + compressedFileSize + " bytes");
-            content.setLabel(compressionDegreeId, "Grado medio de compresion: " + compressionDegree);
+            content.setLabel(compressedFileSizeId, "Tamaño medio de los archivos comprimidos: " + compressedFileSize + " bytes");
+            content.setLabel(compressionDegreeId, "Grado medio de compresion: " + compressionDegree + "%");
             content.setLabel(compressionSpeedId, "Velocidad media de compresion: " + compressionSpeed + " bytes/ms");
-            content.setLabel(originalFileSizeId, "Tamaño medio del archivo original: " + originalFileSize + "bytes");
+            content.setLabel(originalFileSizeId, "Tamaño medio de los archivos originales: " + originalFileSize + "bytes");
         }
     }
 }
