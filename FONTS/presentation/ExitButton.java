@@ -18,7 +18,7 @@ public class ExitButton extends ContentDecorator {
     public void init(){
         initComponents();
         initEventListeners();
-    } 
+    }
 
     private void initComponents() {
         // init super class
@@ -34,6 +34,7 @@ public class ExitButton extends ContentDecorator {
         add(getInnerContent(), constraints);
         constraints.fill = GridBagConstraints.NONE;
         constraints.gridy = 1;
+        constraints.insets = new Insets(15, 0, 15, 0);
         add(button, constraints);
     }
 
