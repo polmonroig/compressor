@@ -201,7 +201,6 @@ public class JPEG implements Algorithm {
         Map<Integer, Integer> FreqCR = new HashMap<>();
         if(imagenaux[29] == '/') iteradorFreq = 29;
         else iteradorFreq = 28;
-        System.out.println(sizeY);
         for(int x = 0; x<sizeY; ++x){
             StringBuilder Key = new StringBuilder();
             StringBuilder Value = new StringBuilder();
@@ -431,7 +430,6 @@ public class JPEG implements Algorithm {
         ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
         ArrayList<Integer> Crencoding = new ArrayList<Integer>();
 
-        System.out.println(imagen.length);
 
         char [] imagenaux = new char[imagen.length];
         for (int j = 0; j < imagen.length; j++) {
