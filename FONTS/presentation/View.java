@@ -223,18 +223,18 @@ public class View extends JFrame {
         // set location at the middle of the screen
         statsFrame.setSize(new Dimension(500, 300));
         setInitLocation(statsFrame);
-        ContentInterface content = new Content("Estadisticas", "Visualizacion de las estadisticas de la compresion realizada");
+        ContentInterface content = new Content("Estadístiques compressió", "Estadístiques de la compressió realitzada.");
         content = new VariableLabel(content);
         int id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Tamaño inicial: " + originalFileSize + " bytes");
+        ((VariableLabel) content).setLabel(id, "Tamany inicial: " + originalFileSize + " bytes");
         id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Tamaño comprimido: " + compressedFileSize + " bytes");
+        ((VariableLabel) content).setLabel(id, "Tamany comprimit: " + compressedFileSize + " bytes");
         id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Grado de compresion: " + compressionDegree);
+        ((VariableLabel) content).setLabel(id, "Grau de compressió: " + compressionDegree);
         id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Velocidad de compresion: " + compressionSpeed + " bytes/ms");
+        ((VariableLabel) content).setLabel(id, "Velocitat de compressió: " + compressionSpeed + " bytes/ms");
         id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Tiempo de compresion: " + compressionTime + " ms");
+        ((VariableLabel) content).setLabel(id, "Temps de compressió: " + compressionTime + " ms");
         content.init();
         statsFrame.add(content);
         statsFrame.setVisible(true);
@@ -384,12 +384,12 @@ public class View extends JFrame {
         if(nFiles > 0){
             VariableLabel content = (VariableLabel)contentPanel.getContent(6);
             buttonsPanel.setEnabledButton(6, true);
-            content.setLabel(nFilesId, "Numero de archivos: " + nFiles);
-            content.setLabel(compressionTimeId, "Tiempo medio de compresion: " + compressionTime + " ms");
-            content.setLabel(compressedFileSizeId, "Tamaño medio de los archivos comprimidos: " + compressedFileSize + " bytes");
-            content.setLabel(compressionDegreeId, "Grado medio de compresion: " + compressionDegree + "%");
-            content.setLabel(compressionSpeedId, "Velocidad media de compresion: " + compressionSpeed + " bytes/ms");
-            content.setLabel(originalFileSizeId, "Tamaño medio de los archivos originales: " + originalFileSize + "bytes");
+            content.setLabel(nFilesId, "Numero de compressions: " + nFiles);
+            content.setLabel(compressionTimeId, "Temps mitja de compressions: " + compressionTime + " ms");
+            content.setLabel(compressedFileSizeId, "Mida mitjana dels arxius comprimits: " + compressedFileSize + " bytes");
+            content.setLabel(compressionDegreeId, "Grau mitja de compressió: " + compressionDegree + "%");
+            content.setLabel(compressionSpeedId, "Velocitat mitjana de compressió: " + compressionSpeed + " bytes/ms");
+            content.setLabel(originalFileSizeId, "Tamany mitja dels arxius originals: " + originalFileSize + "bytes");
         }
     }
 }
