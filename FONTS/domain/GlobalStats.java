@@ -11,7 +11,7 @@ public class GlobalStats extends Stats {
     public void setStats(Stats stats){
         setCompressionSpeed(stats.getCompressionSpeed());
         setCompressionDegree(stats.getCompressionDegree());
-        setCompressedFileSize(stats.getOriginalFileSize());
+        setCompressedFileSize(stats.getCompressedFileSize());
         setCompressionTime(stats.getCompressionTime());
         setOriginalFileSize(stats.getOriginalFileSize());
     }
