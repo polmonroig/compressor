@@ -1,3 +1,4 @@
+
 package data.controllers;
 
 import java.io.*;
@@ -26,10 +27,6 @@ public class DataCtrl {
         fs = new FileOutputStream(file);
         fs.write(text);
 
-    }
-
-    public void makeDir(File file){
-        file.mkdir();
     }
 
 }
