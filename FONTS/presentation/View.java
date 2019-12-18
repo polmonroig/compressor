@@ -106,6 +106,7 @@ public class View extends JFrame {
      * */
     private int compressedFileSizeId;
 
+
     /**
      * <p>Basic constructor</p>
      * @param title is the title of the window
@@ -230,11 +231,12 @@ public class View extends JFrame {
         id = ((VariableLabel)content).addLabel();
         ((VariableLabel) content).setLabel(id, "Tamany comprimit: " + compressedFileSize + " bytes");
         id = ((VariableLabel)content).addLabel();
-        ((VariableLabel) content).setLabel(id, "Grau de compressió: " + compressionDegree);
+        ((VariableLabel) content).setLabel(id, "Grau de compressió: " + compressionDegree + "%");
         id = ((VariableLabel)content).addLabel();
         ((VariableLabel) content).setLabel(id, "Velocitat de compressió: " + compressionSpeed + " bytes/ms");
         id = ((VariableLabel)content).addLabel();
         ((VariableLabel) content).setLabel(id, "Temps de compressió: " + compressionTime + " ms");
+        content = new ExitButton(content, "Aceptar", statsFrame);
         content.init();
         statsFrame.add(content);
         statsFrame.setVisible(true);
@@ -245,13 +247,12 @@ public class View extends JFrame {
      * @return a content with about characteristics
      * */
     private ContentInterface setupAboutContent(){
-        ContentInterface aboutContent = new Content("About", "Description de about");
+        ContentInterface aboutContent = new Content("About", "\nPrograma de compressió de text, imatges i carpetes \n creat per a la assignatura de PROP de la FIB.");
         return aboutContent;
     }
 
     private ContentInterface setupCompressTextContent(){
-        ContentInterface compressText = new Content("Comprimir Text",
-                "dexcirpcion de comprimir un text");
+        ContentInterface compressText = new Content("Comprimir Text","");
         compressText = new OptionSelector(compressText, algorithmOptions,
                 "Selecciona el algorisme de compressió desitjat", OptionSelector.ALGORITHM_SELECTOR, this);
         ((OptionSelector) compressText).setDefaultIndex(algorithmOptions.length-1);//auto (la ultima) por defecto
@@ -262,8 +263,7 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupCompressImageContent(){
-        ContentInterface compressImage = new Content("Comprimir imatge",
-                "desciprion imagen");
+        ContentInterface compressImage = new Content("Comprimir imatge","");
         compressImage = new OptionSelector(compressImage, qualityOptions,
                 "Selecciona la qualitat de compressió", OptionSelector.QUALITY_SELECTOR, this);
         compressImage = new FileChooser(compressImage, new String[]{"ppm"},
@@ -273,7 +273,7 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupFolderContent(){
-        ContentInterface compressFolder = new Content("Comprimir carpeta","descripcion");
+        ContentInterface compressFolder = new Content("Comprimir carpeta","");
         compressFolder = new OptionSelector(compressFolder, algorithmOptions,
                 "Selecciona el algorisme de compressió desitjat", OptionSelector.ALGORITHM_SELECTOR, this);
         compressFolder = new OptionSelector(compressFolder, qualityOptions,
@@ -285,7 +285,7 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupDecompressContent(){
-        ContentInterface decompressFile = new Content("Descomprimir", "Descripcion");
+        ContentInterface decompressFile = new Content("Descomprimir", "");
         decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
                 "Descomprimir", this,
                 FileChooser.DECOMPRESSION_MODE, FileChooser.FILES_ONLY);
@@ -293,7 +293,7 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupCompareContent(){
-        ContentInterface compareFile = new Content("Comparar archivos", "Descripcion");
+        ContentInterface compareFile = new Content("Comparar archivos", "");
         compareFile = new FileChooser(compareFile, new String[]{"ppm"}, "Comparar",
                                       this, FileChooser.COMPARISON_MODE, FileChooser.FILES_ONLY);
         return compareFile;
@@ -301,7 +301,7 @@ public class View extends JFrame {
 
 
     private ContentInterface setupGlobalStatsContent(){
-        ContentInterface globalStats = new Content("Estadístiques Globals", "descriptcion");
+        ContentInterface globalStats = new Content("Estadístiques Globals", "");
         globalStats = new VariableLabel(globalStats);
         nFilesId = ((VariableLabel) globalStats).addLabel();
         compressionTimeId = ((VariableLabel) globalStats).addLabel();
@@ -389,7 +389,7 @@ public class View extends JFrame {
             content.setLabel(compressedFileSizeId, "Mida mitjana dels arxius comprimits: " + compressedFileSize + " bytes");
             content.setLabel(compressionDegreeId, "Grau mitja de compressió: " + compressionDegree + "%");
             content.setLabel(compressionSpeedId, "Velocitat mitjana de compressió: " + compressionSpeed + " bytes/ms");
-            content.setLabel(originalFileSizeId, "Tamany mitja dels arxius originals: " + originalFileSize + "bytes");
+            content.setLabel(originalFileSizeId, "Tamany mitja dels arxius originals: " + originalFileSize + " bytes");
         }
     }
 }

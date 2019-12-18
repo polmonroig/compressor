@@ -19,7 +19,7 @@ public class FileSelector extends JPanel {
     public FileSelector(String[] types, int mode, FileChooser fileSelector){
         chooser = fileSelector;
         selectionMode = mode;
-        label = new JTextField("Directori", 20);
+        label = new JTextField("Path", 20);
         button = new CustomButton("Selecciona", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         fileChooser = new JFileChooser();
         fileTypes = types;
@@ -72,6 +72,6 @@ public class FileSelector extends JPanel {
     }
 
     public void resetValues() {
-        label.setText("Directori");
+        label.setText("Path ");
     }
 }
