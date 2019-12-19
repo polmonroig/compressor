@@ -19,6 +19,31 @@ import java.util.Map;
 public class JPEG implements Algorithm {
 
     private int quality = 0;
+    //descompression
+    private int width = 0;
+    private int height = 0;
+    private int calidad = 0;
+    private int sizeY = 0;
+    private int sizeCB = 0;
+    private int sizeCR = 0;
+    private int sizeYc = 0;
+    private int sizeCBc = 0;
+    private int sizeCRc = 0;
+    private int iteradorFreq = 0;
+    private int i = 0;
+    private Map<Integer, Integer> FreqY = new HashMap<>();
+    private Map<Integer, Integer> FreqCB = new HashMap<>();
+    private Map<Integer, Integer> FreqCR = new HashMap<>();
+    private ArrayList<Integer> Ydes = new ArrayList<>();
+    private ArrayList<Integer> CBdes = new ArrayList<>();
+    private ArrayList<Integer> CRdes = new ArrayList<>();
+    private int [][] FinalR;
+    private int [][] FinalG;
+    private int [][] FinalB;
+    //compression
+    private boolean anchura = true;
+    private int iterator = 0;
+    private int color = 0;
 
 
     public void setQuality(int quality){
@@ -111,321 +136,43 @@ public class JPEG implements Algorithm {
 
     @Override
     public byte[] decompress(byte [] imagen){
-
         /*
         Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
          */
-
-        int width = 0;
-        int height = 0;
-        int calidad = 0;
-        int iteratorC = 0;
-        int sizeY = 0;
-        int sizeCB = 0;
-        int sizeCR = 0;
-        int sizeYc = 0;
-        int sizeCBc = 0;
-        int sizeCRc = 0;
-        int iteradorFreq = 0;
-
         char [] imagenaux = new char[imagen.length];
         for (int j = 0; j < imagen.length; j++) {
             imagenaux[j] = (char) (imagen[j] & 0xFF);
         }
 
         StringBuilder imageBYTES = new StringBuilder(imagen.length * Byte.SIZE);
-        for( int i = 0; i < Byte.SIZE * imagen.length; i++ ) imageBYTES.append((imagen[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
+        for( i = 0; i < Byte.SIZE * imagen.length; i++ ) imageBYTES.append((imagen[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
         String aux = imageBYTES.toString();
-        int i = 0;
-        StringBuilder calidadS = new StringBuilder();
-        while(i<8){
-            calidadS.append(aux.charAt(i));
-            ++i;
-        }
-        calidad = Integer.parseInt(calidadS.toString(), 2);
-        StringBuilder widthS = new StringBuilder();
-        while(i<24){
-            widthS.append(aux.charAt(i));
-            ++i;
-        }
-        width = Integer.parseInt(widthS.toString(), 2);
-        StringBuilder heightS = new StringBuilder();
-        while(i<40){
-            heightS.append(aux.charAt(i));
-            ++i;
-        }
-        height = Integer.parseInt(heightS.toString(), 2);
-        StringBuilder sizeYS = new StringBuilder();
-        while(i<72){
-            sizeYS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeY = Integer.parseInt(sizeYS.toString(), 2);
-        StringBuilder sizeCBS = new StringBuilder();
-        while(i<104){
-            sizeCBS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeCB = Integer.parseInt(sizeCBS.toString(), 2);
-        StringBuilder sizeCRS = new StringBuilder();
-        while(i<136){
-            sizeCRS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeCR = Integer.parseInt(sizeCRS.toString(), 2);
-        StringBuilder sizeYcS = new StringBuilder();
-        while(i<168){
-            sizeYcS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeYc = Integer.parseInt(sizeYcS.toString(), 2);
-        StringBuilder sizeCBcS = new StringBuilder();
-        while(i<200){
-            sizeCBcS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeCBc = Integer.parseInt(sizeCBcS.toString(), 2);
-        StringBuilder sizeCRcS = new StringBuilder();
-        while(i<232){
-            sizeCRcS.append(aux.charAt(i));
-            ++i;
-        }
-        sizeCRc = Integer.parseInt(sizeCRcS.toString(), 2);
+        i = 0;
 
-        int [][] FinalR = new int [height][width];
-        int [][] FinalG = new int [height][width];
-        int [][] FinalB = new int [height][width];
+        ReadDecompression(aux);
 
-        Map<Integer, Integer> FreqY = new HashMap<>();
-        Map<Integer, Integer> FreqCB = new HashMap<>();
-        Map<Integer, Integer> FreqCR = new HashMap<>();
-        if(imagenaux[29] == '/') iteradorFreq = 29;
-        else iteradorFreq = 28;
-        for(int x = 0; x<sizeY; ++x){
-            StringBuilder Key = new StringBuilder();
-            StringBuilder Value = new StringBuilder();
-            int n;
-            int f;
-                if(imagenaux[iteradorFreq] == '/'){
-                    ++iteradorFreq;
-                    while(imagenaux[iteradorFreq] != '/'){
-                        Key.append(imagenaux[iteradorFreq]);
-                        ++iteradorFreq;
-                    }
-                    ++iteradorFreq;
-                    while(imagenaux[iteradorFreq] != '/'){
-                        Value.append(imagenaux[iteradorFreq]);
-                        ++iteradorFreq;
-                    }
-                }
-                if(Key.length() > 9){
-                    //negativo
-                    String auxi = Key.toString();
-                    auxi = Utils.andOfString(auxi);
-                    n = Integer.parseInt(auxi,2);
-                    ++n;
-                    n = -1*n;
-                }
-                else{
-                    n = Integer.parseInt(Key.toString(), 2);
-                }
-                f = Integer.parseInt(Value.toString(), 2);
-                FreqY.put(n,f);
-            }
+        FinalR = new int [height][width];
+        FinalG = new int [height][width];
+        FinalB = new int [height][width];
 
-        for(int x = 0; x<sizeCB; ++x){
-            StringBuilder Key = new StringBuilder();
-            StringBuilder Value = new StringBuilder();
-            int n;
-            int f;
-            if(imagenaux[iteradorFreq] == '/'){
-                ++iteradorFreq;
-                while(imagenaux[iteradorFreq] != '/'){
-                    Key.append(imagenaux[iteradorFreq]);
-                    ++iteradorFreq;
-                }
-                ++iteradorFreq;
-                while(imagenaux[iteradorFreq] != '/'){
-                    Value.append(imagenaux[iteradorFreq]);
-                    ++iteradorFreq;
-                }
-            }
-            if(Key.length() > 9){
-                //negativo
-                String auxi = Key.toString();
-                auxi = Utils.andOfString(auxi);
-                n = Integer.parseInt(auxi,2);
-                ++n;
-                n = -1*n;
-            }
-            else{
-                n = Integer.parseInt(Key.toString(), 2);
-            }
-            f = Integer.parseInt(Value.toString(), 2);
-            FreqCB.put(n,f);
-        }
+        ReadFreq(imagenaux);
 
-        for(int x = 0; x<sizeCR; ++x){
-            StringBuilder Key = new StringBuilder();
-            StringBuilder Value = new StringBuilder();
-            int n;
-            int f;
-            if(imagenaux[iteradorFreq] == '/'){
-                ++iteradorFreq;
-                while(imagenaux[iteradorFreq] != '/'){
-                    Key.append(imagenaux[iteradorFreq]);
-                    ++iteradorFreq;
-                }
-                ++iteradorFreq;
-                while(imagenaux[iteradorFreq] != '/'){
-                    Value.append(imagenaux[iteradorFreq]);
-                    ++iteradorFreq;
-                }
-            }
-            if(Key.length() > 9){
-                //negativo
-                String auxi = Key.toString();
-                auxi = Utils.andOfString(auxi);
-                n = Integer.parseInt(auxi,2);
-                ++n;
-                n = -1*n;
-            }
-            else{
-                n = Integer.parseInt(Key.toString(), 2);
-            }
-            f = Integer.parseInt(Value.toString(), 2);
-            FreqCR.put(n,f);
-        }
-
-        Huffman DY = new Huffman();
-        Huffman DCB = new Huffman();
-        Huffman DCR = new Huffman();
-        DY.setFrequencies(FreqY);
-        DCB.setFrequencies(FreqCB);
-        DCR.setFrequencies(FreqCR);
-        StringBuilder encoding = new StringBuilder();
-        int iteradorMatrix = aux.length() - sizeYc - sizeCBc - sizeCRc;
-        for(int x = 0; x<sizeYc; ++x) {
-            encoding.append(aux.charAt(iteradorMatrix));
-            ++iteradorMatrix;
-        }
-        ArrayList<Integer> Ydes = DY.decompressHuffman(encoding.toString());
-        encoding = new StringBuilder();
-        for(int x = 0; x<sizeCBc; ++x) {
-            encoding.append(aux.charAt(iteradorMatrix));
-            ++iteradorMatrix;
-        }
-        ArrayList<Integer> CBdes = DCB.decompressHuffman(encoding.toString());
-        encoding = new StringBuilder();
-        for(int x = 0; x<sizeCRc; ++x) {
-            encoding.append(aux.charAt(iteradorMatrix));
-            ++iteradorMatrix;
-        }
-        ArrayList<Integer> CRdes = DCR.decompressHuffman(encoding.toString());
+        ReadHuffman(aux);
 
         /*
         SE ACABA LA LECTURA DEL ARCHIVO
          */
 
-        int iteradorY = 0;
-        int iteradorarray = 0;
-        int fila = 0;
-        int columna = 0;
-        while (iteradorY < width/8*height/8){
-            int u = 1;
-            int k = 1;
-            double [][] Y = new double[8][8];
-            double [][] CB = new double[8][8];
-            double [][] CR = new double[8][8];
-            for (int element = 0; element < 64; ++element) {
-                Y[u-1][k-1] = (double) Ydes.get(iteradorarray);
-                CB[u-1][k-1] = (double) CBdes.get(iteradorarray);
-                CR[u-1][k-1] = (double) CRdes.get(iteradorarray);
-                if ((k + u) % 2 != 0) {
-                    if (k < 8)
-                        k++;
-                    else
-                        u += 2;
-                    if (u > 1)
-                        u--;
-                } else {
-                    if (u < 8)
-                        u++;
-                    else
-                        k += 2;
-                    if (k > 1)
-                        k--;
-                }
-                iteradorarray++;
-            }
-            ++iteradorY;
-            //DESQUANTIZAMOS
-            for(int m = 0; m < 8; ++m){
-                for(int n = 0; n < 8; ++n){
-                    Y[m][n] = Y[m][n] * QtablesLuminance[calidad][m][n];
-                    CB[m][n] = CB[m][n] * QtablesChrominance[calidad][m][n];
-                    CR[m][n] = CR[m][n] * QtablesChrominance[calidad][m][n];
-                }
-            }
-            //INVERSA DE LA DCT2
-            double [][] Ydct = dct3(Y);
-            double [][] CBdct = dct3(CB);
-            double [][] CRdct = dct3(CR);
+        CreateDecompression();
 
-            //SUMAR 128
-            for(int m = 0; m < 8; ++m){
-                for(int n = 0; n < 8; ++n){
-                    Ydct[m][n] = Ydct[m][n] + 128;
-                    CBdct[m][n] = CBdct[m][n] + 128;
-                    CRdct[m][n] = CRdct[m][n] + 128;
-                    int [] YCbCr = {(int) Ydct[m][n], (int) CBdct[m][n], (int) CRdct[m][n]};
-                    int [] RGB = YCbCrtoRGB(YCbCr);
-                    if(fila+m < height & columna+n < width) {
-                        FinalR[fila + m][columna + n] = RGB[0];
-                        FinalG[fila + m][columna + n] = RGB[1];
-                        FinalB[fila + m][columna + n] = RGB[2];
-                    }
-                }
-            }
-            if(columna + 8 < width) columna = columna + 8;
-            else{
-                fila = fila + 8;
-                columna = 0;
-            }
-        }
-        StringBuilder Finald = new StringBuilder();
-        Finald.append("P6");
-        Finald.append("\n");
-        Finald.append(width);
-        Finald.append(" ");
-        Finald.append(height);
-        Finald.append("\n");
-        Finald.append(255);
-        Finald.append("\n");
-        for(int x = 0; x < height; ++x){
-            for(int y = 0; y < width; ++y){
-                char auxe = (char) FinalR[x][y];
-                Finald.append(auxe);
-                auxe = (char)FinalG[x][y];
-                Finald.append(auxe);
-                auxe = (char)FinalB[x][y];
-                Finald.append(auxe);
-            }
-        }
-        String Finaldes = Finald.toString();
-        return Finaldes.getBytes();
+        return PPMfile();
     }
-
+    
     @Override
     public byte[] compress(byte [] imagen){
         /*
         Declaraciones de variables
          */
-        int width = 0;
-        int height = 0;
-        int color = 0;
-        boolean anchura = true;
-        int iterator = 0;
         ArrayList<Integer> Yencoding = new ArrayList<Integer>();
         ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
         ArrayList<Integer> Crencoding = new ArrayList<Integer>();
@@ -670,6 +417,286 @@ public class JPEG implements Algorithm {
         return finalcode;
     }
 
+    private byte[] PPMfile() {
+        StringBuilder Finald = new StringBuilder();
+        Finald.append("P6");
+        Finald.append("\n");
+        Finald.append(width);
+        Finald.append(" ");
+        Finald.append(height);
+        Finald.append("\n");
+        Finald.append(255);
+        Finald.append("\n");
+        for(int x = 0; x < height; ++x){
+            for(int y = 0; y < width; ++y){
+                char auxe = (char) FinalR[x][y];
+                Finald.append(auxe);
+                auxe = (char)FinalG[x][y];
+                Finald.append(auxe);
+                auxe = (char)FinalB[x][y];
+                Finald.append(auxe);
+            }
+        }
+        String Finaldes = Finald.toString();
+        return Finaldes.getBytes();
+    }
+
+    private void CreateDecompression() {
+        int iteradorY = 0;
+        int iteradorarray = 0;
+        int fila = 0;
+        int columna = 0;
+        while (iteradorY < width/8*height/8){
+            int u = 1;
+            int k = 1;
+            double [][] Y = new double[8][8];
+            double [][] CB = new double[8][8];
+            double [][] CR = new double[8][8];
+            for (int element = 0; element < 64; ++element) {
+                Y[u-1][k-1] = (double) Ydes.get(iteradorarray);
+                CB[u-1][k-1] = (double) CBdes.get(iteradorarray);
+                CR[u-1][k-1] = (double) CRdes.get(iteradorarray);
+                if ((k + u) % 2 != 0) {
+                    if (k < 8)
+                        k++;
+                    else
+                        u += 2;
+                    if (u > 1)
+                        u--;
+                } else {
+                    if (u < 8)
+                        u++;
+                    else
+                        k += 2;
+                    if (k > 1)
+                        k--;
+                }
+                iteradorarray++;
+            }
+            ++iteradorY;
+            //DESQUANTIZAMOS
+            for(int m = 0; m < 8; ++m){
+                for(int n = 0; n < 8; ++n){
+                    Y[m][n] = Y[m][n] * QtablesLuminance[calidad][m][n];
+                    CB[m][n] = CB[m][n] * QtablesChrominance[calidad][m][n];
+                    CR[m][n] = CR[m][n] * QtablesChrominance[calidad][m][n];
+                }
+            }
+            //INVERSA DE LA DCT2
+            double [][] Ydct = dct3(Y);
+            double [][] CBdct = dct3(CB);
+            double [][] CRdct = dct3(CR);
+
+            //SUMAR 128
+            for(int m = 0; m < 8; ++m){
+                for(int n = 0; n < 8; ++n){
+                    Ydct[m][n] = Ydct[m][n] + 128;
+                    CBdct[m][n] = CBdct[m][n] + 128;
+                    CRdct[m][n] = CRdct[m][n] + 128;
+                    int [] YCbCr = {(int) Ydct[m][n], (int) CBdct[m][n], (int) CRdct[m][n]};
+                    int [] RGB = YCbCrtoRGB(YCbCr);
+                    if(fila+m < height & columna+n < width) {
+                        FinalR[fila + m][columna + n] = RGB[0];
+                        FinalG[fila + m][columna + n] = RGB[1];
+                        FinalB[fila + m][columna + n] = RGB[2];
+                    }
+                }
+            }
+            if(columna + 8 < width) columna = columna + 8;
+            else{
+                fila = fila + 8;
+                columna = 0;
+            }
+        }
+    }
+
+    private void ReadHuffman(String aux) {
+
+        Huffman DY = new Huffman();
+        Huffman DCB = new Huffman();
+        Huffman DCR = new Huffman();
+        DY.setFrequencies(FreqY);
+        DCB.setFrequencies(FreqCB);
+        DCR.setFrequencies(FreqCR);
+
+        StringBuilder encoding = new StringBuilder();
+        int iteradorMatrix = aux.length() - sizeYc - sizeCBc - sizeCRc;
+        for(int x = 0; x<sizeYc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
+        }
+        Ydes = DY.decompressHuffman(encoding.toString());
+        encoding = new StringBuilder();
+        for(int x = 0; x<sizeCBc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
+        }
+        CBdes = DCB.decompressHuffman(encoding.toString());
+        encoding = new StringBuilder();
+        for(int x = 0; x<sizeCRc; ++x) {
+            encoding.append(aux.charAt(iteradorMatrix));
+            ++iteradorMatrix;
+        }
+        CRdes = DCR.decompressHuffman(encoding.toString());
+    }
+
+    private void ReadFreq(char[] imagenaux) {
+        if(imagenaux[29] == '/') iteradorFreq = 29;
+        else iteradorFreq = 28;
+        for(int x = 0; x<sizeY; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+            if(imagenaux[iteradorFreq] == '/'){
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Key.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Value.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+            }
+            if(Key.length() > 9){
+                //negativo
+                String auxi = Key.toString();
+                auxi = Utils.andOfString(auxi);
+                n = Integer.parseInt(auxi,2);
+                ++n;
+                n = -1*n;
+            }
+            else{
+                n = Integer.parseInt(Key.toString(), 2);
+            }
+            f = Integer.parseInt(Value.toString(), 2);
+            FreqY.put(n,f);
+        }
+
+        for(int x = 0; x<sizeCB; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+            if(imagenaux[iteradorFreq] == '/'){
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Key.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Value.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+            }
+            if(Key.length() > 9){
+                //negativo
+                String auxi = Key.toString();
+                auxi = Utils.andOfString(auxi);
+                n = Integer.parseInt(auxi,2);
+                ++n;
+                n = -1*n;
+            }
+            else{
+                n = Integer.parseInt(Key.toString(), 2);
+            }
+            f = Integer.parseInt(Value.toString(), 2);
+            FreqCB.put(n,f);
+        }
+
+        for(int x = 0; x<sizeCR; ++x){
+            StringBuilder Key = new StringBuilder();
+            StringBuilder Value = new StringBuilder();
+            int n;
+            int f;
+            if(imagenaux[iteradorFreq] == '/'){
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Key.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+                ++iteradorFreq;
+                while(imagenaux[iteradorFreq] != '/'){
+                    Value.append(imagenaux[iteradorFreq]);
+                    ++iteradorFreq;
+                }
+            }
+            if(Key.length() > 9){
+                //negativo
+                String auxi = Key.toString();
+                auxi = Utils.andOfString(auxi);
+                n = Integer.parseInt(auxi,2);
+                ++n;
+                n = -1*n;
+            }
+            else{
+                n = Integer.parseInt(Key.toString(), 2);
+            }
+            f = Integer.parseInt(Value.toString(), 2);
+            FreqCR.put(n,f);
+        }
+    }
+
+    private void ReadDecompression(String aux) {
+        StringBuilder calidadS = new StringBuilder();
+        while(i<8){
+            calidadS.append(aux.charAt(i));
+            ++i;
+        }
+        calidad = Integer.parseInt(calidadS.toString(), 2);
+        StringBuilder widthS = new StringBuilder();
+        while(i<24){
+            widthS.append(aux.charAt(i));
+            ++i;
+        }
+        width = Integer.parseInt(widthS.toString(), 2);
+        StringBuilder heightS = new StringBuilder();
+        while(i<40){
+            heightS.append(aux.charAt(i));
+            ++i;
+        }
+        height = Integer.parseInt(heightS.toString(), 2);
+        StringBuilder sizeYS = new StringBuilder();
+        while(i<72){
+            sizeYS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeY = Integer.parseInt(sizeYS.toString(), 2);
+        StringBuilder sizeCBS = new StringBuilder();
+        while(i<104){
+            sizeCBS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCB = Integer.parseInt(sizeCBS.toString(), 2);
+        StringBuilder sizeCRS = new StringBuilder();
+        while(i<136){
+            sizeCRS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCR = Integer.parseInt(sizeCRS.toString(), 2);
+        StringBuilder sizeYcS = new StringBuilder();
+        while(i<168){
+            sizeYcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeYc = Integer.parseInt(sizeYcS.toString(), 2);
+        StringBuilder sizeCBcS = new StringBuilder();
+        while(i<200){
+            sizeCBcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCBc = Integer.parseInt(sizeCBcS.toString(), 2);
+        StringBuilder sizeCRcS = new StringBuilder();
+        while(i<232){
+            sizeCRcS.append(aux.charAt(i));
+            ++i;
+        }
+        sizeCRc = Integer.parseInt(sizeCRcS.toString(), 2);
+    }
+
     static private double[][] initMatrix(double [][] c) {
         final int N = c.length;
         final double value = 1/Math.sqrt(2.0);
@@ -799,6 +826,7 @@ public class JPEG implements Algorithm {
 
         return RGB;
     }
+
 
 
     public static BufferedImage makePPM(byte[] aux) {
