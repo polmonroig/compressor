@@ -44,6 +44,12 @@ public class JPEG implements Algorithm {
     private int iterator = 0;
     private int color = 0;
     private int [][][] imagenYCbCr;
+    private ArrayList<Integer> Yencoding;
+    private ArrayList<Integer> Cbencoding;
+    private ArrayList<Integer> Crencoding;
+    private StringBuilder FY;
+    private StringBuilder FCB;
+    private StringBuilder FCR;
 
 
     public void setQuality(int quality){
@@ -136,7 +142,7 @@ public class JPEG implements Algorithm {
 
     @Override
     public byte[] decompress(byte [] imagen){
-        resetVar();
+        resetVarD();
         /*
         Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
          */
@@ -172,32 +178,16 @@ public class JPEG implements Algorithm {
 
     @Override
     public byte[] compress(byte [] imagen){
+        ResetVarC();
         /*
         Declaraciones de variables
          */
-        ArrayList<Integer> Yencoding = new ArrayList<Integer>();
-        ArrayList<Integer> Cbencoding = new ArrayList<Integer>();
-        ArrayList<Integer> Crencoding = new ArrayList<Integer>();
-
-
         char [] imagenaux = new char[imagen.length];
         for (int j = 0; j < imagen.length; j++) {
             imagenaux[j] = (char) (imagen[j] & 0xFF);
         }
-            /*
-            Conseguimos la altura y anchura de la imagen a codificar
-            */
 
         getWidthandHeightandColor(imagenaux);
-
-            /*
-            Conseguimos el color maximo de la imagen a codificar
-            */
-
-
-            /*
-            Cambiamos el color RGB original de la imagen a YCbCr
-            */
 
        imagenYCbCr = new int [height][width][3];
        for (int i = 0; i < height; ++i){
@@ -208,6 +198,109 @@ public class JPEG implements Algorithm {
            }
        }
 
+        CreateCompression();
+
+
+            Huffman comprimirY = new Huffman();
+            Huffman comprimirCB = new Huffman();
+            Huffman comprimirCR = new Huffman();
+
+            String Yen = comprimirY.compressHuffman(Yencoding);
+            String Cben = comprimirCB.compressHuffman(Cbencoding);
+            String Cren = comprimirCR.compressHuffman(Crencoding);
+
+
+            Map<Integer, Integer> freqY = comprimirY.getFrequencies();
+            Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
+            Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
+
+
+            CreateFreq(freqY, freqCb, freqCr);
+
+            return JPEGFile(freqY, freqCb, freqCr, Yen, Cben, Cren);
+    }
+
+    private void ResetVarC() {
+        anchura = true;
+        iterator = 0;
+        color = 0;
+        Yencoding = new ArrayList<Integer>();
+        Cbencoding = new ArrayList<Integer>();
+        Crencoding = new ArrayList<Integer>();
+        FY = new StringBuilder();
+        FCB = new StringBuilder();
+        FCR = new StringBuilder();
+    }
+
+
+    private byte[] JPEGFile(Map<Integer, Integer> freqY, Map<Integer, Integer> freqCb, Map<Integer, Integer> freqCr, String Yen, String Cben, String Cren) {
+        String sizeY = Integer.toBinaryString(freqY.size());
+        String sizeCB = Integer.toBinaryString(freqCb.size());
+        String sizeCR = Integer.toBinaryString(freqCr.size());
+        String calidadE =  Integer.toBinaryString(quality);
+        String widthE =  Integer.toBinaryString(width);
+        String heightE =  Integer.toBinaryString(height);
+        String sizeYc =  Integer.toBinaryString(Yen.length());
+        String sizeCBc =  Integer.toBinaryString(Cben.length());
+        String sizeCRc =  Integer.toBinaryString(Cren.length());
+        while(calidadE.length() < 8) calidadE = "0" + calidadE;
+        while(widthE.length() < 16) widthE = "0" + widthE;
+        while(heightE.length() < 16) heightE = "0" + heightE;
+        while(sizeY.length() < 32) sizeY = "0" + sizeY;
+        while(sizeCB.length() < 32) sizeCB = "0" + sizeCB;
+        while(sizeCR.length() < 32) sizeCR = "0" + sizeCR;
+        while(sizeYc.length() < 32) sizeYc = "0" + sizeYc;
+        while(sizeCBc.length() < 32) sizeCBc = "0" + sizeCBc;
+        while(sizeCRc.length() < 32) sizeCRc = "0" + sizeCRc;
+        String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR + sizeYc + sizeCBc + sizeCRc;
+        String result2 = FY.toString() + FCB.toString() + FCR.toString();
+        String result3 = Yen.toString() + Cben.toString() + Cren.toString();
+        byte [] a = Utils.toByteArray2(result);
+        byte [] b = result2.getBytes();
+        byte [] c = Utils.toByteArray2(result3);
+        byte[] code1 = new byte[a.length + b.length];
+        System.arraycopy(a, 0, code1, 0, a.length);
+        System.arraycopy(b, 0, code1, a.length, b.length);
+        byte[] finalcode = new byte[code1.length + c.length];
+        System.arraycopy(code1, 0, finalcode, 0, code1.length);
+        System.arraycopy(c, 0, finalcode, code1.length, c.length);
+        return finalcode;
+    }
+
+    private void CreateFreq(Map<Integer, Integer> freqY, Map<Integer, Integer> freqCb, Map<Integer, Integer> freqCr) {
+        for(int key : freqY.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FY.append("/");
+            FY.append(auxs);
+            auxs = Integer.toBinaryString(freqY.get(key));
+            FY.append("/");
+            FY.append(auxs);
+        }
+
+        for(int key : freqCb.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FCB.append("/");
+            FCB.append(auxs);
+            auxs = Integer.toBinaryString(freqCb.get(key));
+            FCB.append("/");
+            FCB.append(auxs);
+        }
+
+        for(int key : freqCr.keySet()){
+            int aux = key;
+            String auxs = Integer.toBinaryString(aux);
+            FCR.append("/");
+            FCR.append(auxs);
+            auxs = Integer.toBinaryString(freqCr.get(key));
+            FCR.append("/");
+            FCR.append(auxs);
+        }
+        FCR.append("/");
+    }
+
+    private void CreateCompression() {
         double [][] Ydct  = new double[8][8];
         double [][] Cbdct = new double[8][8];
         double [][] Crdct = new double[8][8];
@@ -287,114 +380,6 @@ public class JPEG implements Algorithm {
                 }
             }
         }
-
-
-            Huffman comprimirY = new Huffman();
-            Huffman comprimirCB = new Huffman();
-            Huffman comprimirCR = new Huffman();
-
-            String Yen = comprimirY.compressHuffman(Yencoding);
-            String Cben = comprimirCB.compressHuffman(Cbencoding);
-            String Cren = comprimirCR.compressHuffman(Crencoding);
-
-
-            Map<Integer, Integer> freqY = comprimirY.getFrequencies();
-            Map<Integer, Integer> freqCb = comprimirCB.getFrequencies();
-            Map<Integer, Integer> freqCr = comprimirCR.getFrequencies();
-
-
-            StringBuilder FY = new StringBuilder();
-            StringBuilder FCB = new StringBuilder();
-            StringBuilder FCR = new StringBuilder();
-
-        for(int key : freqY.keySet()){
-            int aux = key;
-            String auxs = Integer.toBinaryString(aux);
-            FY.append("/");
-            FY.append(auxs);
-            auxs = Integer.toBinaryString(freqY.get(key));
-            FY.append("/");
-            FY.append(auxs);
-        }
-
-        for(int key : freqCb.keySet()){
-            int aux = key;
-            String auxs = Integer.toBinaryString(aux);
-            FCB.append("/");
-            FCB.append(auxs);
-            auxs = Integer.toBinaryString(freqCb.get(key));
-            FCB.append("/");
-            FCB.append(auxs);
-        }
-
-        for(int key : freqCr.keySet()){
-            int aux = key;
-            String auxs = Integer.toBinaryString(aux);
-            FCR.append("/");
-            FCR.append(auxs);
-            auxs = Integer.toBinaryString(freqCr.get(key));
-            FCR.append("/");
-            FCR.append(auxs);
-        }
-        FCR.append("/");
-
-
-
-
-
-
-
-            String sizeY = Integer.toBinaryString(freqY.size());
-            String sizeCB = Integer.toBinaryString(freqCb.size());
-            String sizeCR = Integer.toBinaryString(freqCr.size());
-            String calidadE =  Integer.toBinaryString(quality);
-            String widthE =  Integer.toBinaryString(width);
-            String heightE =  Integer.toBinaryString(height);
-            String sizeYc =  Integer.toBinaryString(Yen.length());
-            String sizeCBc =  Integer.toBinaryString(Cben.length());
-            String sizeCRc =  Integer.toBinaryString(Cren.length());
-            while(calidadE.length() < 8) calidadE = "0" + calidadE;
-            while(widthE.length() < 16) widthE = "0" + widthE;
-            while(heightE.length() < 16) heightE = "0" + heightE;
-            while(sizeY.length() < 32) sizeY = "0" + sizeY;
-            while(sizeCB.length() < 32) sizeCB = "0" + sizeCB;
-            while(sizeCR.length() < 32) sizeCR = "0" + sizeCR;
-            while(sizeYc.length() < 32) sizeYc = "0" + sizeYc;
-            while(sizeCBc.length() < 32) sizeCBc = "0" + sizeCBc;
-            while(sizeCRc.length() < 32) sizeCRc = "0" + sizeCRc;
-            String result = calidadE + widthE + heightE + sizeY + sizeCB + sizeCR + sizeYc + sizeCBc + sizeCRc;
-            String result2 = FY.toString() + FCB.toString() + FCR.toString();
-            String result3 = Yen.toString() + Cben.toString() + Cren.toString();
-            byte [] a = Utils.toByteArray2(result);
-            byte [] b = result2.getBytes();
-            byte [] c = Utils.toByteArray2(result3);
-            byte[] code1 = new byte[a.length + b.length];
-            System.arraycopy(a, 0, code1, 0, a.length);
-            System.arraycopy(b, 0, code1, a.length, b.length);
-            byte[] finalcode = new byte[code1.length + c.length];
-            System.arraycopy(code1, 0, finalcode, 0, code1.length);
-            System.arraycopy(c, 0, finalcode, code1.length, c.length);
-
-        /*
-
-          SOI	FFD8	Start Of Image
-          1111111111011000
-          DQT	FFDB	One or more quantization tables DQT
-          1111111111011011
-          SOF	FFC0	Start Of Frame
-          1111111111000000
-          DHT	FFC4	One or more huffman tables DHT
-          1111111111000100
-          SOS	FFDA	Start Of Scan -1, -38
-          1111111111011010
-          EOI	FFD9	End of Image
-          1111111111011001
-
-          */
-
-
-
-        return finalcode;
     }
 
     private void getWidthandHeightandColor(char [] imagenaux) {
@@ -422,7 +407,7 @@ public class JPEG implements Algorithm {
         ++iterator;
     }
 
-    private void resetVar() {
+    private void resetVarD() {
         width = 0;
         height = 0;
         sizeY = 0;
