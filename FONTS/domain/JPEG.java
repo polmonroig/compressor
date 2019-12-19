@@ -9,17 +9,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- 
- @author Adrián Álvarez
- JPEG COMPRESSION ALGORTIHM
-
- */
+/**
+ * This is one of the algortihm to compress files, in specific, it
+ * compress image files. This class implements de JPEG algortihm.
+ **/
 
 public class JPEG implements Algorithm {
-
+    /**
+     * This is the quality of the image
+     **/
     private int quality = 0;
-    //descompression
+    /**
+     * These are the variables to make the decompression part
+     **/
     private int width;
     private int height;
     private int sizeY;
@@ -39,7 +41,9 @@ public class JPEG implements Algorithm {
     private int[][] FinalR;
     private int[][] FinalG;
     private int[][] FinalB;
-    //compression
+    /**
+     * These are the variables to make the compression part
+     **/
     private boolean anchura = true;
     private int iterator = 0;
     private int color = 0;
@@ -50,12 +54,9 @@ public class JPEG implements Algorithm {
     private StringBuilder FY;
     private StringBuilder FCB;
     private StringBuilder FCR;
-
-
-    public void setQuality(int quality) {
-        this.quality = quality;
-    }
-
+    /**
+     * These are the two tables of quality, it has 12 different qualities
+     **/
     private static double[][][] QtablesLuminance = {
             {
                     {32, 33, 51, 81, 66, 39, 34, 17}, {33, 36, 48, 47, 28, 23, 12, 12}, {51, 48, 47, 28, 23, 12, 12, 12}, {81, 47, 28, 23, 12, 12, 12, 12}, {66, 28, 23, 12, 12, 12, 12, 12}, {39, 23, 12, 12, 12, 12, 12, 12}, {34, 12, 12, 12, 12, 12, 12, 12}, {17, 12, 12, 12, 12, 12, 12, 12},
@@ -140,6 +141,21 @@ public class JPEG implements Algorithm {
             }
     };
 
+    /**
+     * <p>setQuality set the quality of the image</p>
+     *
+     * @param quality It has the quality of the image
+     */
+    public void setQuality(int quality) {
+        this.quality = quality;
+    }
+
+    /**
+     * <p>decompress makes the decompression of an image</p>
+     *
+     * @param imagen It is the images to decompress
+     * @return Array of bytes with the final decompression
+     */
     @Override
     public byte[] decompress(byte[] imagen) {
         resetVarD();
@@ -176,7 +192,12 @@ public class JPEG implements Algorithm {
         return PPMfile();
     }
 
-
+    /**
+     * <p>compress makes the compression of an image</p>
+     *
+     * @param imagen It is the images to compress
+     * @return Array of bytes with the final compression
+     */
     @Override
     public byte[] compress(byte[] imagen) {
         ResetVarC();
@@ -221,7 +242,9 @@ public class JPEG implements Algorithm {
         return JPEGFile(freqY, freqCb, freqCr, Yen, Cben, Cren);
     }
 
-
+    /**
+     * <p>ResetVarc resets the variables for a new compression</p>
+     */
     private void ResetVarC() {
         anchura = true;
         iterator = 0;
@@ -234,6 +257,17 @@ public class JPEG implements Algorithm {
         FCR = new StringBuilder();
     }
 
+    /**
+     * <p>JPEGFile makes the final encoding for the compression</p>
+     *
+     * @param Cben   Encoding of the CB variable
+     * @param Cren   Encoding of the CR variable
+     * @param Yen    Encoding of the Y variable
+     * @param freqCb Frequencies for the CB variable
+     * @param freqCr Frequencies for the CR variable
+     * @param freqY  Frequencies for the Y variable
+     * @return Array of bytes with the final compression
+     */
     private byte[] JPEGFile(Map<Integer, Integer> freqY, Map<Integer, Integer> freqCb, Map<Integer, Integer> freqCr, String Yen, String Cben, String Cren) {
         String sizeY = Integer.toBinaryString(freqY.size());
         String sizeCB = Integer.toBinaryString(freqCb.size());
@@ -268,6 +302,14 @@ public class JPEG implements Algorithm {
         return finalcode;
     }
 
+    /**
+     * <p>CreateFreq make the encoding of the frequencies</p>
+     *
+     * @param freqY  Frequencies for the Y variable
+     * @param freqCr Frequencies for the Cr variable
+     * @param freqCb Frequencies for the Cb variable
+     * @return Array of bytes with the final decompression
+     */
     private void CreateFreq(Map<Integer, Integer> freqY, Map<Integer, Integer> freqCb, Map<Integer, Integer> freqCr) {
         for (int key : freqY.keySet()) {
             int aux = key;
@@ -301,6 +343,9 @@ public class JPEG implements Algorithm {
         FCR.append("/");
     }
 
+    /**
+     * <p>CreateCompression makes the whole computing part of compression of the algorithm</p>
+     **/
     private void CreateCompression() {
         double[][] Ydct = new double[8][8];
         double[][] Cbdct = new double[8][8];
@@ -383,6 +428,11 @@ public class JPEG implements Algorithm {
         }
     }
 
+    /**
+     * <p>getWidthandHeightandColor achieve the height, width and color for the decompression</p>
+     *
+     * @param imagenaux Is the image to decompress
+     */
     private void getWidthandHeightandColor(char[] imagenaux) {
         for (iterator = 3; imagenaux[iterator] != '\n'; ++iterator) {
             if (imagenaux[iterator] == ' ') anchura = false;
@@ -408,6 +458,9 @@ public class JPEG implements Algorithm {
         ++iterator;
     }
 
+    /**
+     * <p>ResetVarc resets the variables for a new compression</p>
+     */
     private void resetVarD() {
         width = 0;
         height = 0;
@@ -427,6 +480,11 @@ public class JPEG implements Algorithm {
         CRdes = new ArrayList<>();
     }
 
+    /**
+     * <p>PPMfile makes the final encoding for the decompression</p>
+     *
+     * @return Array of byte with the final encoding
+     **/
     private byte[] PPMfile() {
         StringBuilder Finald = new StringBuilder();
         Finald.append("P6");
@@ -451,6 +509,9 @@ public class JPEG implements Algorithm {
         return Finaldes.getBytes();
     }
 
+    /**
+     * <p>CreateDecompression makes the whole computing part of compression of the algorithm</p>
+     **/
     private void CreateDecompression() {
         int iteradorY = 0;
         int iteradorarray = 0;
@@ -520,6 +581,11 @@ public class JPEG implements Algorithm {
         }
     }
 
+    /**
+     * <p>ReadHuffman makes reading part of the decompression</p>
+     *
+     * @param aux This is the image for decompress
+     **/
     private void ReadHuffman(String aux) {
 
         Huffman DY = new Huffman();
@@ -550,6 +616,11 @@ public class JPEG implements Algorithm {
         CRdes = DCR.decompressHuffman(encoding.toString());
     }
 
+    /**
+     * <p>ReadFreq makes reading part of the decompression for the frequencies</p>
+     *
+     * @param imagenaux This is the image for decompress
+     **/
     private void ReadFreq(char[] imagenaux) {
         if (imagenaux[29] == '/') iteradorFreq = 29;
         else iteradorFreq = 28;
@@ -647,6 +718,11 @@ public class JPEG implements Algorithm {
         }
     }
 
+    /**
+     * <p>ReadDecompression makes reading part of heading of the decompression</p>
+     *
+     * @param aux This is the image for decompress
+     **/
     private void ReadDecompression(String aux) {
         StringBuilder calidadS = new StringBuilder();
         while (i < 8) {
@@ -704,6 +780,12 @@ public class JPEG implements Algorithm {
         sizeCRc = Integer.parseInt(sizeCRcS.toString(), 2);
     }
 
+    /**
+     * <p>initMatrix make the inizialization of the matrix for the dct</p>
+     *
+     * @param c This is the matrix to inizialize
+     * @return A matrix c with the inizialation made
+     **/
     static private double[][] initMatrix(double[][] c) {
         final int N = c.length;
         final double value = 1 / Math.sqrt(2.0);
@@ -722,6 +804,12 @@ public class JPEG implements Algorithm {
         return c;
     }
 
+    /**
+     * <p>dct2 makes Discrete Cousine Transform for the compression part</p>
+     *
+     * @param input This is the image for compress part
+     * @return A Matrix with the dct made
+     **/
     static private double[][] dct2(double[][] input) {
         final int N = input.length;
         final double mathPI = Math.PI;
@@ -751,6 +839,12 @@ public class JPEG implements Algorithm {
         return output;
     }
 
+    /**
+     * <p>RBGtoYCbCR make the transform of the two forms</p>
+     *
+     * @param RGB The colour to transform
+     * @return An Array with the transform made
+     **/
     static private int[] RGBtoYCbCr(int[] RGB) {
         int[] YCbCr = new int[3];
 
@@ -771,6 +865,12 @@ public class JPEG implements Algorithm {
         return YCbCr;
     }
 
+    /**
+     * <p>dct3 makes Inverse of Discrete Cousine Transform for the decompression part</p>
+     *
+     * @param input This is the image for decompress part
+     * @return A Matrix with the inversion of the dct made
+     **/
     static private double[][] dct3(double[][] input) {
         final int N = input.length;
         final double mathPI = Math.PI;
@@ -801,6 +901,12 @@ public class JPEG implements Algorithm {
         return output;
     }
 
+    /**
+     * <p>YCbCRtoRBG make the transform of the two forms</p>
+     *
+     * @param YCbCr The colour to transform
+     * @return An Array with the transform made
+     **/
     static private int[] YCbCrtoRGB(int[] YCbCr) {
         int[] RGB = new int[3];
 
@@ -823,7 +929,12 @@ public class JPEG implements Algorithm {
         return RGB;
     }
 
-
+    /**
+     * <p>makePPM makes a PPM for the view to be displayed</p>
+     *
+     * @param aux The image to make
+     * @return A BufferedImage instance to display
+     **/
     public static BufferedImage makePPM(byte[] aux) {
         int w = 0, h = 0;
         boolean fin = true;
@@ -862,5 +973,4 @@ public class JPEG implements Algorithm {
 
         return image;
     }
-
 }
