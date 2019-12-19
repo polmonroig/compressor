@@ -20,23 +20,22 @@ public class JPEG implements Algorithm {
 
     private int quality = 0;
     //descompression
-    private int width = 0;
-    private int height = 0;
-    private int calidad = 0;
-    private int sizeY = 0;
-    private int sizeCB = 0;
-    private int sizeCR = 0;
-    private int sizeYc = 0;
-    private int sizeCBc = 0;
-    private int sizeCRc = 0;
-    private int iteradorFreq = 0;
-    private int i = 0;
-    private Map<Integer, Integer> FreqY = new HashMap<>();
-    private Map<Integer, Integer> FreqCB = new HashMap<>();
-    private Map<Integer, Integer> FreqCR = new HashMap<>();
-    private ArrayList<Integer> Ydes = new ArrayList<>();
-    private ArrayList<Integer> CBdes = new ArrayList<>();
-    private ArrayList<Integer> CRdes = new ArrayList<>();
+    private int width;
+    private int height;
+    private int sizeY;
+    private int sizeCB;
+    private int sizeCR;
+    private int sizeYc;
+    private int sizeCBc;
+    private int sizeCRc;
+    private int iteradorFreq;
+    private int i;
+    private Map<Integer, Integer> FreqY;
+    private Map<Integer, Integer> FreqCB;
+    private Map<Integer, Integer> FreqCR;
+    private ArrayList<Integer> Ydes;
+    private ArrayList<Integer> CBdes;
+    private ArrayList<Integer> CRdes;
     private int [][] FinalR;
     private int [][] FinalG;
     private int [][] FinalB;
@@ -136,6 +135,7 @@ public class JPEG implements Algorithm {
 
     @Override
     public byte[] decompress(byte [] imagen){
+        resetVar();
         /*
         Declaraciones de variables SI VEO QUE EL ULTIMO BIT ES UN 1 HACER AND OF STRING PASARLO A INT Y MULTIPLICAR POR 1
          */
@@ -167,7 +167,8 @@ public class JPEG implements Algorithm {
 
         return PPMfile();
     }
-    
+
+
     @Override
     public byte[] compress(byte [] imagen){
         /*
@@ -272,7 +273,6 @@ public class JPEG implements Algorithm {
                         Ydct[v][h] = Math.round(Ydct[v][h] / QtablesLuminance[quality][v][h]);
                         Cbdct[v][h] = Math.round(Cbdct[v][h] / QtablesChrominance[quality][v][h]);
                         Crdct[v][h] = Math.round(Crdct[v][h] / QtablesChrominance[quality][v][h]);
-                        //test[v][h] = test[v][h] / QtablesLuminance[calidad][v][h];
 
                     }
                 }
@@ -417,6 +417,25 @@ public class JPEG implements Algorithm {
         return finalcode;
     }
 
+    private void resetVar() {
+        width = 0;
+        height = 0;
+        sizeY = 0;
+        sizeCB = 0;
+        sizeCR = 0;
+        sizeYc = 0;
+        sizeCBc = 0;
+        sizeCRc = 0;
+        iteradorFreq = 0;
+        i = 0;
+        FreqY = new HashMap<>();
+        FreqCB = new HashMap<>();
+        FreqCR = new HashMap<>();
+        Ydes = new ArrayList<>();
+        CBdes = new ArrayList<>();
+        CRdes = new ArrayList<>();
+    }
+
     private byte[] PPMfile() {
         StringBuilder Finald = new StringBuilder();
         Finald.append("P6");
@@ -477,9 +496,9 @@ public class JPEG implements Algorithm {
             //DESQUANTIZAMOS
             for(int m = 0; m < 8; ++m){
                 for(int n = 0; n < 8; ++n){
-                    Y[m][n] = Y[m][n] * QtablesLuminance[calidad][m][n];
-                    CB[m][n] = CB[m][n] * QtablesChrominance[calidad][m][n];
-                    CR[m][n] = CR[m][n] * QtablesChrominance[calidad][m][n];
+                    Y[m][n] = Y[m][n] * QtablesLuminance[quality][m][n];
+                    CB[m][n] = CB[m][n] * QtablesChrominance[quality][m][n];
+                    CR[m][n] = CR[m][n] * QtablesChrominance[quality][m][n];
                 }
             }
             //INVERSA DE LA DCT2
@@ -646,7 +665,7 @@ public class JPEG implements Algorithm {
             calidadS.append(aux.charAt(i));
             ++i;
         }
-        calidad = Integer.parseInt(calidadS.toString(), 2);
+        quality = Integer.parseInt(calidadS.toString(), 2);
         StringBuilder widthS = new StringBuilder();
         while(i<24){
             widthS.append(aux.charAt(i));
