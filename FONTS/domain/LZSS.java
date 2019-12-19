@@ -66,16 +66,16 @@ public class LZSS implements Algorithm {
         binTree.insertNode(r);
 
         do {
-            if (binTree.matchLength > len) binTree.matchLength = len;
+            if (binTree.getMatchLength() > len) binTree.setMatchLength(len);
 
-            if (binTree.matchLength < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
-                binTree.matchLength = 1;
+            if (binTree.getMatchLength() < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
+                binTree.setMatchLength((short) 1);
                 codeBuff[0] |= mask;
                 codeBuff[codeBufPos++] = binTree.ringBuffer[r];
             }
             else{
-                codeBuff[codeBufPos++] = (byte) binTree.matchPosition;
-                codeBuff[codeBufPos++] = (byte) (((binTree.matchPosition >> 4) & 0xF0) | (binTree.matchLength - THRESHOLD));
+                codeBuff[codeBufPos++] = (byte) binTree.getMatchPosition();
+                codeBuff[codeBufPos++] = (byte) (((binTree.getMatchPosition() >> 4) & 0xF0) | (binTree.getMatchLength()- THRESHOLD));
                 //2Bytes guardo los 12 primeros bits la posicion de match y la longitud de match en los otros 4
             }
             mask <<= 1;
@@ -87,7 +87,7 @@ public class LZSS implements Algorithm {
                 mask = 1;
             }
 
-            lastMatchLength = binTree.matchLength;
+            lastMatchLength = binTree.getMatchLength();
 
             for (i = 0; i < lastMatchLength; ++i) {
                 byte[] aux = new byte[1];
