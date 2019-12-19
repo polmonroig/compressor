@@ -43,6 +43,7 @@ public class JPEG implements Algorithm {
     private boolean anchura = true;
     private int iterator = 0;
     private int color = 0;
+    private int [][][] imagenYCbCr;
 
 
     public void setQuality(int quality){
@@ -187,39 +188,18 @@ public class JPEG implements Algorithm {
             Conseguimos la altura y anchura de la imagen a codificar
             */
 
-        for (iterator = 3; imagenaux[iterator] != '\n'; ++iterator) {
-            if (imagenaux[iterator] == ' ') anchura = false;
-            else {
-                if (anchura) {
-                    int aux = Character.getNumericValue(imagenaux[iterator]);
-                    width *= 10;
-                    width += aux;
-                } else {
-                    int aux = Character.getNumericValue(imagenaux[iterator]);
-                    height *= 10;
-                    height += aux;
-                }
-            }
-        }
+        getWidthandHeightandColor(imagenaux);
 
             /*
             Conseguimos el color maximo de la imagen a codificar
             */
 
-        ++iterator;
-        while(imagenaux[iterator] != '\n'){
-            int aux = Character.getNumericValue(imagenaux[iterator]);
-            color *= 10;
-            color += aux;
-            ++iterator;
-        }
-        ++iterator;
 
             /*
             Cambiamos el color RGB original de la imagen a YCbCr
             */
 
-       int [][][] imagenYCbCr = new int [height][width][3];
+       imagenYCbCr = new int [height][width][3];
        for (int i = 0; i < height; ++i){
            for (int j = 0; j < width; ++j){
                 int [] RGB = {(int)imagenaux[iterator],(int)imagenaux[iterator+1],(int)imagenaux[iterator+2]};
@@ -415,6 +395,31 @@ public class JPEG implements Algorithm {
 
 
         return finalcode;
+    }
+
+    private void getWidthandHeightandColor(char [] imagenaux) {
+        for (iterator = 3; imagenaux[iterator] != '\n'; ++iterator) {
+            if (imagenaux[iterator] == ' ') anchura = false;
+            else {
+                if (anchura) {
+                    int aux = Character.getNumericValue(imagenaux[iterator]);
+                    width *= 10;
+                    width += aux;
+                } else {
+                    int aux = Character.getNumericValue(imagenaux[iterator]);
+                    height *= 10;
+                    height += aux;
+                }
+            }
+        }
+        ++iterator;
+        while(imagenaux[iterator] != '\n'){
+            int aux = Character.getNumericValue(imagenaux[iterator]);
+            color *= 10;
+            color += aux;
+            ++iterator;
+        }
+        ++iterator;
     }
 
     private void resetVar() {
