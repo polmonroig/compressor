@@ -65,7 +65,7 @@ public class View extends JFrame {
      * */
     private static final String[] buttonNames = {"About", "Comprimir text", "Comprimir imatge",
                                                  "Comprimir carpeta", "Descomprimir", "Comparar",
-                                                 "Estadístiques", "Informació"};
+                                                 "Estadístiques", "Ajuda"};
     /**
      * This contains the quality options selections required by the JPEG algorithm
      * */
@@ -313,7 +313,19 @@ public class View extends JFrame {
     }
 
     private ContentInterface setupInfoContent(){
-        ContentInterface info = new Content("Informació", "Descripciondassdadsdasdassda ESTOY HARTO !!!!");
+        ContentInterface info = new Content("Ajuda", "Comprimir text: Selecciona l’algorisme de compressió desitjat, selecciona \n " +
+                                                                                "el arxiu i fes clic a comprimir. Es mostraran les estadístiques de compressió\n" +
+                                                                                "i el path de l’arxiu generat.\n\n" +
+                                                                                "Comprimir imatge: Selecciona la qualitat de compressió desitjada, selecciona el\n" +
+                                                                                "arxiu i fes clic a comprimir. Es mostraran les estadístiques de compressió i \n" +
+                                                                                "el path de l’arxiu generat.\n\n" +
+                                                                                "Comprimir carpeta: Selecciona l’algorisme de compressió desitjat per als arxius \n" +
+                                                                                "de text, selecciona la qualitat de la compressió de les imatges, selecciona l’arxiu\n" +
+                                                                                " i fes clic a comprimir. Es mostraran les estadístiques de compressió i el path de \n" +
+                                                                                "l’arxiu generat.\n\n" +
+                                                                                "Descomprimir: Selecciona l’arxiu i fes clic a descomprimir. Es mostrara el path de\n l’arxiu descomprimit.\n\n" +
+                                                                                "Comparar: Selecciona dos imatges i fes clic a comparar. Es mostrara una finestra\n amb les dos imatges.\n\n" +
+                                                                                "Estadístiques: Es mostren les estadístiques conjuntes de totes les compressions \nrealitzades. \n\n");
         return info;
     }
 
