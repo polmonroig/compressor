@@ -20,7 +20,7 @@ public class FileSelector extends JPanel {
         chooser = fileSelector;
         selectionMode = mode;
         label = new JTextField("Path", 20);
-        button = new CustomButton("Selecciona", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
+        button = new CustomButton("Seleccionar", Color.DARK_GRAY, Color.WHITE, Color.WHITE, Color.DARK_GRAY);
         fileChooser = new JFileChooser();
         fileTypes = types;
     }
