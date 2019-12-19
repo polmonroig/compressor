@@ -15,8 +15,8 @@ public class Tree {
 
         public byte[] ringBuffer;//buffer para encontrar coincidencias
 
-        public short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
-        public short matchLength;//numero de coincidencias consecutivas en ringBuffer
+        private short matchPosition;//posicion de match en el ring buffer, se calcula en insertNode
+        private short matchLength;//numero de coincidencias consecutivas en ringBuffer
 
         private short[] dad;
         private short[] leftSon;
@@ -163,5 +163,17 @@ public class Tree {
 
             dad[node] = NOT_USED;
         }
+
+    public short getMatchLength() {
+        return matchLength;
     }
+
+    public void setMatchLength(short matchLength) {
+        this.matchLength = matchLength;
+    }
+
+    public short getMatchPosition() {
+        return matchPosition;
+    }
+}
 
