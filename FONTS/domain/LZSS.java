@@ -25,9 +25,9 @@ public class LZSS implements Algorithm {
         binTree = new Tree();
     }
     /**
-     * <p>El metodo de comprimir hace una compresion del texto introducido, con la codificación para LZSS</>
-     * @param binaryFile el texto a comprimir
-     * @return el texto comprimido
+     * <p>The method compress makes a compresion of the given input text</p>
+     * @param binaryFile The byte[] of text to compress
+     * @return The compressed text
      */
     @Override
     public byte[] compress(byte[] binaryFile){
@@ -59,10 +59,10 @@ public class LZSS implements Algorithm {
         int x = readXBytes(binaryFile, r, MAX_STORE_LENGTH);
         if(x <= 0) return binaryFile;
         len = (short) x;
-
+        //añado a las ultimas posiciones del arbol las MAX_STORE_LENGTH strings, las cuales empezaran por uno o mas ' '
         for (i=1; i<=MAX_STORE_LENGTH; i++) binTree.insertNode((short) (r-i));
 
-        binTree.insertNode(r);
+        binTree.insertNode(r);//añado la ultima string. De esta manera las variables matchLength y matcth position estan listas
 
         do {
             if (binTree.getMatchLength() > len) binTree.setMatchLength(len);//evito un posible error por si matchLength es mas grande que la medida del texto
@@ -134,9 +134,9 @@ public class LZSS implements Algorithm {
     }
 
     /**
-     * <p>El metodo de descomprimir hace una descompresion del texto introducido</>
-     * @param binaryFile el texto a comprimir, codificado con formato LZSS
-     * @return el texto descomprimido
+     * <p>The method decompress makes a decompression of the given compressed text</p>
+     * @param binaryFile The  byte[] of the content to decompress, with a LZSS format
+     * @return The decompressed text
      */
     @Override
     public byte[] decompress(byte[] binaryFile) {
@@ -190,9 +190,10 @@ public class LZSS implements Algorithm {
     }
 
     /**
-     * <p></>
-     * @param
-     * @return
+     * <p>Gets of the first parameter its length and puts it on a byte[]</p>
+     * @param text The byte[] you want to add its length on it
+     * @param extra The size of text.length on basis 256
+     * @return A byte[] of the text.length in basis 256
      */
     //añado al final del output #texto.length para saber la medida
     private byte[] putTextSize(byte[] text, int extra){
@@ -205,9 +206,9 @@ public class LZSS implements Algorithm {
     }
 
     /**
-     * <p></>
-     * @param
-     * @return
+     * <p>Decodificates the value added on the function putTextSize</p>
+     * @param text A byte[] with te last positions with {#,putTextSize} format
+     * @return The value of the original text size
      */
     private int getTextSize(byte[] text) {
         int t = 0, i = text.length - 1, j = -1;
@@ -223,9 +224,13 @@ public class LZSS implements Algorithm {
 
 
     /**
-     * <p></>
-     * @param
-     * @return
+     * <p>Simulates a reading on a file of the first parameter, puts on the ringBuffer of Tree x bytes starting on the offset position of new positions of the text.
+     *  It modifies the global variable lecturePoint, adding at most x on it</p>
+     * @param text The text which is being compressed
+     * @param offset The position on the ringBuffer has to be inserted new characters
+     * @param x The number of characters you want to read
+     *
+     * @return The bytes that have been read, -1 if anyone
      */
     private int readXBytes(byte[] text, int offset, int x){
         int j = 0;
@@ -238,9 +243,13 @@ public class LZSS implements Algorithm {
     }
 
     /**
-     * <p></>
-     * @param
-     * @return
+     * <p>Simulates a reading on a file of the first parameter, puts on the second parameter x bytes of new positions of the text.
+     *  It modifies the global variable lecturePoint, adding at most x on it</p>
+     * @param text The text which is being decompressed
+     * @param chars The byte[] you want to fill
+     * @param x The number of characters you want to read
+     *
+     * @return The bytes that have been read, -1 if anyone
      */
     private int readDecoding(byte[] text, byte[] chars, int x){
         int j = 0;
@@ -252,11 +261,13 @@ public class LZSS implements Algorithm {
         else return j;
     }
 
-    /**
-     * <p></>
-     * @param
-     * @return
-     */
+
+/**
+ * <p>Simulates a writing on a file, puts on the global variable out at most x bytes, it's not necessary knowing how many bytes have been written.
+ *  It modifies the global variable writePoint, adding at most x on it</p>
+ * @param code The text which is being decompressed
+ * @param x The number of characters you want to write
+ * */
     private void writeXBytes(byte[] code, int x){
         for (int i = 0; i < x && writePoint < out.length; ++i){
             out[writePoint] = code[i];
