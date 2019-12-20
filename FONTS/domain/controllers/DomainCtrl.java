@@ -32,7 +32,7 @@ public class DomainCtrl {
         dataCtrl = new DataCtrl();
         globalStats = new GlobalStats();
         autoAlgorithm = new AutoAlgorithm();
-        globalStatsFilePath = "FONTS/data/GlobalStatesSave.txt";
+        globalStatsFilePath = System.getProperty("user.dir") + File.separator +"GlobalStatesSave.txt";
         readGlobalStats();
     }
 
@@ -74,9 +74,9 @@ public class DomainCtrl {
             pFile.compress();
             int errorInt = writeFile(pFile.getCompletePath() + "." + pFile.getIdName(), pFile.getContent());
             if(errorInt == NO_ERROR){
-                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + pFile.getCompletePath() + "." + pFile.getIdName());
                 globalStats.setNumberFiles(globalStats.getNumberFiles() + 1);
                 setLocalStats(pFile.getLocalStats());
+                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + pFile.getCompletePath() + "." + pFile.getIdName());
             }
 
         }
@@ -131,9 +131,9 @@ public class DomainCtrl {
 
             int errorInt = writeFile(file.getPath() + "." + PhysicalFile.AUTO_EXTENSION, fileBytes);
             if(errorInt == NO_ERROR){
-                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
                 globalStats.setNumberFiles(globalStats.getNumberFiles() + physicalFiles.size());
                 setLocalStats(autoAlgorithm.getLocalStats());
+                presentationCtrl.displayMessage("Compresion completada", "El archivo a sido guardado en " + file.getPath() + "." + PhysicalFile.AUTO_EXTENSION);
             }
         }
         catch (IOException e) {
@@ -185,6 +185,7 @@ public class DomainCtrl {
                                        localStats.getCompressionDegree(), localStats.getCompressionSpeed(),
                                        localStats.getOriginalFileSize());
         String data = globalStats.getAllStats();
+        //System.out.println(globalStatsFilePath);
         writeFile(globalStatsFilePath, data.getBytes());
     }
 
