@@ -41,8 +41,7 @@ public class LZSS implements Algorithm {
         short len; // length of initial string
         short lastMatchLength;
         short codeBufPos;
-        byte[] codeBuff = new byte[17];
-        // buffer de la codificacion, [0] guarda los flags y las otras 16 sirven para guardar 8 unidades de codigo
+        byte[] codeBuff = new byte[17];// buffer de la codificacion, [0] guarda los flags y las otras 16 sirven para guardar 8 unidades de codigo
         byte mask; // mete los 1 a codeBuff[0] cuando no hay coincidencia
         byte c; // character read from string
 
@@ -66,9 +65,10 @@ public class LZSS implements Algorithm {
         binTree.insertNode(r);
 
         do {
-            if (binTree.getMatchLength() > len) binTree.setMatchLength(len);
+            if (binTree.getMatchLength() > len) binTree.setMatchLength(len);//evito un posible error por si matchLength es mas grande que la medida del texto
 
             if (binTree.getMatchLength() < THRESHOLD){//si hay una coincidencia de 0, 1 o 2 caracteres mejor guardar el caracter sin codificar
+                //marco que vendra un caracter no codificado y este lo añado
                 binTree.setMatchLength((short) 1);
                 codeBuff[0] |= mask;
                 codeBuff[codeBufPos++] = binTree.ringBuffer[r];
@@ -78,10 +78,10 @@ public class LZSS implements Algorithm {
                 codeBuff[codeBufPos++] = (byte) (((binTree.getMatchPosition() >> 4) & 0xF0) | (binTree.getMatchLength()- THRESHOLD));
                 //2Bytes guardo los 12 primeros bits la posicion de match y la longitud de match en los otros 4
             }
-            mask <<= 1;
+            mask <<= 1;//ajusto la mascara para el marcar el siguiente bit
 
-            if (mask == 0){//hemos almacenado 8 caracteres
-                readXBytes(codeBuff, codeBufPos);
+            if (mask == 0){//hemos almacenado 8 caracteres vamos a ponerlos en el output y reiniciciamos las variables
+                writeXBytes(codeBuff, codeBufPos);
                 codeBuff[0] = 0;
                 codeBufPos = 1;
                 mask = 1;
@@ -89,7 +89,7 @@ public class LZSS implements Algorithm {
 
             lastMatchLength = binTree.getMatchLength();
 
-            for (i = 0; i < lastMatchLength; ++i) {
+            for (i = 0; i < lastMatchLength; ++i) {//
                 byte[] aux = new byte[1];
                 x = readDecoding(binaryFile, aux, 1);
                 if (x == -1) break;
@@ -99,32 +99,33 @@ public class LZSS implements Algorithm {
                 //duplico el principio y el final del buffer
                 binTree.ringBuffer[s] = c;
                 if (s < MAX_STORE_LENGTH - 1) binTree.ringBuffer[s + RING_SIZE] = c;
-                //incremento la posicion y reinicio si ya estoy al final del taanom
-                s = (short) ((s + 1) & RING_WRAP);
-                r = (short) ((r + 1) & RING_WRAP);
+                //incremento la posicion y reinicio si ya estoy al final del tope
+                s = (short) ((s + 1) & RING_WRAP);//nueva posicion para el ring buffer
+                r = (short) ((r + 1) & RING_WRAP);//siguiente nodo para el arbol
                 //nueva string
                 binTree.insertNode(r);
             }
-            //podriamos haber salido porque no quedaban caracteres, entonces acabamos el trabajo que nos queedaba
+            //podriamos haber salido porque no quedaban caracteres de input, entonces acabamos el trabajo que nos quedaba
             while (i++ < lastMatchLength){
-                binTree.deleteNode(s);
+                binTree.deleteNode(s);//borramos strings viejas
 
                 s = (short) ((s + 1) & RING_WRAP);
                 r = (short) ((r + 1) & RING_WRAP);
 
-                if (--len != 0) binTree.insertNode(r);
+                if (--len != 0) binTree.insertNode(r);//restamos len e añadimos nuevo nodo
             }
         } while (len > 0);//hasta que no queden caracteres por comprimir
-
-        if (codeBufPos > 1) readXBytes(codeBuff, codeBufPos);
-
+        //si queda algo por escribir se escribe
+        if (codeBufPos > 1) writeXBytes(codeBuff, codeBufPos);
+        //calculamos tamaño del texto en base 256 para que quepa en lo minimo posible
         double bytes = Math.log(binaryFile.length)/Math.log(256);
         int bytesTamFchr = (int) bytes;
         if ((bytes - bytesTamFchr) != 0)  ++bytesTamFchr;
-        byte[] ret = new byte[writePoint+bytesTamFchr+1];
+        byte[] ret = new byte[writePoint+bytesTamFchr+1];//ajustamos tamaño de retorno al minimo necesario
 
-        if (writePoint >= 0) System.arraycopy(out, 0, ret, 0, writePoint);
+        if (writePoint >= 0) System.arraycopy(out, 0, ret, 0, writePoint);//ponemos los valores de out al nuevoo array
         ret[writePoint] = '#';
+        //insertamos tamaño de fichero original para usarlo al descomprimir
         byte[] aux = putTextSize(binaryFile, bytesTamFchr);
         for (int j = 0; j < bytesTamFchr; ++j)
             ret[writePoint+j+1] = aux[j];
@@ -140,25 +141,24 @@ public class LZSS implements Algorithm {
     @Override
     public byte[] decompress(byte[] binaryFile) {
         byte[] c = new byte[MAX_STORE_LENGTH]; //array de chars que escriben el texto inicial
-        byte flags; //8 bits de flags
+        byte flags = 0; //8 bits de flags
         out = new byte[getTextSize(binaryFile)-1];
         lecturePoint = 0;
         writePoint = 0;
 
         int r = RING_SIZE - MAX_STORE_LENGTH;
         Arrays.fill(binTree.ringBuffer, 0, r, (byte) ' ');
-        flags = 0;
-        int flagCount = 0;
+        int flagCount = 0;//contador de flags
 
         while(true){
-            if (flagCount > 0){
+            if (flagCount > 0){//si quedan flags cojemos nuevo flag
                 flags = (byte) (flags >> 1);
                 --flagCount;
             }
-            else {
+            else {//leemos el siguiente byte que tendra los flags
                 byte[] aux = new byte[1];
                 int readResult = readDecoding(binaryFile, aux, 1);
-                if (readResult == -1)   break;
+                if (readResult == -1)   break;//si no queda nada que leer terminamos
 
                 flags = (byte) (aux[0] & 0xFF);
                 flagCount = 7;
@@ -166,7 +166,7 @@ public class LZSS implements Algorithm {
 
             if ((flags & 1) != 0) {//viene un caracter no codificado
                 if (readDecoding(binaryFile, c, 1) != 1) break;
-                readXBytes(c, 1);
+                writeXBytes(c, 1);
 
                 binTree.ringBuffer[r] = c[0];
                 r = (short) ((r + 1) & RING_WRAP);
@@ -177,12 +177,12 @@ public class LZSS implements Algorithm {
                 short pos = (short) ((c[0] & 0xFF) | ((c[1] & 0xF0) << 4));
                 short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
 
-                for (int k = 0; k < len; k++) {
+                for (int k = 0; k < len; k++) {//cojemos los caracteres de la coincidencia de la posicion del arbol
                     c[k] = binTree.ringBuffer[(pos + k) & RING_WRAP];
                     binTree.ringBuffer[r] = c[k];
                     r = (r + 1) & RING_WRAP;
                 }
-                readXBytes(c, len);
+                writeXBytes(c, len);//escribe los caracteres leidos en el buffer del output
             }
         }
         return out;
@@ -256,7 +256,7 @@ public class LZSS implements Algorithm {
      * @param
      * @return
      */
-    private void readXBytes(byte[] code, int x){
+    private void writeXBytes(byte[] code, int x){
         for (int i = 0; i < x && writePoint < out.length; ++i){
             out[writePoint] = code[i];
             ++writePoint;
