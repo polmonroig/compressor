@@ -53,9 +53,9 @@ public class LZW implements Algorithm {
     }
 
     /**
-     * <p>El metodo to16bit canvierte un entero en una string de 16 bits en binario</>
-     * @param i es el entero
-     * @return el entero en binario
+     * <p>The method to16bit makes a 16 bit binary string from an integer</>
+     * @param i is the integer
+     * @return binary string
      */
     private String to16bit(int i) {
         StringBuilder temp = new StringBuilder(Integer.toBinaryString(i));
@@ -68,9 +68,9 @@ public class LZW implements Algorithm {
 
 
     /**
-     * <p>El metodo de descomprimir hace una descompresion del texto introducido</>
-     * @param binaryFile el texto a comprimir, codificado con formato LZSS
-     * @return el texto descomprimido
+     * <p>The decompression method takes a compressed file and returns the original text</>
+     * @param binaryFile the text to decompress
+     * @return the decompressed text
      */
     @Override
     public byte[] decompress(byte[] binaryFile) {
