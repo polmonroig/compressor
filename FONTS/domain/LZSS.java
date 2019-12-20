@@ -12,12 +12,21 @@ import static domain.Tree.*;
  */
  
 public class LZSS implements Algorithm {
-
+    /**
+     * <p>Variable that indicates the position of the text that has to be read</p>
+     * */
     private int lecturePoint;
+    /**
+     * <p>Variable that indicates the position of out that has to be written</p>
+     * */
     private int writePoint;
-
+    /**
+     * <p>The data structure that the algorithm takes use</p>
+     * */
     private Tree binTree;
-
+    /**
+     * <p>Empty variable which is filled dinamically with the output</p>
+     * */
     private byte[] out;
 
 
