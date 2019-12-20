@@ -5,8 +5,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * The type Buttons panel.
- */
+ * ButtonsPanel is a JPanel used for using buttons
+ *
+ * */
 public class ButtonsPanel extends JPanel {
 
 
@@ -23,11 +24,10 @@ public class ButtonsPanel extends JPanel {
     private static final Color DISABLED_TEXT = new Color(150, 178, 221);
 
     /**
-     * <p>Instantiates a new Buttons panel.</p>
-     *
-     * @param names the names
-     * @param view  the view
-     */
+     * <p>Base constructor of the ButtonsPanel</p>
+     * @param names The names you want the buttons give
+     * @param view The place you want to visualize the buttons
+     * */
     public ButtonsPanel(String[] names, View view){
         // init layout
         innerPanel = new JPanel();
@@ -50,13 +50,15 @@ public class ButtonsPanel extends JPanel {
     }
 
     /**
-     * <p>Init.</p>
-     */
+     * <p>Initializes the components</p>
+     * */
     public void init() {
         initComponents();
     }
 
-
+    /**
+     * <p>Initializes the components</p>
+     * */
     private void initComponents() {
 
         // init inner panel
@@ -65,24 +67,20 @@ public class ButtonsPanel extends JPanel {
         // init buttons
         buttons.get(currentSelected).setActive();
     }
-
     /**
-     * <p>Disable current.</p>
-     *
-     * @param id the id
-     */
+     * <p>Disables a button</p>
+     * @param id The id of the button you want to disable
+     * */
     public void disableCurrent(int id) {
         buttons.get(currentSelected).setInactive();
         currentSelected = id;
         parent.selectView(id);
     }
-
     /**
-     * <p>Sets enabled button.</p>
-     *
-     * @param i the
-     * @param b the b
-     */
+     * <p>Initializes the components</p>
+     * @param i The id of the button
+     * @param b True for enabling the button, false for not enabling it
+     * */
     public void setEnabledButton(int i, boolean b) {
         buttons.get(i).setEnabled(b);
     }

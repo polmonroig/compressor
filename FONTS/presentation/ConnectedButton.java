@@ -3,26 +3,25 @@ package presentation;
 import java.awt.*;
 
 /**
- * The type Connected button.
- */
+ * ConnectedButton is a CustomButton which uses functions that happens when some events are activated
+ *
+ * */
 public class ConnectedButton extends CustomButton {
 
 
     private ButtonsPanel parent;
     private boolean selected;
     private int id;
-
     /**
-     * <p>Instantiates a new Connected button.</p>
-     *
-     * @param text    the text
-     * @param colorBD the color bd
-     * @param colorBA the color ba
-     * @param colorFD the color fd
-     * @param colorFA the color fa
-     * @param panel   the panel
-     * @param i       the
-     */
+     * <p>Constructor for a ConnectedButton</p>
+     * @param colorBA Color for the background when the button is actvated
+     * @param colorBD Color for the background when the button is disabled
+     * @param colorFA Color for the font when the button is actvated
+     * @param colorFD Color for the font when the button is disabled
+     * @param i id of the button
+     * @param panel ButtonsPannel which contains this buttion
+     * @param text Text the button will contain
+     * */
     public ConnectedButton(String text, Color colorBD, Color colorBA, Color colorFD, Color colorFA, ButtonsPanel panel, int i) {
         super(text, colorBD, colorBA, colorFD, colorFA);
 
@@ -31,7 +30,9 @@ public class ConnectedButton extends CustomButton {
         selected = false;
  
     }
-
+    /**
+     * <p>Adds an effect when the button is clicked</p>
+     * */
     @Override
     protected void addOnClickEffect() {
         addActionListener(actionEvent -> {
@@ -43,7 +44,9 @@ public class ConnectedButton extends CustomButton {
 
         });
     }
-
+    /**
+     * <p>Adds an effect when the button is hoved</p>
+     * */
     @Override
     protected void addOnHoverEffect(){
         this.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -62,12 +65,16 @@ public class ConnectedButton extends CustomButton {
             }
         });
     }
-
+    /**
+     * <p>Activates the effects of this button and goes into selected state</p>
+     * */
     public void setActive(){
         super.setActive();
         selected = true;
     }
-
+    /**
+     * <p>Disactivates the effects of this buttos and returns to unselected state</p>
+     * */
     public void setInactive() {
         super.setInactive();
         selected = false;
