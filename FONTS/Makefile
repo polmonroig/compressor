@@ -7,7 +7,7 @@
 
 # bash commands
 JAVAC = javac --release 8 -cp
-JAR = jar cmf 
+JAR = jar cmf
 
 #############################
 #    VARIABLE DEFINITION
@@ -44,12 +44,18 @@ programName = program.jar
 #    RULES DEFINITION
 #############################
 
+
+
 # compile and build main program
 program:
 	echo 'Main-Class: Main' > $(manifest)
 	$(JAVAC) $(files)
 	$(JAR) $(manifest) $(programName) $(classes)
 
+# javadoc
+docs:
+	javadoc -d ../DOCS/javadoc/ $(files)
+
 # clean all
 clean:
-	rm -f $(classes) $(manifest) *.jar 
+	rm -f $(classes) $(manifest) *.jar

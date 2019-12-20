@@ -184,10 +184,18 @@ public class PhysicalFile {
         return fileDir;
     }
 
+    /**
+     * <p>Gets the file extension</p>
+     * @return string with the extension
+     * */
     public String getFileExtension(){
         return fileExtension;
     }
 
+    /**
+     * <p>Gets the complete path of the file and its name</p>
+     * @return string with path
+     * */
     public String getCompletePath(){
         return fileDir + fileName;
     }
