@@ -158,6 +158,10 @@ public class FileChooser extends ContentDecorator {
 
     }
 
+    /**
+     * <p>Notifies that a file selection has been made,
+     * and we should update its status</p>
+     * */
     public void notifySelection(){
         filesSelected += 1;
         if(filesSelected == selectors.size()){

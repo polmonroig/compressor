@@ -22,6 +22,9 @@ public class LZ78 implements Algorithm {
      */
     @Override
     public byte[] compress(byte[] binaryFile) {
+        // In the first part of the algorithm we
+        // convert the original text into a string of the codified text
+        // making use of a dictionary
         if(binaryFile.length == 0)return binaryFile; // empty file
         String text = new String(binaryFile, StandardCharsets.UTF_8);
         SortedMap< String, Integer> dict = new TreeMap<>();
@@ -46,8 +49,13 @@ public class LZ78 implements Algorithm {
             }
         }
         if(inDict) coding.append(lastWordPos);
+
+        // Now we convert the codified string into a string
+        // of bits, this is necessary to ensure a maximum
+        // compression rate
         String binary_string = Utils.toBinaryString(coding.toString());
 
+        // Finally we convert the string of bits into a byte array
         return Utils.toByteArray(binary_string);
     }
 
