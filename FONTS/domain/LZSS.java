@@ -168,7 +168,7 @@ public class LZSS implements Algorithm {
                 if (readDecoding(binaryFile, c, 1) != 1) break;
                 writeXBytes(c, 1);
 
-                binTree.ringBuffer[r] = c[0];
+                binTree.ringBuffer[r] = c[0];//añadimos el caracter al ringbuffer donde se encontraban las coincidencias
                 r = (short) ((r + 1) & RING_WRAP);
             }
             else {//viene un pair de posicion(12 bits) y longitud (4 bits)
@@ -178,6 +178,7 @@ public class LZSS implements Algorithm {
                 short len = (short) ((c[1] & 0x0F) + THRESHOLD);//+ threshold para obtener una longitud de 18 con 4 bits
 
                 for (int k = 0; k < len; k++) {//cojemos los caracteres de la coincidencia de la posicion del arbol
+                    //copiamos los caracteres repetidos a los mas nuevos del ringBuffer
                     c[k] = binTree.ringBuffer[(pos + k) & RING_WRAP];
                     binTree.ringBuffer[r] = c[k];
                     r = (r + 1) & RING_WRAP;
