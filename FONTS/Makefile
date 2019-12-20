@@ -1,14 +1,12 @@
 ######################
 #		MAKEFILE
 # To compile and build the program: 'make program'
-# To compile and build a driver: 'make driverX' where X=CLASS
-# To compile and test a class: 'make testX' where X=CLASS
 # To clean manifest, *.jar and *.class: 'make clean'
 #####################
 
 
 # bash commands
-JAVAC = javac --release 8 -cp 
+JAVAC = javac --release 8 -cp
 JAR = jar cmf 
 
 #############################
