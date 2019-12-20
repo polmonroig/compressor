@@ -185,7 +185,6 @@ public class DomainCtrl {
                                        localStats.getCompressionDegree(), localStats.getCompressionSpeed(),
                                        localStats.getOriginalFileSize());
         String data = globalStats.getAllStats();
-        //System.out.println(globalStatsFilePath);
         writeFile(globalStatsFilePath, data.getBytes());
     }
 
