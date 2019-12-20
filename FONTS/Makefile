@@ -54,7 +54,7 @@ program:
 
 # javadoc
 docs:
-	javadoc -d ../DOCS/javadoc/ $(files)
+	javadoc -private -d ../DOCS/javadoc/ $(files)
 
 # clean all
 clean:
