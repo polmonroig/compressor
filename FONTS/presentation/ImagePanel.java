@@ -3,11 +3,20 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Image panel.
+ */
 public class ImagePanel extends JPanel {
 
     private Image image;
     private int maxSize;
 
+    /**
+     * <p>Instantiates a new Image panel.</p>
+     *
+     * @param i    the
+     * @param size the size
+     */
     public ImagePanel(Image i, int size){
         image = i;
         maxSize = size;
@@ -20,6 +29,9 @@ public class ImagePanel extends JPanel {
         g.drawImage(image, 0, 0, this);
     }
 
+    /**
+     * <p>Init.</p>
+     */
     public void init(){
         initComponents();
     }

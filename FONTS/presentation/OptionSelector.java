@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Option selector.
+ */
 public class OptionSelector extends ContentDecorator {
 
 
@@ -14,9 +17,24 @@ public class OptionSelector extends ContentDecorator {
     private View view;
 
 
+    /**
+     * The constant ALGORITHM_SELECTOR.
+     */
     public static final int ALGORITHM_SELECTOR = 0;
+    /**
+     * The constant QUALITY_SELECTOR.
+     */
     public static final int QUALITY_SELECTOR = 1;
 
+    /**
+     * <p>Instantiates a new Option selector.</p>
+     *
+     * @param content      the content
+     * @param comboOptions the combo options
+     * @param text         the text
+     * @param type         the type
+     * @param parentView   the parent view
+     */
     public OptionSelector(ContentInterface content, String[] comboOptions, String text, int type, View parentView){
         super(content);
         label = new JLabel(text);
@@ -66,6 +84,11 @@ public class OptionSelector extends ContentDecorator {
     }
 
 
+    /**
+     * <p>Set default index.</p>
+     *
+     * @param i the
+     */
     public void setDefaultIndex(int i){
         options.setSelectedIndex(i);
     }

@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
- 
 
+
+/**
+ * The type Domain ctrl.
+ */
 public class DomainCtrl {
     private DataCtrl dataCtrl;
     private PresentationCtrl presentationCtrl;
@@ -23,10 +26,18 @@ public class DomainCtrl {
     private static final int NO_ERROR = 0;
     private static final int ERROR = 1;
 
+    /**
+     * Instantiates a new Domain ctrl.
+     *
+     * @param controller the controller
+     */
     public DomainCtrl(PresentationCtrl controller){
         presentationCtrl = controller;
     }
 
+    /**
+     * <p>Init.</p>
+     */
     public void init() {
         currentId = AlgorithmSet.LZ78_ID;
         dataCtrl = new DataCtrl();
@@ -50,11 +61,21 @@ public class DomainCtrl {
     }
 
 
+    /**
+     * <p>Select algorithm.</p>
+     *
+     * @param id the id
+     */
     public void selectAlgorithm(int id){
         currentId = id;
     }
 
 
+    /**
+     * <p>Set quality.</p>
+     *
+     * @param quality the quality
+     */
     public void setQuality(int quality){
         AlgorithmSet.setQuality(quality);
     }
@@ -84,6 +105,11 @@ public class DomainCtrl {
     }
 
 
+    /**
+     * <p>Decompress file.</p>
+     *
+     * @param file the file
+     */
     public void decompressFile(File file){
         PhysicalFile pFile = new PhysicalFile(file);
         byte[]content = readFile(file);
@@ -189,6 +215,11 @@ public class DomainCtrl {
     }
 
 
+    /**
+     * <p>Compress.</p>
+     *
+     * @param file the file
+     */
     public void compress(File file)  {
         if(file.isDirectory()){
             compressFolder(file);
@@ -198,11 +229,20 @@ public class DomainCtrl {
         }
     }
 
+    /**
+     * <p>Reset values.</p>
+     */
     public void resetValues() {
         AlgorithmSet.setQuality(0);
         selectAlgorithm(AlgorithmSet.LZ78_ID);
     }
 
+    /**
+     * <p>Gets ppm.</p>
+     *
+     * @param fileA the file a
+     * @return the ppm
+     */
     public BufferedImage getPPM(File fileA) {
             byte [] aux = readFile(fileA);
             if(aux != null) return JPEG.makePPM(aux);

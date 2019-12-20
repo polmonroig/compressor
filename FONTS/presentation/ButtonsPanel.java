@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * The type Buttons panel.
+ */
 public class ButtonsPanel extends JPanel {
 
 
@@ -19,6 +22,12 @@ public class ButtonsPanel extends JPanel {
     private static final Color ACTIVE_TEXT = new Color(255, 255, 255);
     private static final Color DISABLED_TEXT = new Color(150, 178, 221);
 
+    /**
+     * <p>Instantiates a new Buttons panel.</p>
+     *
+     * @param names the names
+     * @param view  the view
+     */
     public ButtonsPanel(String[] names, View view){
         // init layout
         innerPanel = new JPanel();
@@ -40,6 +49,9 @@ public class ButtonsPanel extends JPanel {
         }
     }
 
+    /**
+     * <p>Init.</p>
+     */
     public void init() {
         initComponents();
     }
@@ -54,12 +66,23 @@ public class ButtonsPanel extends JPanel {
         buttons.get(currentSelected).setActive();
     }
 
+    /**
+     * <p>Disable current.</p>
+     *
+     * @param id the id
+     */
     public void disableCurrent(int id) {
         buttons.get(currentSelected).setInactive();
         currentSelected = id;
         parent.selectView(id);
     }
 
+    /**
+     * <p>Sets enabled button.</p>
+     *
+     * @param i the
+     * @param b the b
+     */
     public void setEnabledButton(int i, boolean b) {
         buttons.get(i).setEnabled(b);
     }

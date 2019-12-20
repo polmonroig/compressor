@@ -5,6 +5,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
+/**
+ * The type File selector.
+ */
 public class FileSelector extends JPanel {
 
     private JTextField label;
@@ -16,6 +19,13 @@ public class FileSelector extends JPanel {
     private int selectionMode;
     private FileChooser chooser;
 
+    /**
+     * <p>Instantiates a new File selector.</p>
+     *
+     * @param types        the types
+     * @param mode         the mode
+     * @param fileSelector the file selector
+     */
     public FileSelector(String[] types, int mode, FileChooser fileSelector){
         chooser = fileSelector;
         selectionMode = mode;
@@ -25,6 +35,9 @@ public class FileSelector extends JPanel {
         fileTypes = types;
     }
 
+    /**
+     * <p>Init.</p>
+     */
     public void init(){
         initComponents();
         initEventListeners();
@@ -62,6 +75,11 @@ public class FileSelector extends JPanel {
         });
     }
 
+    /**
+     * <p>Get file file.</p>
+     *
+     * @return the file
+     */
     public File getFile(){
         return file;
     }
@@ -71,6 +89,9 @@ public class FileSelector extends JPanel {
         filePath = file.getAbsolutePath();
     }
 
+    /**
+     * <p>Reset values.</p>
+     */
     public void resetValues() {
         label.setText("Path ");
     }

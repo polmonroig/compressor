@@ -2,6 +2,9 @@ package presentation;
 
 import java.awt.*;
 
+/**
+ * The type Connected button.
+ */
 public class ConnectedButton extends CustomButton {
 
 
@@ -9,6 +12,17 @@ public class ConnectedButton extends CustomButton {
     private boolean selected;
     private int id;
 
+    /**
+     * <p>Instantiates a new Connected button.</p>
+     *
+     * @param text    the text
+     * @param colorBD the color bd
+     * @param colorBA the color ba
+     * @param colorFD the color fd
+     * @param colorFA the color fa
+     * @param panel   the panel
+     * @param i       the
+     */
     public ConnectedButton(String text, Color colorBD, Color colorBA, Color colorFD, Color colorFA, ButtonsPanel panel, int i) {
         super(text, colorBD, colorBA, colorFD, colorFA);
 

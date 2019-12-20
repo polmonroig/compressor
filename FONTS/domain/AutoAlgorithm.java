@@ -6,7 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
- 
+
+/**
+ * The type Auto algorithm.
+ */
 public class AutoAlgorithm {
 
 
@@ -17,13 +20,28 @@ public class AutoAlgorithm {
     private Stats stats;
     private int iterator;
 
+    /**
+     * Instantiates a new Auto algorithm.
+     */
     public AutoAlgorithm(){
         currentID = AlgorithmSet.LZ78_ID;
         stats = new GlobalStats();
     }
 
+    /**
+     * <p>Get unsupported file string.</p>
+     *
+     * @return the string
+     */
     public static String getUnsupportedFile(){return unsupportedFile;}
 
+    /**
+     * <p>Compress files byte [ ].</p>
+     *
+     * @param files the files
+     * @return the byte [ ]
+     * @throws IOException the io exception
+     */
     public byte[] compressFiles(ArrayList<PhysicalFile> files) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -86,6 +104,12 @@ public class AutoAlgorithm {
     }
 
 
+    /**
+     * <p>Decompress file array list.</p>
+     *
+     * @param file the file
+     * @return the array list
+     */
     public ArrayList<PhysicalFile> decompressFile(PhysicalFile file){
         ArrayList<PhysicalFile> files = new ArrayList<>();
         iterator = 0;
@@ -110,11 +134,21 @@ public class AutoAlgorithm {
     }
 
 
+    /**
+     * <p>Sets algorithm.</p>
+     *
+     * @param id the id
+     */
     public void setAlgorithm(int id) {
         currentID = id;
     }
 
 
+    /**
+     * <p>Gets local stats.</p>
+     *
+     * @return the local stats
+     */
     public Stats getLocalStats() {
         return stats;
     }
