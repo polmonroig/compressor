@@ -6,42 +6,66 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+ 
 
 /**
- * The type Auto algorithm.
- */
+ * The AutoAlgorithm is responsible for compressing and decompressing multiple
+ * files automatically given a specific algorithm and compression quality (JPEG)
+ * It is also responsible for saving stats of all the compressions made
+ * of all the files. It differs from other algorithms in that it does not know
+ * anything about compression, and ir requires an Algorithm to compress the file
+ * for it.
+ *
+ * The basic functionality in some way is to encode the compressions and decode
+ * the decompressions
+ * */
 public class AutoAlgorithm {
 
 
-
+    /**
+     * This is the selected compression algorithm
+     * */
     private int currentID;
+    /**
+     * This is just an end line character declared for readability
+     * */
     private static final char END_LINE = '\n';
+    /**
+     * This string is null always except when an unsupported file
+     * is being compressed in than case it saves the path to
+     * that file
+     * */
     private static String unsupportedFile;
+    /**
+     * This saves the average stats for all the file compressions
+     * */
     private Stats stats;
+    /**
+     * This is an iterator, that points to the current
+     * byte in the file
+     * */
     private int iterator;
 
     /**
-     * Instantiates a new Auto algorithm.
-     */
+     * <p>Basic constructor</p>
+     * */
     public AutoAlgorithm(){
         currentID = AlgorithmSet.LZ78_ID;
         stats = new GlobalStats();
     }
 
     /**
-     * <p>Get unsupported file string.</p>
-     *
-     * @return the string
-     */
+     * <p>Getter for the unsupported file, beware since
+     * if no exception has been raise it returns null</p>
+     * @return unsupported file path
+     * */
     public static String getUnsupportedFile(){return unsupportedFile;}
 
     /**
-     * <p>Compress files byte [ ].</p>
-     *
-     * @param files the files
-     * @return the byte [ ]
-     * @throws IOException the io exception
-     */
+     * <p>Compress an array of files</p>
+     * @param files contains all the PhysicalFiles for compression
+     * @return a byte array with the output file content
+     * */
     public byte[] compressFiles(ArrayList<PhysicalFile> files) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -70,7 +94,10 @@ public class AutoAlgorithm {
         return stream.toByteArray();
     }
 
-
+    /**
+     * <p>Reads a given array until an end line is found</p>
+     * @return the content until the end line
+     * */
     private ByteArrayOutputStream readWhileNotEndLine(byte[] array){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         while (array[iterator] != END_LINE){
@@ -81,6 +108,10 @@ public class AutoAlgorithm {
         return stream;
     }
 
+    /**
+     * <p>Reads the content of a file and returns a Physical file</p>
+     *
+     * */
     private PhysicalFile readFileContent(byte[] array, int compressionType, int compressionSize, String fileName){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         int size = iterator + compressionSize;
@@ -95,6 +126,11 @@ public class AutoAlgorithm {
         return file;
     }
 
+    /**
+     * <p>Given a four byte array it returns it int representation</p>
+     * @param bytes the byte array
+     * @return the bytes as an integer
+     * */
     private int byteToInt(byte[] bytes){
         int sum = 0;
         for(byte b : bytes){
@@ -103,13 +139,11 @@ public class AutoAlgorithm {
         return sum;
     }
 
-
     /**
-     * <p>Decompress file array list.</p>
-     *
-     * @param file the file
-     * @return the array list
-     */
+     * <p>Decompress file</p>
+     * @param file to decompress
+     * @return an array of files from the compression
+     * */
     public ArrayList<PhysicalFile> decompressFile(PhysicalFile file){
         ArrayList<PhysicalFile> files = new ArrayList<>();
         iterator = 0;
@@ -133,22 +167,17 @@ public class AutoAlgorithm {
         return files;
     }
 
-
     /**
-     * <p>Sets algorithm.</p>
-     *
-     * @param id the id
-     */
+     * <p>Sets the id of the default text compression algorithm</p>
+     * @param id is the algorithm
+     * */
     public void setAlgorithm(int id) {
         currentID = id;
     }
 
-
-    /**
-     * <p>Gets local stats.</p>
-     *
-     * @return the local stats
-     */
+    /**<p>Getter for the compression stats</p>
+     * @return the stats
+     * */
     public Stats getLocalStats() {
         return stats;
     }
