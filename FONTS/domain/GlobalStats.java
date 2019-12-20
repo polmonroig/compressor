@@ -1,5 +1,10 @@
 package domain;
 
+/**
+ *
+ * **/
+
+
 public class GlobalStats extends Stats {
     private float nFiles = 0;
 
@@ -49,7 +54,7 @@ public class GlobalStats extends Stats {
     public void addCompressionSpeed(float compressionSpeed) {
         setCompressionSpeed(updateValue(getCompressionSpeed(), compressionSpeed));
     }
-
+//escribir el formato del archivo de texto
     public String getAllStats(){
         String data = "";
         data += getNumberFiles() + "\n";
@@ -60,7 +65,7 @@ public class GlobalStats extends Stats {
         data += getCompressionSpeed() + "\n";
         return data;
     }
-
+    //leer el formato del archivo de texto
     public void setFileStats(String data){
         int j = 0;
         int nStats = 5;

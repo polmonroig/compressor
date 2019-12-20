@@ -188,6 +188,9 @@ public class View extends JFrame {
         // remove undesirable border
         separator.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
+        //Resize
+        setResizable(false);
+
         // finally set view to visible
         setVisible(true);
     }
@@ -247,7 +250,8 @@ public class View extends JFrame {
      * @return a content with about characteristics
      * */
     private ContentInterface setupAboutContent(){
-        ContentInterface aboutContent = new Content("About", "\nPrograma de compressió de text, imatges i carpetes \n creat per a la assignatura de PROP de la FIB.");
+        ContentInterface aboutContent = new Content("About", "\nPrograma de compressió de text, imatges i carpetes creat per a la assignatura de PROP" +
+                                                                                        "\nde la FIB per l'any 2019/2020. Sóm el grup 6.1 integrat per:\n-Adrián Álvarez\n-Jaume Bernaus\n-Pol Monroig\n-David Santos");
         return aboutContent;
     }
 

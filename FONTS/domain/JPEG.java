@@ -44,9 +44,8 @@ public class JPEG implements Algorithm {
     /**
      * These are the variables to make the compression part
      **/
-    private boolean anchura = true;
-    private int iterator = 0;
-    private int color = 0;
+    private boolean anchura;
+    private int iterator;
     private int[][][] imagenYCbCr;
     private ArrayList<Integer> Yencoding;
     private ArrayList<Integer> Cbencoding;
@@ -209,7 +208,7 @@ public class JPEG implements Algorithm {
             imagenaux[j] = (char) (imagen[j] & 0xFF);
         }
 
-        getWidthandHeightandColor(imagenaux);
+        getWidthandHeight(imagenaux);
 
         imagenYCbCr = new int[height][width][3];
         for (int i = 0; i < height; ++i) {
@@ -248,7 +247,6 @@ public class JPEG implements Algorithm {
     private void ResetVarC() {
         anchura = true;
         iterator = 0;
-        color = 0;
         Yencoding = new ArrayList<Integer>();
         Cbencoding = new ArrayList<Integer>();
         Crencoding = new ArrayList<Integer>();
@@ -429,11 +427,11 @@ public class JPEG implements Algorithm {
     }
 
     /**
-     * <p>getWidthandHeightandColor achieve the height, width and color for the decompression</p>
+     * <p>getWidthandHeight achieve the height and width for the decompression</p>
      *
      * @param imagenaux Is the image to decompress
      */
-    private void getWidthandHeightandColor(char[] imagenaux) {
+    private void getWidthandHeight(char[] imagenaux) {
         for (iterator = 3; imagenaux[iterator] != '\n'; ++iterator) {
             if (imagenaux[iterator] == ' ') anchura = false;
             else {
@@ -449,12 +447,7 @@ public class JPEG implements Algorithm {
             }
         }
         ++iterator;
-        while (imagenaux[iterator] != '\n') {
-            int aux = Character.getNumericValue(imagenaux[iterator]);
-            color *= 10;
-            color += aux;
-            ++iterator;
-        }
+        while (imagenaux[iterator] != '\n') { ++iterator; }
         ++iterator;
     }
 
