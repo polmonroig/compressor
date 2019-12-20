@@ -214,11 +214,11 @@ public class View extends JFrame {
 
     /**
      *<p>Sets and visualizes the local stats in a new window</p>
-     * @param compressedFileSize is
-     * @param compressionDegree is
-     * @param compressionSpeed is
-     * @param compressionTime is
-     * @param originalFileSize is
+     * @param compressionTime is the compression time
+     * @param compressedFileSize is the compressed file size
+     * @param compressionDegree is the compression degree
+     * @param compressionSpeed is the compression speed
+     * @param originalFileSize is the original file size
      * */
     public void setLocalStats(float compressedFileSize, float compressionDegree, float compressionSpeed, float compressionTime, float originalFileSize) {
         JFrame statsFrame = new JFrame();
@@ -255,6 +255,10 @@ public class View extends JFrame {
         return aboutContent;
     }
 
+    /**
+     * <p>This sets up the compress text content</p>
+     * @return a content with the text compression qualities
+     * */
     private ContentInterface setupCompressTextContent(){
         ContentInterface compressText = new Content("Comprimir Text","");
         compressText = new OptionSelector(compressText, algorithmOptions,
@@ -266,6 +270,10 @@ public class View extends JFrame {
         return compressText;
     }
 
+    /**
+     * <p>This sets up the compress image content</p>
+     * @return a content with the image compression qualities
+     * */
     private ContentInterface setupCompressImageContent(){
         ContentInterface compressImage = new Content("Comprimir imatge","");
         compressImage = new OptionSelector(compressImage, qualityOptions,
@@ -276,6 +284,10 @@ public class View extends JFrame {
         return compressImage;
     }
 
+    /**
+     * <p>This sets up the compress folder content</p>
+     * @return a content with the folder compression qualities
+     * */
     private ContentInterface setupFolderContent(){
         ContentInterface compressFolder = new Content("Comprimir carpeta","");
         compressFolder = new OptionSelector(compressFolder, algorithmOptions,
@@ -288,6 +300,10 @@ public class View extends JFrame {
         return compressFolder;
     }
 
+    /**
+     * <p>This sets up the decompression content</p>
+     * @return a content with the decompression qualities
+     * */
     private ContentInterface setupDecompressContent(){
         ContentInterface decompressFile = new Content("Descomprimir", "");
         decompressFile = new FileChooser(decompressFile, new String[]{"jpeg", "lz78", "lzw", "lzss", "auto"},
@@ -296,6 +312,10 @@ public class View extends JFrame {
         return decompressFile;
     }
 
+    /**
+     * <p>This sets up the compare images content</p>
+     * @return a content with the comparison qualities
+     * */
     private ContentInterface setupCompareContent(){
         ContentInterface compareFile = new Content("Comparar archivos", "");
         compareFile = new FileChooser(compareFile, new String[]{"ppm"}, "Comparar",
@@ -304,6 +324,10 @@ public class View extends JFrame {
     }
 
 
+    /**
+     * <p>This sets up the content for the global stats/p>
+     * @return a content with the global stats of the compression qualities
+     * */
     private ContentInterface setupGlobalStatsContent(){
         ContentInterface globalStats = new Content("Estadístiques Globals", "");
         globalStats = new VariableLabel(globalStats);
@@ -316,6 +340,10 @@ public class View extends JFrame {
         return globalStats;
     }
 
+    /**
+     * <p>This sets up the info content</p>
+     * @return a content with help information
+     * */
     private ContentInterface setupInfoContent(){
         ContentInterface info = new Content("Ajuda", "Comprimir text: Selecciona l’algorisme de compressió desitjat, selecciona \n " +
                                                                                 "el arxiu i fes clic a comprimir. Es mostraran les estadístiques de compressió\n" +
@@ -333,14 +361,30 @@ public class View extends JFrame {
         return info;
     }
 
+    /**
+     * <p>This function sends a file to the presentation for
+     * with the intention of compressing it, from the controller
+     * it is then send to the domain controller</p>
+     * */
     public void compress(File file) {
         presentationCtrl.compress(file);
     }
 
+    /**
+     * <p>This function sends a file to the presentation for
+     * with the intention of decompressing it, from the controller
+     * it is then send to the domain controller</p>
+     * */
     public void decompress(File file) {
         presentationCtrl.decompress(file);
     }
 
+    /**
+     * <p>Given an index (usually set by an OptionSelector)
+     * an algorithm is selected and set in the domain controller
+     * The indexes available are displayed in the AlgorithmSet class</p>
+     * @param selectedIndex selected algorithm
+     * */
     public void setAlgorithm(int selectedIndex) {
         if(selectedIndex == algorithmOptions.length - 1){
             selectedIndex = AUTO_ALGORITHM_INDEX;
@@ -348,16 +392,28 @@ public class View extends JFrame {
         presentationCtrl.setAlgorithm(selectedIndex);
     }
 
+    /**
+     * <p>Given an index of quality, it is send to the
+     * domain controller to set it to the JPEG algorithm</p>
+     * @param selectedIndex selected quality
+     * */
     public void setQuality(int selectedIndex) {
         presentationCtrl.setQuality(selectedIndex);
     }
 
+    /**
+     * <p>Resets the values to their original state</p>
+     * */
     public void resetValues() {
         presentationCtrl.resetValues();
     }
 
 
-
+    /**
+     * <p>Given to images it displays them side by side</p>
+     * @param fileA is a file to a given image
+     * @param fileB is a file to another image
+     * */
     public void displayImages(File fileA, File fileB) {
 
         Image imageA = presentationCtrl.getPPM(fileA);
@@ -379,6 +435,11 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * <p>Displays in a new window and informative message</p>
+     * @param title is the main title of the window
+     * @param message is the informative message
+     * */
     public void displayMessage(String title, String message) {
         JFrame errorFrame = new JFrame();
 
@@ -394,6 +455,15 @@ public class View extends JFrame {
         errorFrame.setVisible(true);
     }
 
+    /**
+     * <p>Updates the global stats panel given different arguments</p>
+     * @param nFiles is the number of files
+     * @param compressionTime is the compression time
+     * @param compressedFileSize is the compressed file size
+     * @param compressionDegree is the compression degree
+     * @param compressionSpeed is the compression speed
+     * @param originalFileSize is the original file size
+     * */
     public void setGlobalStats(float nFiles, float compressionTime, float compressedFileSize,
                                float compressionDegree, float compressionSpeed, float originalFileSize) {
 
