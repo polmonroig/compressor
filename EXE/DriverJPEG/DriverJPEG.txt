@@ -1,4 +1,0 @@
-Aquest executable serveix per comprobar les funcionalitats de la classe JPEG, en té dos funcions:
-1.-Descomprimir
-2.-Comprimir
-On comprimir et preguntará el path i la calitat del arxiu a comprimir i la funcio de descomprimir solament et demanara el path del arxiu a descomprimir. Els casos de proba que hem utilitzat estan a la carpeta, són imatges de diferents mides, i colors, per tal d'observar el funcionament del algoritme. Hem observat que aplicant diferents images dona resultats incorrectes a la descompressió.
