@@ -12,6 +12,9 @@ import java.util.Map;
 /**
  * This is one of the algortihm to compress files, in specific, it
  * compress image files. This class implements de JPEG algortihm.
+ *
+ * @author Adrian Alvarez Martinez
+ *
  **/
 
 public class JPEG implements Algorithm {
