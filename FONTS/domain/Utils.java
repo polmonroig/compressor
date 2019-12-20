@@ -63,6 +63,12 @@ public class Utils {
         return binary;
     }
 
+    /**
+     * <p>Gets an integer from the first 8 chars of teh String from the position of i</>
+     * @param text String with the text
+     * @param i iterator to start
+     * @return an integer of the sequence of chars
+     */
     static public int getIntFromString(String text, int i){
         StringBuilder letter = new StringBuilder();
         for(int j = i; j < i + 8 && j < text.length(); ++j){
@@ -71,11 +77,21 @@ public class Utils {
         return Integer.parseInt(letter.toString(), 2);
     }
 
-
+    /**
+     * <p>Get a String of the position i from the String</>
+     * @param text String with the text
+     * @param i position to achieve the string
+     * @return returns an String of the position of i
+     */
     static public String getLetter(String text,  int i){
         return Character.toString((char) getIntFromString(text, i));
     }
 
+    /**
+     * <p>Transforms a binary string to a Array of byte with offset</>
+     * @param binary_string A String to transform
+     * @return an Array of bytes with the transform
+     */
     static public byte[] toByteArray(String binary_string){
         int size = (int)Math.ceil(binary_string.length() / 8.0) + 1; // number of bytes + offset byte
         byte [] byte_coding = new byte[size];
@@ -89,6 +105,11 @@ public class Utils {
         return  byte_coding;
     }
 
+    /**
+     * <p>Transforms a binary string to a Array of byte without offset</>
+     * @param binary_string A String to transform
+     * @return an Array of bytes with the transform
+     */
     static public byte[] toByteArray2(String binary_string){
         int size = (int)Math.ceil(binary_string.length() / 8.0);
         byte [] byte_coding = new byte[size];
@@ -101,6 +122,11 @@ public class Utils {
         return  byte_coding;
     }
 
+    /**
+     * <p>Transforms an Array of bytes to a binary String with offset</>
+     * @param byte_coding An Array of bytes to transform
+     * @return a binary String with the transform
+     */
     static  public String toString(byte[] byte_coding){ // CORRECTA
         StringBuilder binary_string = new StringBuilder();
         int zeros_offset = byte_coding[0];
@@ -114,6 +140,11 @@ public class Utils {
         return binary_string.toString();
     }
 
+    /**
+     * <p>Makes the and bit a bit of a binary String</>
+     * @param code binary string to make the and
+     * @return a binary String with the transform
+     */
     static public String andOfString(String code){
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < code.length(); ++i){
