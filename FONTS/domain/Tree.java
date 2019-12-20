@@ -30,9 +30,7 @@ public class Tree {
         }
 
         /**
-         * <p></>
-         * @param
-         * @return
+         * <p>Fills all the buffers of the tree with ' ', which represents a not used value</p>
          */
         public void initTree() {
             Arrays.fill(dad, 0, dad.length, NOT_USED);
@@ -41,9 +39,9 @@ public class Tree {
         }
 
         /**
-         * <p></>
-         * @param
-         * @return
+         * <p>The string to be inserted is identified by pos. If the matched length is MAX_STORE_lENGTH, then an old node is removed in favour of the new one.
+         *  Modifies global variables matchPosition and matchLength with the maximum values it can achieve with the inserted string</p>
+         * @param pos The position in the ringBuffer and a tree node
          */
         //Busca para el nuevo caracter todas las coincidencias y se queda con la mas grande
         public void insertNode(short pos) {
@@ -117,9 +115,8 @@ public class Tree {
         }
 
         /**
-         * <p></>
-         * @param
-         * @return
+         * <p>Remove a node from the tree</p>
+         * @param node the node to remove
          */
         //Borra el arbol creado para encontrar las coincidencias, porque ya se ha usado
         public void deleteNode(short node) {
@@ -163,15 +160,24 @@ public class Tree {
 
             dad[node] = NOT_USED;
         }
-
+    /**
+     * <p>A getter for matchLength</p>
+     * @return The matchLength value
+     */
     public short getMatchLength() {
         return matchLength;
     }
-
+    /**
+     * <p>A setter for matchLength</p>
+     * @param matchLength Puts on the Tree matchLength matchLength value
+     */
     public void setMatchLength(short matchLength) {
         this.matchLength = matchLength;
     }
-
+    /**
+     * <p>A getter for matchPosition</p>
+     * @return The value of matchPosition
+     */
     public short getMatchPosition() {
         return matchPosition;
     }
