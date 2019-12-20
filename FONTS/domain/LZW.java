@@ -1,8 +1,19 @@
 package domain;
 import java.util.*;
 
+/**
+ * LZW ASCII compression algorithm
+ *
+ * @author Jaume Bernaus Serra
+ *
+ */
 public class LZW implements Algorithm {
 
+    /**
+     * <p>The compression method makes a compression of a given text</>
+     * @param binaryFile the text to compress
+     * @return the compressed text
+     */
     @Override
     public byte[] compress(byte[] binaryFile) {
         Map<String, Integer> dict = new HashMap<String, Integer>(); //map per guardar el diccionari
@@ -41,8 +52,11 @@ public class LZW implements Algorithm {
         return Utils.toByteArray(s.toString());
     }
 
-
-    /** Convert 8 bit to 12 bit */
+    /**
+     * <p>El metodo to16bit canvierte un entero en una string de 16 bits en binario</>
+     * @param i es el entero
+     * @return el entero en binario
+     */
     private String to16bit(int i) {
         StringBuilder temp = new StringBuilder(Integer.toBinaryString(i));
         while (temp.length() < 16) {
@@ -53,7 +67,11 @@ public class LZW implements Algorithm {
 
 
 
-
+    /**
+     * <p>El metodo de descomprimir hace una descompresion del texto introducido</>
+     * @param binaryFile el texto a comprimir, codificado con formato LZSS
+     * @return el texto descomprimido
+     */
     @Override
     public byte[] decompress(byte[] binaryFile) {
 
