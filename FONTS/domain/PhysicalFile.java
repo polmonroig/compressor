@@ -204,13 +204,20 @@ public class PhysicalFile {
     private  void setFileName(File file){
         int indexLastSlash = file.getPath().lastIndexOf(File.separator) + 1;
         int indexLastDot = file.getPath().lastIndexOf(".");
+        if(indexLastDot == -1)indexLastDot = file.getPath().length() - 1;
         fileName = file.getPath().substring(indexLastSlash, indexLastDot);
     }
 
     private void setFileExtension(File file) {
         int indexLastDot = file.getPath().lastIndexOf(".");
-        int size = file.getPath().length();
-        fileExtension = file.getPath().substring(indexLastDot + 1, size);
+        if(indexLastDot == -1){
+            fileExtension = "";
+        }
+        else{
+            int size = file.getPath().length();
+            fileExtension = file.getPath().substring(indexLastDot + 1, size);
+        }
+
     }
 
 
